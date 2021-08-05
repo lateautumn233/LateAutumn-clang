@@ -504,6 +504,16 @@ set_target_properties(LLVMSymbolize PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS LLVMSymbolize )
 list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMSymbolize "${_IMPORT_PREFIX}/lib/libLLVMSymbolize.a" )
 
+# Import target "LLVMDWP" for configuration "Release"
+set_property(TARGET LLVMDWP APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(LLVMDWP PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMDWP.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS LLVMDWP )
+list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMDWP "${_IMPORT_PREFIX}/lib/libLLVMDWP.a" )
+
 # Import target "LLVMExecutionEngine" for configuration "Release"
 set_property(TARGET LLVMExecutionEngine APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMExecutionEngine PROPERTIES
@@ -594,66 +604,6 @@ set_target_properties(LLVMTarget PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS LLVMTarget )
 list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMTarget "${_IMPORT_PREFIX}/lib/libLLVMTarget.a" )
 
-# Import target "LLVMAArch64CodeGen" for configuration "Release"
-set_property(TARGET LLVMAArch64CodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMAArch64CodeGen PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMAArch64CodeGen.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMAArch64CodeGen )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMAArch64CodeGen "${_IMPORT_PREFIX}/lib/libLLVMAArch64CodeGen.a" )
-
-# Import target "LLVMAArch64AsmParser" for configuration "Release"
-set_property(TARGET LLVMAArch64AsmParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMAArch64AsmParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMAArch64AsmParser.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMAArch64AsmParser )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMAArch64AsmParser "${_IMPORT_PREFIX}/lib/libLLVMAArch64AsmParser.a" )
-
-# Import target "LLVMAArch64Disassembler" for configuration "Release"
-set_property(TARGET LLVMAArch64Disassembler APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMAArch64Disassembler PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMAArch64Disassembler.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMAArch64Disassembler )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMAArch64Disassembler "${_IMPORT_PREFIX}/lib/libLLVMAArch64Disassembler.a" )
-
-# Import target "LLVMAArch64Desc" for configuration "Release"
-set_property(TARGET LLVMAArch64Desc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMAArch64Desc PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMAArch64Desc.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMAArch64Desc )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMAArch64Desc "${_IMPORT_PREFIX}/lib/libLLVMAArch64Desc.a" )
-
-# Import target "LLVMAArch64Info" for configuration "Release"
-set_property(TARGET LLVMAArch64Info APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMAArch64Info PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMAArch64Info.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMAArch64Info )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMAArch64Info "${_IMPORT_PREFIX}/lib/libLLVMAArch64Info.a" )
-
-# Import target "LLVMAArch64Utils" for configuration "Release"
-set_property(TARGET LLVMAArch64Utils APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMAArch64Utils PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMAArch64Utils.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMAArch64Utils )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMAArch64Utils "${_IMPORT_PREFIX}/lib/libLLVMAArch64Utils.a" )
-
 # Import target "LLVMARMCodeGen" for configuration "Release"
 set_property(TARGET LLVMARMCodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMARMCodeGen PROPERTIES
@@ -714,305 +664,65 @@ set_target_properties(LLVMARMUtils PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS LLVMARMUtils )
 list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMARMUtils "${_IMPORT_PREFIX}/lib/libLLVMARMUtils.a" )
 
-# Import target "LLVMBPFCodeGen" for configuration "Release"
-set_property(TARGET LLVMBPFCodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMBPFCodeGen PROPERTIES
+# Import target "LLVMAArch64CodeGen" for configuration "Release"
+set_property(TARGET LLVMAArch64CodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(LLVMAArch64CodeGen PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMBPFCodeGen.a"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMAArch64CodeGen.a"
   )
 
-list(APPEND _IMPORT_CHECK_TARGETS LLVMBPFCodeGen )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMBPFCodeGen "${_IMPORT_PREFIX}/lib/libLLVMBPFCodeGen.a" )
+list(APPEND _IMPORT_CHECK_TARGETS LLVMAArch64CodeGen )
+list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMAArch64CodeGen "${_IMPORT_PREFIX}/lib/libLLVMAArch64CodeGen.a" )
 
-# Import target "LLVMBPFAsmParser" for configuration "Release"
-set_property(TARGET LLVMBPFAsmParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMBPFAsmParser PROPERTIES
+# Import target "LLVMAArch64AsmParser" for configuration "Release"
+set_property(TARGET LLVMAArch64AsmParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(LLVMAArch64AsmParser PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMBPFAsmParser.a"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMAArch64AsmParser.a"
   )
 
-list(APPEND _IMPORT_CHECK_TARGETS LLVMBPFAsmParser )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMBPFAsmParser "${_IMPORT_PREFIX}/lib/libLLVMBPFAsmParser.a" )
+list(APPEND _IMPORT_CHECK_TARGETS LLVMAArch64AsmParser )
+list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMAArch64AsmParser "${_IMPORT_PREFIX}/lib/libLLVMAArch64AsmParser.a" )
 
-# Import target "LLVMBPFDisassembler" for configuration "Release"
-set_property(TARGET LLVMBPFDisassembler APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMBPFDisassembler PROPERTIES
+# Import target "LLVMAArch64Disassembler" for configuration "Release"
+set_property(TARGET LLVMAArch64Disassembler APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(LLVMAArch64Disassembler PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMBPFDisassembler.a"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMAArch64Disassembler.a"
   )
 
-list(APPEND _IMPORT_CHECK_TARGETS LLVMBPFDisassembler )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMBPFDisassembler "${_IMPORT_PREFIX}/lib/libLLVMBPFDisassembler.a" )
+list(APPEND _IMPORT_CHECK_TARGETS LLVMAArch64Disassembler )
+list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMAArch64Disassembler "${_IMPORT_PREFIX}/lib/libLLVMAArch64Disassembler.a" )
 
-# Import target "LLVMBPFDesc" for configuration "Release"
-set_property(TARGET LLVMBPFDesc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMBPFDesc PROPERTIES
+# Import target "LLVMAArch64Desc" for configuration "Release"
+set_property(TARGET LLVMAArch64Desc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(LLVMAArch64Desc PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMBPFDesc.a"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMAArch64Desc.a"
   )
 
-list(APPEND _IMPORT_CHECK_TARGETS LLVMBPFDesc )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMBPFDesc "${_IMPORT_PREFIX}/lib/libLLVMBPFDesc.a" )
+list(APPEND _IMPORT_CHECK_TARGETS LLVMAArch64Desc )
+list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMAArch64Desc "${_IMPORT_PREFIX}/lib/libLLVMAArch64Desc.a" )
 
-# Import target "LLVMBPFInfo" for configuration "Release"
-set_property(TARGET LLVMBPFInfo APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMBPFInfo PROPERTIES
+# Import target "LLVMAArch64Info" for configuration "Release"
+set_property(TARGET LLVMAArch64Info APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(LLVMAArch64Info PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMBPFInfo.a"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMAArch64Info.a"
   )
 
-list(APPEND _IMPORT_CHECK_TARGETS LLVMBPFInfo )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMBPFInfo "${_IMPORT_PREFIX}/lib/libLLVMBPFInfo.a" )
+list(APPEND _IMPORT_CHECK_TARGETS LLVMAArch64Info )
+list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMAArch64Info "${_IMPORT_PREFIX}/lib/libLLVMAArch64Info.a" )
 
-# Import target "LLVMMipsCodeGen" for configuration "Release"
-set_property(TARGET LLVMMipsCodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMMipsCodeGen PROPERTIES
+# Import target "LLVMAArch64Utils" for configuration "Release"
+set_property(TARGET LLVMAArch64Utils APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(LLVMAArch64Utils PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMMipsCodeGen.a"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMAArch64Utils.a"
   )
 
-list(APPEND _IMPORT_CHECK_TARGETS LLVMMipsCodeGen )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMMipsCodeGen "${_IMPORT_PREFIX}/lib/libLLVMMipsCodeGen.a" )
-
-# Import target "LLVMMipsAsmParser" for configuration "Release"
-set_property(TARGET LLVMMipsAsmParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMMipsAsmParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMMipsAsmParser.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMMipsAsmParser )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMMipsAsmParser "${_IMPORT_PREFIX}/lib/libLLVMMipsAsmParser.a" )
-
-# Import target "LLVMMipsDisassembler" for configuration "Release"
-set_property(TARGET LLVMMipsDisassembler APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMMipsDisassembler PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMMipsDisassembler.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMMipsDisassembler )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMMipsDisassembler "${_IMPORT_PREFIX}/lib/libLLVMMipsDisassembler.a" )
-
-# Import target "LLVMMipsDesc" for configuration "Release"
-set_property(TARGET LLVMMipsDesc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMMipsDesc PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMMipsDesc.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMMipsDesc )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMMipsDesc "${_IMPORT_PREFIX}/lib/libLLVMMipsDesc.a" )
-
-# Import target "LLVMMipsInfo" for configuration "Release"
-set_property(TARGET LLVMMipsInfo APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMMipsInfo PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMMipsInfo.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMMipsInfo )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMMipsInfo "${_IMPORT_PREFIX}/lib/libLLVMMipsInfo.a" )
-
-# Import target "LLVMPowerPCCodeGen" for configuration "Release"
-set_property(TARGET LLVMPowerPCCodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMPowerPCCodeGen PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMPowerPCCodeGen.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMPowerPCCodeGen )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMPowerPCCodeGen "${_IMPORT_PREFIX}/lib/libLLVMPowerPCCodeGen.a" )
-
-# Import target "LLVMPowerPCAsmParser" for configuration "Release"
-set_property(TARGET LLVMPowerPCAsmParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMPowerPCAsmParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMPowerPCAsmParser.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMPowerPCAsmParser )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMPowerPCAsmParser "${_IMPORT_PREFIX}/lib/libLLVMPowerPCAsmParser.a" )
-
-# Import target "LLVMPowerPCDisassembler" for configuration "Release"
-set_property(TARGET LLVMPowerPCDisassembler APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMPowerPCDisassembler PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMPowerPCDisassembler.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMPowerPCDisassembler )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMPowerPCDisassembler "${_IMPORT_PREFIX}/lib/libLLVMPowerPCDisassembler.a" )
-
-# Import target "LLVMPowerPCDesc" for configuration "Release"
-set_property(TARGET LLVMPowerPCDesc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMPowerPCDesc PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMPowerPCDesc.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMPowerPCDesc )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMPowerPCDesc "${_IMPORT_PREFIX}/lib/libLLVMPowerPCDesc.a" )
-
-# Import target "LLVMPowerPCInfo" for configuration "Release"
-set_property(TARGET LLVMPowerPCInfo APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMPowerPCInfo PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMPowerPCInfo.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMPowerPCInfo )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMPowerPCInfo "${_IMPORT_PREFIX}/lib/libLLVMPowerPCInfo.a" )
-
-# Import target "LLVMRISCVCodeGen" for configuration "Release"
-set_property(TARGET LLVMRISCVCodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMRISCVCodeGen PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMRISCVCodeGen.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMRISCVCodeGen )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMRISCVCodeGen "${_IMPORT_PREFIX}/lib/libLLVMRISCVCodeGen.a" )
-
-# Import target "LLVMRISCVAsmParser" for configuration "Release"
-set_property(TARGET LLVMRISCVAsmParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMRISCVAsmParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMRISCVAsmParser.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMRISCVAsmParser )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMRISCVAsmParser "${_IMPORT_PREFIX}/lib/libLLVMRISCVAsmParser.a" )
-
-# Import target "LLVMRISCVDisassembler" for configuration "Release"
-set_property(TARGET LLVMRISCVDisassembler APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMRISCVDisassembler PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMRISCVDisassembler.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMRISCVDisassembler )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMRISCVDisassembler "${_IMPORT_PREFIX}/lib/libLLVMRISCVDisassembler.a" )
-
-# Import target "LLVMRISCVDesc" for configuration "Release"
-set_property(TARGET LLVMRISCVDesc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMRISCVDesc PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMRISCVDesc.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMRISCVDesc )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMRISCVDesc "${_IMPORT_PREFIX}/lib/libLLVMRISCVDesc.a" )
-
-# Import target "LLVMRISCVInfo" for configuration "Release"
-set_property(TARGET LLVMRISCVInfo APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMRISCVInfo PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMRISCVInfo.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMRISCVInfo )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMRISCVInfo "${_IMPORT_PREFIX}/lib/libLLVMRISCVInfo.a" )
-
-# Import target "LLVMSystemZCodeGen" for configuration "Release"
-set_property(TARGET LLVMSystemZCodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMSystemZCodeGen PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMSystemZCodeGen.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMSystemZCodeGen )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMSystemZCodeGen "${_IMPORT_PREFIX}/lib/libLLVMSystemZCodeGen.a" )
-
-# Import target "LLVMSystemZAsmParser" for configuration "Release"
-set_property(TARGET LLVMSystemZAsmParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMSystemZAsmParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMSystemZAsmParser.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMSystemZAsmParser )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMSystemZAsmParser "${_IMPORT_PREFIX}/lib/libLLVMSystemZAsmParser.a" )
-
-# Import target "LLVMSystemZDisassembler" for configuration "Release"
-set_property(TARGET LLVMSystemZDisassembler APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMSystemZDisassembler PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMSystemZDisassembler.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMSystemZDisassembler )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMSystemZDisassembler "${_IMPORT_PREFIX}/lib/libLLVMSystemZDisassembler.a" )
-
-# Import target "LLVMSystemZDesc" for configuration "Release"
-set_property(TARGET LLVMSystemZDesc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMSystemZDesc PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMSystemZDesc.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMSystemZDesc )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMSystemZDesc "${_IMPORT_PREFIX}/lib/libLLVMSystemZDesc.a" )
-
-# Import target "LLVMSystemZInfo" for configuration "Release"
-set_property(TARGET LLVMSystemZInfo APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMSystemZInfo PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMSystemZInfo.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMSystemZInfo )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMSystemZInfo "${_IMPORT_PREFIX}/lib/libLLVMSystemZInfo.a" )
-
-# Import target "LLVMX86CodeGen" for configuration "Release"
-set_property(TARGET LLVMX86CodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMX86CodeGen PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMX86CodeGen.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMX86CodeGen )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMX86CodeGen "${_IMPORT_PREFIX}/lib/libLLVMX86CodeGen.a" )
-
-# Import target "LLVMX86AsmParser" for configuration "Release"
-set_property(TARGET LLVMX86AsmParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMX86AsmParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMX86AsmParser.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMX86AsmParser )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMX86AsmParser "${_IMPORT_PREFIX}/lib/libLLVMX86AsmParser.a" )
-
-# Import target "LLVMX86Disassembler" for configuration "Release"
-set_property(TARGET LLVMX86Disassembler APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMX86Disassembler PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMX86Disassembler.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMX86Disassembler )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMX86Disassembler "${_IMPORT_PREFIX}/lib/libLLVMX86Disassembler.a" )
-
-# Import target "LLVMX86Desc" for configuration "Release"
-set_property(TARGET LLVMX86Desc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMX86Desc PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMX86Desc.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMX86Desc )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMX86Desc "${_IMPORT_PREFIX}/lib/libLLVMX86Desc.a" )
-
-# Import target "LLVMX86Info" for configuration "Release"
-set_property(TARGET LLVMX86Info APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMX86Info PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMX86Info.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMX86Info )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMX86Info "${_IMPORT_PREFIX}/lib/libLLVMX86Info.a" )
+list(APPEND _IMPORT_CHECK_TARGETS LLVMAArch64Utils )
+list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMAArch64Utils "${_IMPORT_PREFIX}/lib/libLLVMAArch64Utils.a" )
 
 # Import target "LLVMAsmParser" for configuration "Release"
 set_property(TARGET LLVMAsmParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
@@ -1117,12 +827,12 @@ list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMWindowsManifest "${_IMPORT_PREFIX}/lib/l
 # Import target "LTO" for configuration "Release"
 set_property(TARGET LTO APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LTO PROPERTIES
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLTO.so.13git"
-  IMPORTED_SONAME_RELEASE "libLTO.so.13git"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLTO.so.14git"
+  IMPORTED_SONAME_RELEASE "libLTO.so.14git"
   )
 
 list(APPEND _IMPORT_CHECK_TARGETS LTO )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LTO "${_IMPORT_PREFIX}/lib/libLTO.so.13git" )
+list(APPEND _IMPORT_CHECK_FILES_FOR_LTO "${_IMPORT_PREFIX}/lib/libLTO.so.14git" )
 
 # Import target "LLVMgold" for configuration "Release"
 set_property(TARGET LLVMgold APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
@@ -1343,15 +1053,6 @@ set_target_properties(llvm-dwp PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS llvm-dwp )
 list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-dwp "${_IMPORT_PREFIX}/bin/llvm-dwp" )
 
-# Import target "llvm-elfabi" for configuration "Release"
-set_property(TARGET llvm-elfabi APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(llvm-elfabi PROPERTIES
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/bin/llvm-elfabi"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS llvm-elfabi )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-elfabi "${_IMPORT_PREFIX}/bin/llvm-elfabi" )
-
 # Import target "llvm-exegesis" for configuration "Release"
 set_property(TARGET llvm-exegesis APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(llvm-exegesis PROPERTIES
@@ -1360,16 +1061,6 @@ set_target_properties(llvm-exegesis PROPERTIES
 
 list(APPEND _IMPORT_CHECK_TARGETS llvm-exegesis )
 list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-exegesis "${_IMPORT_PREFIX}/bin/llvm-exegesis" )
-
-# Import target "LLVMExegesisX86" for configuration "Release"
-set_property(TARGET LLVMExegesisX86 APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMExegesisX86 PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMExegesisX86.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMExegesisX86 )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMExegesisX86 "${_IMPORT_PREFIX}/lib/libLLVMExegesisX86.a" )
 
 # Import target "LLVMExegesisAArch64" for configuration "Release"
 set_property(TARGET LLVMExegesisAArch64 APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
@@ -1380,26 +1071,6 @@ set_target_properties(LLVMExegesisAArch64 PROPERTIES
 
 list(APPEND _IMPORT_CHECK_TARGETS LLVMExegesisAArch64 )
 list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMExegesisAArch64 "${_IMPORT_PREFIX}/lib/libLLVMExegesisAArch64.a" )
-
-# Import target "LLVMExegesisPowerPC" for configuration "Release"
-set_property(TARGET LLVMExegesisPowerPC APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMExegesisPowerPC PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMExegesisPowerPC.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMExegesisPowerPC )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMExegesisPowerPC "${_IMPORT_PREFIX}/lib/libLLVMExegesisPowerPC.a" )
-
-# Import target "LLVMExegesisMips" for configuration "Release"
-set_property(TARGET LLVMExegesisMips APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(LLVMExegesisMips PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLLVMExegesisMips.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMExegesisMips )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMExegesisMips "${_IMPORT_PREFIX}/lib/libLLVMExegesisMips.a" )
 
 # Import target "LLVMExegesis" for configuration "Release"
 set_property(TARGET LLVMExegesis APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
@@ -1618,6 +1289,15 @@ set_target_properties(llvm-rtdyld PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS llvm-rtdyld )
 list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-rtdyld "${_IMPORT_PREFIX}/bin/llvm-rtdyld" )
 
+# Import target "llvm-sim" for configuration "Release"
+set_property(TARGET llvm-sim APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(llvm-sim PROPERTIES
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/bin/llvm-sim"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS llvm-sim )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-sim "${_IMPORT_PREFIX}/bin/llvm-sim" )
+
 # Import target "llvm-size" for configuration "Release"
 set_property(TARGET llvm-size APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(llvm-size PROPERTIES
@@ -1663,6 +1343,15 @@ set_target_properties(llvm-symbolizer PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS llvm-symbolizer )
 list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-symbolizer "${_IMPORT_PREFIX}/bin/llvm-symbolizer" )
 
+# Import target "llvm-tapi-diff" for configuration "Release"
+set_property(TARGET llvm-tapi-diff APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(llvm-tapi-diff PROPERTIES
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/bin/llvm-tapi-diff"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS llvm-tapi-diff )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-tapi-diff "${_IMPORT_PREFIX}/bin/llvm-tapi-diff" )
+
 # Import target "llvm-undname" for configuration "Release"
 set_property(TARGET llvm-undname APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(llvm-undname PROPERTIES
@@ -1693,12 +1382,12 @@ list(APPEND _IMPORT_CHECK_FILES_FOR_opt "${_IMPORT_PREFIX}/bin/opt" )
 # Import target "Remarks" for configuration "Release"
 set_property(TARGET Remarks APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(Remarks PROPERTIES
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libRemarks.so.13git"
-  IMPORTED_SONAME_RELEASE "libRemarks.so.13git"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libRemarks.so.14git"
+  IMPORTED_SONAME_RELEASE "libRemarks.so.14git"
   )
 
 list(APPEND _IMPORT_CHECK_TARGETS Remarks )
-list(APPEND _IMPORT_CHECK_FILES_FOR_Remarks "${_IMPORT_PREFIX}/lib/libRemarks.so.13git" )
+list(APPEND _IMPORT_CHECK_FILES_FOR_Remarks "${_IMPORT_PREFIX}/lib/libRemarks.so.14git" )
 
 # Import target "sancov" for configuration "Release"
 set_property(TARGET sancov APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)

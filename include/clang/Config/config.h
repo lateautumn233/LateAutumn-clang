@@ -9,7 +9,7 @@
 #define BUG_REPORT_URL "https://bugs.llvm.org/"
 
 /* Default linker to use. */
-#define CLANG_DEFAULT_LINKER ""
+#define CLANG_DEFAULT_LINKER "lld"
 
 /* Default C/ObjC standard to use. */
 /* #undef CLANG_DEFAULT_STD_C */
@@ -64,7 +64,7 @@
 #define CLANG_HAVE_RLIMITS 1
 
 /* The LLVM product name and version */
-#define BACKEND_PACKAGE_STRING "LLVM 13.0.0git"
+#define BACKEND_PACKAGE_STRING "LLVM 14.0.0git"
 
 /* Linker version detected at compile time. */
 /* #undef HOST_LINK_VERSION */

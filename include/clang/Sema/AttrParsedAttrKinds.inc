@@ -982,7 +982,7 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       return AttributeCommonInfo::AT_XRayLogArgs;	 // "xray_log_args"
     }
     break;
-  case 14:	 // 17 strings to match.
+  case 14:	 // 18 strings to match.
     switch (Name[0]) {
     default: break;
     case 'a':	 // 4 strings to match.
@@ -1085,13 +1085,17 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       if (memcmp(Name.data()+1, "elease_handle", 13) != 0)
         break;
       return AttributeCommonInfo::AT_ReleaseHandle;	 // "release_handle"
+    case 's':	 // 1 string to match.
+      if (memcmp(Name.data()+1, "wiftasynccall", 13) != 0)
+        break;
+      return AttributeCommonInfo::AT_SwiftAsyncCall;	 // "swiftasynccall"
     case 't':	 // 1 string to match.
       if (memcmp(Name.data()+1, "est_typestate", 13) != 0)
         break;
       return AttributeCommonInfo::AT_TestTypestate;	 // "test_typestate"
     }
     break;
-  case 15:	 // 16 strings to match.
+  case 15:	 // 17 strings to match.
     switch (Name[0]) {
     default: break;
     case 'a':	 // 3 strings to match.
@@ -1190,10 +1194,19 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       if (memcmp(Name.data()+1, "ype_visibility", 14) != 0)
         break;
       return AttributeCommonInfo::AT_TypeVisibility;	 // "type_visibility"
-    case 'u':	 // 1 string to match.
-      if (memcmp(Name.data()+1, "nlock_function", 14) != 0)
-        break;
-      return AttributeCommonInfo::AT_ReleaseCapability;	 // "unlock_function"
+    case 'u':	 // 2 strings to match.
+      switch (Name[1]) {
+      default: break;
+      case 'n':	 // 1 string to match.
+        if (memcmp(Name.data()+2, "lock_function", 13) != 0)
+          break;
+        return AttributeCommonInfo::AT_ReleaseCapability;	 // "unlock_function"
+      case 's':	 // 1 string to match.
+        if (memcmp(Name.data()+2, "ing_if_exists", 13) != 0)
+          break;
+        return AttributeCommonInfo::AT_UsingIfExists;	 // "using_if_exists"
+      }
+      break;
     }
     break;
   case 16:	 // 10 strings to match.
@@ -1425,7 +1438,7 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       return AttributeCommonInfo::AT_WarnUnusedResult;	 // "warn_unused_result"
     }
     break;
-  case 19:	 // 15 strings to match.
+  case 19:	 // 16 strings to match.
     switch (Name[0]) {
     default: break;
     case 'a':	 // 2 strings to match.
@@ -1529,6 +1542,10 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       if (memcmp(Name.data()+1, "equires_capability", 18) != 0)
         break;
       return AttributeCommonInfo::AT_RequiresCapability;	 // "requires_capability"
+    case 's':	 // 1 string to match.
+      if (memcmp(Name.data()+1, "wift_async_context", 18) != 0)
+        break;
+      return AttributeCommonInfo::AT_SwiftAsyncContext;	 // "swift_async_context"
     }
     break;
   case 20:	 // 8 strings to match.
@@ -1885,6 +1902,10 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       return AttributeCommonInfo::AT_TryAcquireCapability;	 // "try_acquire_shared_capability"
     }
     break;
+  case 30:	 // 1 string to match.
+    if (memcmp(Name.data()+0, "no_profile_instrument_function", 30) != 0)
+      break;
+    return AttributeCommonInfo::AT_NoProfileFunction;	 // "no_profile_instrument_function"
   case 31:	 // 2 strings to match.
     switch (Name[0]) {
     default: break;
@@ -3138,7 +3159,7 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       return AttributeCommonInfo::AT_ReturnsNonNull;	 // "gnu::returns_nonnull"
     }
     break;
-  case 21:	 // 11 strings to match.
+  case 21:	 // 12 strings to match.
     if (memcmp(Name.data()+0, "clang::", 7) != 0)
       break;
     switch (Name[7]) {
@@ -3212,16 +3233,20 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       if (memcmp(Name.data()+8, "elease_handle", 13) != 0)
         break;
       return AttributeCommonInfo::AT_ReleaseHandle;	 // "clang::release_handle"
+    case 's':	 // 1 string to match.
+      if (memcmp(Name.data()+8, "wiftasynccall", 13) != 0)
+        break;
+      return AttributeCommonInfo::AT_SwiftAsyncCall;	 // "clang::swiftasynccall"
     case 't':	 // 1 string to match.
       if (memcmp(Name.data()+8, "est_typestate", 13) != 0)
         break;
       return AttributeCommonInfo::AT_TestTypestate;	 // "clang::test_typestate"
     }
     break;
-  case 22:	 // 13 strings to match.
+  case 22:	 // 14 strings to match.
     switch (Name[0]) {
     default: break;
-    case 'c':	 // 12 strings to match.
+    case 'c':	 // 13 strings to match.
       if (memcmp(Name.data()+1, "lang::", 6) != 0)
         break;
       switch (Name[7]) {
@@ -3296,10 +3321,19 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
         if (memcmp(Name.data()+8, "ype_visibility", 14) != 0)
           break;
         return AttributeCommonInfo::AT_TypeVisibility;	 // "clang::type_visibility"
-      case 'u':	 // 1 string to match.
-        if (memcmp(Name.data()+8, "nlock_function", 14) != 0)
-          break;
-        return AttributeCommonInfo::AT_ReleaseCapability;	 // "clang::unlock_function"
+      case 'u':	 // 2 strings to match.
+        switch (Name[8]) {
+        default: break;
+        case 'n':	 // 1 string to match.
+          if (memcmp(Name.data()+9, "lock_function", 13) != 0)
+            break;
+          return AttributeCommonInfo::AT_ReleaseCapability;	 // "clang::unlock_function"
+        case 's':	 // 1 string to match.
+          if (memcmp(Name.data()+9, "ing_if_exists", 13) != 0)
+            break;
+          return AttributeCommonInfo::AT_UsingIfExists;	 // "clang::using_if_exists"
+        }
+        break;
       }
       break;
     case 'g':	 // 1 string to match.
@@ -3509,7 +3543,7 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       return AttributeCommonInfo::AT_WarnUnusedResult;	 // "clang::warn_unused_result"
     }
     break;
-  case 26:	 // 11 strings to match.
+  case 26:	 // 12 strings to match.
     if (memcmp(Name.data()+0, "clang::", 7) != 0)
       break;
     switch (Name[7]) {
@@ -3584,6 +3618,10 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       if (memcmp(Name.data()+8, "equires_capability", 18) != 0)
         break;
       return AttributeCommonInfo::AT_RequiresCapability;	 // "clang::requires_capability"
+    case 's':	 // 1 string to match.
+      if (memcmp(Name.data()+8, "wift_async_context", 18) != 0)
+        break;
+      return AttributeCommonInfo::AT_SwiftAsyncContext;	 // "clang::swift_async_context"
     }
     break;
   case 27:	 // 5 strings to match.
@@ -3888,10 +3926,19 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       break;
     }
     break;
-  case 35:	 // 1 string to match.
-    if (memcmp(Name.data()+0, "clang::consumable_set_state_on_read", 35) != 0)
-      break;
-    return AttributeCommonInfo::AT_ConsumableSetOnRead;	 // "clang::consumable_set_state_on_read"
+  case 35:	 // 2 strings to match.
+    switch (Name[0]) {
+    default: break;
+    case 'c':	 // 1 string to match.
+      if (memcmp(Name.data()+1, "lang::consumable_set_state_on_read", 34) != 0)
+        break;
+      return AttributeCommonInfo::AT_ConsumableSetOnRead;	 // "clang::consumable_set_state_on_read"
+    case 'g':	 // 1 string to match.
+      if (memcmp(Name.data()+1, "nu::no_profile_instrument_function", 34) != 0)
+        break;
+      return AttributeCommonInfo::AT_NoProfileFunction;	 // "gnu::no_profile_instrument_function"
+    }
+    break;
   case 36:	 // 2 strings to match.
     if (memcmp(Name.data()+0, "clang::", 7) != 0)
       break;
@@ -4798,7 +4845,7 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       return AttributeCommonInfo::AT_ReturnsNonNull;	 // "gnu::returns_nonnull"
     }
     break;
-  case 21:	 // 6 strings to match.
+  case 21:	 // 7 strings to match.
     if (memcmp(Name.data()+0, "clang::", 7) != 0)
       break;
     switch (Name[7]) {
@@ -4846,6 +4893,10 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       if (memcmp(Name.data()+8, "elease_handle", 13) != 0)
         break;
       return AttributeCommonInfo::AT_ReleaseHandle;	 // "clang::release_handle"
+    case 's':	 // 1 string to match.
+      if (memcmp(Name.data()+8, "wiftasynccall", 13) != 0)
+        break;
+      return AttributeCommonInfo::AT_SwiftAsyncCall;	 // "clang::swiftasynccall"
     }
     break;
   case 22:	 // 8 strings to match.
@@ -5074,7 +5125,7 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       return AttributeCommonInfo::AT_SwiftErrorResult;	 // "clang::swift_error_result"
     }
     break;
-  case 26:	 // 9 strings to match.
+  case 26:	 // 10 strings to match.
     if (memcmp(Name.data()+0, "clang::", 7) != 0)
       break;
     switch (Name[7]) {
@@ -5141,6 +5192,10 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
         return AttributeCommonInfo::AT_OSReturnsRetained;	 // "clang::os_returns_retained"
       }
       break;
+    case 's':	 // 1 string to match.
+      if (memcmp(Name.data()+8, "wift_async_context", 18) != 0)
+        break;
+      return AttributeCommonInfo::AT_SwiftAsyncContext;	 // "clang::swift_async_context"
     }
     break;
   case 27:	 // 5 strings to match.
@@ -5388,6 +5443,10 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       return AttributeCommonInfo::AT_OSReturnsRetainedOnZero;	 // "clang::os_returns_retained_on_zero"
     }
     break;
+  case 35:	 // 1 string to match.
+    if (memcmp(Name.data()+0, "gnu::no_profile_instrument_function", 35) != 0)
+      break;
+    return AttributeCommonInfo::AT_NoProfileFunction;	 // "gnu::no_profile_instrument_function"
   case 36:	 // 1 string to match.
     if (memcmp(Name.data()+0, "clang::no_speculative_load_hardening", 36) != 0)
       break;

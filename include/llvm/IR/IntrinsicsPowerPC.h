@@ -13,7 +13,7 @@ namespace llvm {
 namespace Intrinsic {
 enum PPCIntrinsics : unsigned {
 // Enum values for intrinsics
-    ppc_addf128_round_to_odd = 6198,                  // llvm.ppc.addf128.round.to.odd
+    ppc_addf128_round_to_odd = 6406,                  // llvm.ppc.addf128.round.to.odd
     ppc_altivec_crypto_vcipher,                // llvm.ppc.altivec.crypto.vcipher
     ppc_altivec_crypto_vcipherlast,            // llvm.ppc.altivec.crypto.vcipherlast
     ppc_altivec_crypto_vncipher,               // llvm.ppc.altivec.crypto.vncipher
@@ -318,9 +318,20 @@ enum PPCIntrinsics : unsigned {
     ppc_altivec_vupklsb,                       // llvm.ppc.altivec.vupklsb
     ppc_altivec_vupklsh,                       // llvm.ppc.altivec.vupklsh
     ppc_altivec_vupklsw,                       // llvm.ppc.altivec.vupklsw
+    ppc_atomicrmw_add_i128,                    // llvm.ppc.atomicrmw.add.i128
+    ppc_atomicrmw_and_i128,                    // llvm.ppc.atomicrmw.and.i128
+    ppc_atomicrmw_nand_i128,                   // llvm.ppc.atomicrmw.nand.i128
+    ppc_atomicrmw_or_i128,                     // llvm.ppc.atomicrmw.or.i128
+    ppc_atomicrmw_sub_i128,                    // llvm.ppc.atomicrmw.sub.i128
+    ppc_atomicrmw_xchg_i128,                   // llvm.ppc.atomicrmw.xchg.i128
+    ppc_atomicrmw_xor_i128,                    // llvm.ppc.atomicrmw.xor.i128
     ppc_bpermd,                                // llvm.ppc.bpermd
     ppc_cfence,                                // llvm.ppc.cfence
     ppc_cfuged,                                // llvm.ppc.cfuged
+    ppc_cmpb,                                  // llvm.ppc.cmpb
+    ppc_cmpeqb,                                // llvm.ppc.cmpeqb
+    ppc_cmprb,                                 // llvm.ppc.cmprb
+    ppc_cmpxchg_i128,                          // llvm.ppc.cmpxchg.i128
     ppc_cntlzdm,                               // llvm.ppc.cntlzdm
     ppc_cnttzdm,                               // llvm.ppc.cnttzdm
     ppc_darn,                                  // llvm.ppc.darn
@@ -338,6 +349,8 @@ enum PPCIntrinsics : unsigned {
     ppc_dcbt_with_hint,                        // llvm.ppc.dcbt.with.hint
     ppc_dcbtst,                                // llvm.ppc.dcbtst
     ppc_dcbtst_with_hint,                      // llvm.ppc.dcbtst.with.hint
+    ppc_dcbtstt,                               // llvm.ppc.dcbtstt
+    ppc_dcbtt,                                 // llvm.ppc.dcbtt
     ppc_dcbz,                                  // llvm.ppc.dcbz
     ppc_dcbzl,                                 // llvm.ppc.dcbzl
     ppc_divde,                                 // llvm.ppc.divde
@@ -346,13 +359,49 @@ enum PPCIntrinsics : unsigned {
     ppc_divwe,                                 // llvm.ppc.divwe
     ppc_divweu,                                // llvm.ppc.divweu
     ppc_eieio,                                 // llvm.ppc.eieio
+    ppc_extract_exp,                           // llvm.ppc.extract.exp
+    ppc_extract_sig,                           // llvm.ppc.extract.sig
+    ppc_fcfid,                                 // llvm.ppc.fcfid
+    ppc_fcfud,                                 // llvm.ppc.fcfud
+    ppc_fctid,                                 // llvm.ppc.fctid
+    ppc_fctidz,                                // llvm.ppc.fctidz
+    ppc_fctiw,                                 // llvm.ppc.fctiw
+    ppc_fctiwz,                                // llvm.ppc.fctiwz
+    ppc_fctudz,                                // llvm.ppc.fctudz
+    ppc_fctuwz,                                // llvm.ppc.fctuwz
     ppc_fmaf128_round_to_odd,                  // llvm.ppc.fmaf128.round.to.odd
+    ppc_fmsub,                                 // llvm.ppc.fmsub
+    ppc_fmsubs,                                // llvm.ppc.fmsubs
+    ppc_fnmadd,                                // llvm.ppc.fnmadd
+    ppc_fnmadds,                               // llvm.ppc.fnmadds
+    ppc_fnmsub,                                // llvm.ppc.fnmsub
+    ppc_fnmsubs,                               // llvm.ppc.fnmsubs
+    ppc_fre,                                   // llvm.ppc.fre
+    ppc_fres,                                  // llvm.ppc.fres
+    ppc_frsqrte,                               // llvm.ppc.frsqrte
+    ppc_frsqrtes,                              // llvm.ppc.frsqrtes
+    ppc_fsel,                                  // llvm.ppc.fsel
+    ppc_fsels,                                 // llvm.ppc.fsels
     ppc_get_texasr,                            // llvm.ppc.get.texasr
     ppc_get_texasru,                           // llvm.ppc.get.texasru
     ppc_get_tfhar,                             // llvm.ppc.get.tfhar
     ppc_get_tfiar,                             // llvm.ppc.get.tfiar
+    ppc_icbt,                                  // llvm.ppc.icbt
+    ppc_insert_exp,                            // llvm.ppc.insert.exp
+    ppc_iospace_eieio,                         // llvm.ppc.iospace.eieio
+    ppc_iospace_lwsync,                        // llvm.ppc.iospace.lwsync
+    ppc_iospace_sync,                          // llvm.ppc.iospace.sync
     ppc_isync,                                 // llvm.ppc.isync
+    ppc_load2r,                                // llvm.ppc.load2r
+    ppc_load4r,                                // llvm.ppc.load4r
+    ppc_load8r,                                // llvm.ppc.load8r
     ppc_lwsync,                                // llvm.ppc.lwsync
+    ppc_maddhd,                                // llvm.ppc.maddhd
+    ppc_maddhdu,                               // llvm.ppc.maddhdu
+    ppc_maddld,                                // llvm.ppc.maddld
+    ppc_mfmsr,                                 // llvm.ppc.mfmsr
+    ppc_mfspr,                                 // llvm.ppc.mfspr
+    ppc_mftbu,                                 // llvm.ppc.mftbu
     ppc_mma_assemble_acc,                      // llvm.ppc.mma.assemble.acc
     ppc_mma_disassemble_acc,                   // llvm.ppc.mma.disassemble.acc
     ppc_mma_pmxvbf16ger2,                      // llvm.ppc.mma.pmxvbf16ger2
@@ -416,7 +465,17 @@ enum PPCIntrinsics : unsigned {
     ppc_mma_xxmfacc,                           // llvm.ppc.mma.xxmfacc
     ppc_mma_xxmtacc,                           // llvm.ppc.mma.xxmtacc
     ppc_mma_xxsetaccz,                         // llvm.ppc.mma.xxsetaccz
+    ppc_mtfsb0,                                // llvm.ppc.mtfsb0
+    ppc_mtfsb1,                                // llvm.ppc.mtfsb1
+    ppc_mtfsf,                                 // llvm.ppc.mtfsf
+    ppc_mtfsfi,                                // llvm.ppc.mtfsfi
+    ppc_mtmsr,                                 // llvm.ppc.mtmsr
+    ppc_mtspr,                                 // llvm.ppc.mtspr
     ppc_mulf128_round_to_odd,                  // llvm.ppc.mulf128.round.to.odd
+    ppc_mulhd,                                 // llvm.ppc.mulhd
+    ppc_mulhdu,                                // llvm.ppc.mulhdu
+    ppc_mulhw,                                 // llvm.ppc.mulhw
+    ppc_mulhwu,                                // llvm.ppc.mulhwu
     ppc_pdepd,                                 // llvm.ppc.pdepd
     ppc_pextd,                                 // llvm.ppc.pextd
     ppc_popcntb,                               // llvm.ppc.popcntb
@@ -427,9 +486,18 @@ enum PPCIntrinsics : unsigned {
     ppc_set_texasru,                           // llvm.ppc.set.texasru
     ppc_set_tfhar,                             // llvm.ppc.set.tfhar
     ppc_set_tfiar,                             // llvm.ppc.set.tfiar
+    ppc_setb,                                  // llvm.ppc.setb
     ppc_setflm,                                // llvm.ppc.setflm
     ppc_setrnd,                                // llvm.ppc.setrnd
     ppc_sqrtf128_round_to_odd,                 // llvm.ppc.sqrtf128.round.to.odd
+    ppc_stbcx,                                 // llvm.ppc.stbcx
+    ppc_stdcx,                                 // llvm.ppc.stdcx
+    ppc_stfiw,                                 // llvm.ppc.stfiw
+    ppc_sthcx,                                 // llvm.ppc.sthcx
+    ppc_store2r,                               // llvm.ppc.store2r
+    ppc_store4r,                               // llvm.ppc.store4r
+    ppc_store8r,                               // llvm.ppc.store8r
+    ppc_stwcx,                                 // llvm.ppc.stwcx
     ppc_subf128_round_to_odd,                  // llvm.ppc.subf128.round.to.odd
     ppc_sync,                                  // llvm.ppc.sync
     ppc_tabort,                                // llvm.ppc.tabort
@@ -439,8 +507,11 @@ enum PPCIntrinsics : unsigned {
     ppc_tabortwci,                             // llvm.ppc.tabortwci
     ppc_tbegin,                                // llvm.ppc.tbegin
     ppc_tcheck,                                // llvm.ppc.tcheck
+    ppc_tdw,                                   // llvm.ppc.tdw
     ppc_tend,                                  // llvm.ppc.tend
     ppc_tendall,                               // llvm.ppc.tendall
+    ppc_trap,                                  // llvm.ppc.trap
+    ppc_trapd,                                 // llvm.ppc.trapd
     ppc_trechkpt,                              // llvm.ppc.trechkpt
     ppc_treclaim,                              // llvm.ppc.treclaim
     ppc_tresume,                               // llvm.ppc.tresume
@@ -448,6 +519,7 @@ enum PPCIntrinsics : unsigned {
     ppc_tsr,                                   // llvm.ppc.tsr
     ppc_tsuspend,                              // llvm.ppc.tsuspend
     ppc_ttest,                                 // llvm.ppc.ttest
+    ppc_tw,                                    // llvm.ppc.tw
     ppc_vsx_assemble_pair,                     // llvm.ppc.vsx.assemble.pair
     ppc_vsx_disassemble_pair,                  // llvm.ppc.vsx.disassemble.pair
     ppc_vsx_lxvd2x,                            // llvm.ppc.vsx.lxvd2x

@@ -99,6 +99,26 @@ LINKAGESPEC(LinkageSpec, Decl)
 #  define NAMED(Type, Base) DECL(Type, Base)
 #endif
 ABSTRACT_DECL(NAMED(Named, Decl))
+#ifndef BASEUSING
+#  define BASEUSING(Type, Base) NAMED(Type, Base)
+#endif
+ABSTRACT_DECL(BASEUSING(BaseUsing, NamedDecl))
+#ifndef USING
+#  define USING(Type, Base) BASEUSING(Type, Base)
+#endif
+USING(Using, BaseUsingDecl)
+#undef USING
+
+#ifndef USINGENUM
+#  define USINGENUM(Type, Base) BASEUSING(Type, Base)
+#endif
+USINGENUM(UsingEnum, BaseUsingDecl)
+#undef USINGENUM
+
+DECL_RANGE(BaseUsing, Using, UsingEnum)
+
+#undef BASEUSING
+
 #ifndef LABEL
 #  define LABEL(Type, Base) NAMED(Type, Base)
 #endif
@@ -329,11 +349,11 @@ DECL_RANGE(Type, Enum, UnresolvedUsingTypename)
 
 #undef TYPE
 
-#ifndef USING
-#  define USING(Type, Base) NAMED(Type, Base)
+#ifndef UNRESOLVEDUSINGIFEXISTS
+#  define UNRESOLVEDUSINGIFEXISTS(Type, Base) NAMED(Type, Base)
 #endif
-USING(Using, NamedDecl)
-#undef USING
+UNRESOLVEDUSINGIFEXISTS(UnresolvedUsingIfExists, NamedDecl)
+#undef UNRESOLVEDUSINGIFEXISTS
 
 #ifndef USINGDIRECTIVE
 #  define USINGDIRECTIVE(Type, Base) NAMED(Type, Base)
@@ -543,7 +563,7 @@ DECL_RANGE(Value, Binding, UnresolvedUsingValue)
 
 #undef VALUE
 
-DECL_RANGE(Named, Label, UnresolvedUsingValue)
+DECL_RANGE(Named, Using, UnresolvedUsingValue)
 
 #undef NAMED
 

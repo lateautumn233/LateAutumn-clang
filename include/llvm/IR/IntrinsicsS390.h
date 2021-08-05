@@ -13,7 +13,7 @@ namespace llvm {
 namespace Intrinsic {
 enum S390Intrinsics : unsigned {
 // Enum values for intrinsics
-    s390_efpc = 7298,                                 // llvm.s390.efpc
+    s390_efpc = 7578,                                 // llvm.s390.efpc
     s390_etnd,                                 // llvm.s390.etnd
     s390_lcbb,                                 // llvm.s390.lcbb
     s390_ntstg,                                // llvm.s390.ntstg
@@ -46,6 +46,7 @@ enum S390Intrinsics : unsigned {
     s390_vceqfs,                               // llvm.s390.vceqfs
     s390_vceqgs,                               // llvm.s390.vceqgs
     s390_vceqhs,                               // llvm.s390.vceqhs
+    s390_vcfn,                                 // llvm.s390.vcfn
     s390_vchbs,                                // llvm.s390.vchbs
     s390_vchfs,                                // llvm.s390.vchfs
     s390_vchgs,                                // llvm.s390.vchgs
@@ -55,6 +56,10 @@ enum S390Intrinsics : unsigned {
     s390_vchlgs,                               // llvm.s390.vchlgs
     s390_vchlhs,                               // llvm.s390.vchlhs
     s390_vcksm,                                // llvm.s390.vcksm
+    s390_vclfnhs,                              // llvm.s390.vclfnhs
+    s390_vclfnls,                              // llvm.s390.vclfnls
+    s390_vcnf,                                 // llvm.s390.vcnf
+    s390_vcrnfs,                               // llvm.s390.vcrnfs
     s390_verimb,                               // llvm.s390.verimb
     s390_verimf,                               // llvm.s390.verimf
     s390_verimg,                               // llvm.s390.verimg

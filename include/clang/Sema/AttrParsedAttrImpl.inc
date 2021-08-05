@@ -6840,6 +6840,51 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
 static const ParsedAttrInfoNoMips16 Instance;
 };
 const ParsedAttrInfoNoMips16 ParsedAttrInfoNoMips16::Instance;
+static constexpr ParsedAttrInfo::Spelling NoProfileFunctionSpellings[] = {
+  {AttributeCommonInfo::AS_GNU, "no_profile_instrument_function"},
+  {AttributeCommonInfo::AS_CXX11, "gnu::no_profile_instrument_function"},
+  {AttributeCommonInfo::AS_C2x, "gnu::no_profile_instrument_function"},
+};
+struct ParsedAttrInfoNoProfileFunction final : public ParsedAttrInfo {
+  ParsedAttrInfoNoProfileFunction() {
+    AttrKind = ParsedAttr::AT_NoProfileFunction;
+    NumArgs = 0;
+    OptArgs = 0;
+    HasCustomParsing = 0;
+    IsTargetSpecific = 0;
+    IsType = 0;
+    IsStmt = 0;
+    IsKnownToGCC = 1;
+    IsSupportedByPragmaAttribute = 1;
+    Spellings = NoProfileFunctionSpellings;
+  }
+bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
+  if (!isa<FunctionDecl>(D)) {
+    S.Diag(Attr.getLoc(), diag::warn_attribute_wrong_decl_type_str)
+      << Attr << "functions";
+    return false;
+  }
+  return true;
+}
+
+bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const override {
+  S.Diag(AL.getLoc(), diag::err_decl_attribute_invalid_on_stmt)
+    << AL << St->getBeginLoc();
+  return false;
+}
+
+void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectMatchRule, bool>> &MatchRules, const LangOptions &LangOpts) const override {
+  MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
+}
+
+AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const override {
+  D->addAttr(::new (S.Context) NoProfileFunctionAttr(S.Context, Attr));
+  return AttributeApplied;
+}
+
+static const ParsedAttrInfoNoProfileFunction Instance;
+};
+const ParsedAttrInfoNoProfileFunction ParsedAttrInfoNoProfileFunction::Instance;
 static constexpr ParsedAttrInfo::Spelling NoReturnSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "noreturn"},
   {AttributeCommonInfo::AS_CXX11, "gnu::noreturn"},
@@ -11084,6 +11129,67 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
 static const ParsedAttrInfoSwiftAsync Instance;
 };
 const ParsedAttrInfoSwiftAsync ParsedAttrInfoSwiftAsync::Instance;
+static constexpr ParsedAttrInfo::Spelling SwiftAsyncCallSpellings[] = {
+  {AttributeCommonInfo::AS_GNU, "swiftasynccall"},
+  {AttributeCommonInfo::AS_CXX11, "clang::swiftasynccall"},
+  {AttributeCommonInfo::AS_C2x, "clang::swiftasynccall"},
+};
+struct ParsedAttrInfoSwiftAsyncCall final : public ParsedAttrInfo {
+  ParsedAttrInfoSwiftAsyncCall() {
+    AttrKind = ParsedAttr::AT_SwiftAsyncCall;
+    NumArgs = 0;
+    OptArgs = 0;
+    HasCustomParsing = 0;
+    IsTargetSpecific = 0;
+    IsType = 1;
+    IsStmt = 0;
+    IsKnownToGCC = 0;
+    IsSupportedByPragmaAttribute = 0;
+    Spellings = SwiftAsyncCallSpellings;
+  }
+static const ParsedAttrInfoSwiftAsyncCall Instance;
+};
+const ParsedAttrInfoSwiftAsyncCall ParsedAttrInfoSwiftAsyncCall::Instance;
+static constexpr ParsedAttrInfo::Spelling SwiftAsyncContextSpellings[] = {
+  {AttributeCommonInfo::AS_GNU, "swift_async_context"},
+  {AttributeCommonInfo::AS_CXX11, "clang::swift_async_context"},
+  {AttributeCommonInfo::AS_C2x, "clang::swift_async_context"},
+};
+struct ParsedAttrInfoSwiftAsyncContext final : public ParsedAttrInfo {
+  ParsedAttrInfoSwiftAsyncContext() {
+    AttrKind = ParsedAttr::AT_SwiftAsyncContext;
+    NumArgs = 0;
+    OptArgs = 0;
+    HasCustomParsing = 0;
+    IsTargetSpecific = 0;
+    IsType = 0;
+    IsStmt = 0;
+    IsKnownToGCC = 0;
+    IsSupportedByPragmaAttribute = 1;
+    Spellings = SwiftAsyncContextSpellings;
+  }
+bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
+  if (!isa<ParmVarDecl>(D)) {
+    S.Diag(Attr.getLoc(), diag::warn_attribute_wrong_decl_type_str)
+      << Attr << "parameters";
+    return false;
+  }
+  return true;
+}
+
+bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const override {
+  S.Diag(AL.getLoc(), diag::err_decl_attribute_invalid_on_stmt)
+    << AL << St->getBeginLoc();
+  return false;
+}
+
+void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectMatchRule, bool>> &MatchRules, const LangOptions &LangOpts) const override {
+  MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
+}
+
+static const ParsedAttrInfoSwiftAsyncContext Instance;
+};
+const ParsedAttrInfoSwiftAsyncContext ParsedAttrInfoSwiftAsyncContext::Instance;
 static constexpr ParsedAttrInfo::Spelling SwiftAsyncErrorSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "swift_async_error"},
   {AttributeCommonInfo::AS_CXX11, "clang::swift_async_error"},
@@ -12287,6 +12393,41 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
 static const ParsedAttrInfoUsed Instance;
 };
 const ParsedAttrInfoUsed ParsedAttrInfoUsed::Instance;
+static constexpr ParsedAttrInfo::Spelling UsingIfExistsSpellings[] = {
+  {AttributeCommonInfo::AS_GNU, "using_if_exists"},
+  {AttributeCommonInfo::AS_CXX11, "clang::using_if_exists"},
+};
+struct ParsedAttrInfoUsingIfExists final : public ParsedAttrInfo {
+  ParsedAttrInfoUsingIfExists() {
+    AttrKind = ParsedAttr::AT_UsingIfExists;
+    NumArgs = 0;
+    OptArgs = 0;
+    HasCustomParsing = 0;
+    IsTargetSpecific = 0;
+    IsType = 0;
+    IsStmt = 0;
+    IsKnownToGCC = 0;
+    IsSupportedByPragmaAttribute = 0;
+    Spellings = UsingIfExistsSpellings;
+  }
+bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
+  if (!isa<UsingDecl>(D) && !isa<UnresolvedUsingTypenameDecl>(D) && !isa<UnresolvedUsingValueDecl>(D)) {
+    S.Diag(Attr.getLoc(), diag::err_attribute_wrong_decl_type_str)
+      << Attr << "named declarations, types, and value declarations";
+    return false;
+  }
+  return true;
+}
+
+bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const override {
+  S.Diag(AL.getLoc(), diag::err_decl_attribute_invalid_on_stmt)
+    << AL << St->getBeginLoc();
+  return false;
+}
+
+static const ParsedAttrInfoUsingIfExists Instance;
+};
+const ParsedAttrInfoUsingIfExists ParsedAttrInfoUsingIfExists::Instance;
 static constexpr ParsedAttrInfo::Spelling UuidSpellings[] = {
   {AttributeCommonInfo::AS_Declspec, "uuid"},
   {AttributeCommonInfo::AS_Microsoft, "uuid"},
@@ -13171,6 +13312,7 @@ static const ParsedAttrInfo *AttrInfoMap[] = {
 &ParsedAttrInfoNoMerge::Instance,
 &ParsedAttrInfoNoMicroMips::Instance,
 &ParsedAttrInfoNoMips16::Instance,
+&ParsedAttrInfoNoProfileFunction::Instance,
 &ParsedAttrInfoNoReturn::Instance,
 &ParsedAttrInfoNoSanitize::Instance,
 &ParsedAttrInfoNoSanitizeSpecific::Instance,
@@ -13279,6 +13421,8 @@ static const ParsedAttrInfo *AttrInfoMap[] = {
 &ParsedAttrInfoStrictFP::Instance,
 &ParsedAttrInfoSuppress::Instance,
 &ParsedAttrInfoSwiftAsync::Instance,
+&ParsedAttrInfoSwiftAsyncCall::Instance,
+&ParsedAttrInfoSwiftAsyncContext::Instance,
 &ParsedAttrInfoSwiftAsyncError::Instance,
 &ParsedAttrInfoSwiftAsyncName::Instance,
 &ParsedAttrInfoSwiftAttr::Instance,
@@ -13315,6 +13459,7 @@ static const ParsedAttrInfo *AttrInfoMap[] = {
 &ParsedAttrInfoUnused::Instance,
 &ParsedAttrInfoUseHandle::Instance,
 &ParsedAttrInfoUsed::Instance,
+&ParsedAttrInfoUsingIfExists::Instance,
 &ParsedAttrInfoUuid::Instance,
 &ParsedAttrInfoVecReturn::Instance,
 &ParsedAttrInfoVecTypeHint::Instance,

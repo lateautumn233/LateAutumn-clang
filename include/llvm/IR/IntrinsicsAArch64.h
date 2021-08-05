@@ -13,7 +13,7 @@ namespace llvm {
 namespace Intrinsic {
 enum AARCH64Intrinsics : unsigned {
 // Enum values for intrinsics
-    aarch64_addg = 323,                              // llvm.aarch64.addg
+    aarch64_addg = 340,                              // llvm.aarch64.addg
     aarch64_clrex,                             // llvm.aarch64.clrex
     aarch64_cls,                               // llvm.aarch64.cls
     aarch64_cls64,                             // llvm.aarch64.cls64
@@ -146,7 +146,6 @@ enum AARCH64Intrinsics : unsigned {
     aarch64_neon_pmull,                        // llvm.aarch64.neon.pmull
     aarch64_neon_pmull64,                      // llvm.aarch64.neon.pmull64
     aarch64_neon_raddhn,                       // llvm.aarch64.neon.raddhn
-    aarch64_neon_rbit,                         // llvm.aarch64.neon.rbit
     aarch64_neon_rshrn,                        // llvm.aarch64.neon.rshrn
     aarch64_neon_rsubhn,                       // llvm.aarch64.neon.rsubhn
     aarch64_neon_sabd,                         // llvm.aarch64.neon.sabd

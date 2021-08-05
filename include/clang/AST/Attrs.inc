@@ -1639,6 +1639,8 @@ static llvm::StringRef getPrettyPlatformName(llvm::StringRef Platform) {
              .Case("macos_app_extension", "macOS (App Extension)")
              .Case("tvos_app_extension", "tvOS (App Extension)")
              .Case("watchos_app_extension", "watchOS (App Extension)")
+             .Case("maccatalyst", "macCatalyst")
+             .Case("maccatalyst_app_extension", "macCatalyst (App Extension)")
              .Case("swift", "Swift")
              .Default(llvm::StringRef());
 }
@@ -1652,6 +1654,8 @@ static llvm::StringRef getPlatformNameSourceSpelling(llvm::StringRef Platform) {
              .Case("macos_app_extension", "macOSApplicationExtension")
              .Case("tvos_app_extension", "tvOSApplicationExtension")
              .Case("watchos_app_extension", "watchOSApplicationExtension")
+             .Case("maccatalyst", "macCatalyst")
+             .Case("maccatalyst_app_extension", "macCatalystApplicationExtension")
              .Case("zos", "z/OS")
              .Default(Platform);
 }
@@ -1665,6 +1669,8 @@ static llvm::StringRef canonicalizePlatformName(llvm::StringRef Platform) {
              .Case("macOSApplicationExtension", "macos_app_extension")
              .Case("tvOSApplicationExtension", "tvos_app_extension")
              .Case("watchOSApplicationExtension", "watchos_app_extension")
+             .Case("macCatalyst", "maccatalyst")
+             .Case("macCatalystApplicationExtension", "maccatalyst_app_extension")
              .Default(Platform);
 } 
 
@@ -5962,6 +5968,35 @@ public:
   static bool classof(const Attr *A) { return A->getKind() == attr::NoMips16; }
 };
 
+class NoProfileFunctionAttr : public InheritableAttr {
+public:
+  enum Spelling {
+    GNU_no_profile_instrument_function = 0,
+    CXX11_gnu_no_profile_instrument_function = 1,
+    C2x_gnu_no_profile_instrument_function = 2,
+  SpellingNotCalculated = 15
+
+  };
+
+  // Factory methods
+  static NoProfileFunctionAttr *CreateImplicit(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo = {SourceRange{}});
+  static NoProfileFunctionAttr *Create(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo);
+  static NoProfileFunctionAttr *CreateImplicit(ASTContext &Ctx, SourceRange Range, AttributeCommonInfo::Syntax Syntax);
+  static NoProfileFunctionAttr *Create(ASTContext &Ctx, SourceRange Range, AttributeCommonInfo::Syntax Syntax);
+
+  // Constructors
+  NoProfileFunctionAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
+             );
+
+  NoProfileFunctionAttr *clone(ASTContext &C) const;
+  void printPretty(raw_ostream &OS,
+                   const PrintingPolicy &Policy) const;
+  const char *getSpelling() const;
+
+
+  static bool classof(const Attr *A) { return A->getKind() == attr::NoProfileFunction; }
+};
+
 class NoReturnAttr : public InheritableAttr {
 public:
   enum Spelling {
@@ -6038,6 +6073,10 @@ public:
         Mask |= expandSanitizerGroups(ParsedMask);
       }
       return Mask;
+    }
+
+    bool hasCoverage() const {
+      return llvm::is_contained(sanitizers(), "coverage");
     }
   
 
@@ -9890,6 +9929,64 @@ public:
   static bool classof(const Attr *A) { return A->getKind() == attr::SwiftAsync; }
 };
 
+class SwiftAsyncCallAttr : public InheritableAttr {
+public:
+  enum Spelling {
+    GNU_swiftasynccall = 0,
+    CXX11_clang_swiftasynccall = 1,
+    C2x_clang_swiftasynccall = 2,
+  SpellingNotCalculated = 15
+
+  };
+
+  // Factory methods
+  static SwiftAsyncCallAttr *CreateImplicit(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo = {SourceRange{}});
+  static SwiftAsyncCallAttr *Create(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo);
+  static SwiftAsyncCallAttr *CreateImplicit(ASTContext &Ctx, SourceRange Range, AttributeCommonInfo::Syntax Syntax);
+  static SwiftAsyncCallAttr *Create(ASTContext &Ctx, SourceRange Range, AttributeCommonInfo::Syntax Syntax);
+
+  // Constructors
+  SwiftAsyncCallAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
+             );
+
+  SwiftAsyncCallAttr *clone(ASTContext &C) const;
+  void printPretty(raw_ostream &OS,
+                   const PrintingPolicy &Policy) const;
+  const char *getSpelling() const;
+
+
+  static bool classof(const Attr *A) { return A->getKind() == attr::SwiftAsyncCall; }
+};
+
+class SwiftAsyncContextAttr : public ParameterABIAttr {
+public:
+  enum Spelling {
+    GNU_swift_async_context = 0,
+    CXX11_clang_swift_async_context = 1,
+    C2x_clang_swift_async_context = 2,
+  SpellingNotCalculated = 15
+
+  };
+
+  // Factory methods
+  static SwiftAsyncContextAttr *CreateImplicit(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo = {SourceRange{}});
+  static SwiftAsyncContextAttr *Create(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo);
+  static SwiftAsyncContextAttr *CreateImplicit(ASTContext &Ctx, SourceRange Range, AttributeCommonInfo::Syntax Syntax);
+  static SwiftAsyncContextAttr *Create(ASTContext &Ctx, SourceRange Range, AttributeCommonInfo::Syntax Syntax);
+
+  // Constructors
+  SwiftAsyncContextAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
+             );
+
+  SwiftAsyncContextAttr *clone(ASTContext &C) const;
+  void printPretty(raw_ostream &OS,
+                   const PrintingPolicy &Policy) const;
+  const char *getSpelling() const;
+
+
+  static bool classof(const Attr *A) { return A->getKind() == attr::SwiftAsyncContext; }
+};
+
 class SwiftAsyncErrorAttr : public InheritableAttr {
 public:
   enum ConventionKind {
@@ -11217,6 +11314,34 @@ public:
 
 
   static bool classof(const Attr *A) { return A->getKind() == attr::Used; }
+};
+
+class UsingIfExistsAttr : public InheritableAttr {
+public:
+  enum Spelling {
+    GNU_using_if_exists = 0,
+    CXX11_clang_using_if_exists = 1,
+  SpellingNotCalculated = 15
+
+  };
+
+  // Factory methods
+  static UsingIfExistsAttr *CreateImplicit(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo = {SourceRange{}});
+  static UsingIfExistsAttr *Create(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo);
+  static UsingIfExistsAttr *CreateImplicit(ASTContext &Ctx, SourceRange Range, AttributeCommonInfo::Syntax Syntax);
+  static UsingIfExistsAttr *Create(ASTContext &Ctx, SourceRange Range, AttributeCommonInfo::Syntax Syntax);
+
+  // Constructors
+  UsingIfExistsAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
+             );
+
+  UsingIfExistsAttr *clone(ASTContext &C) const;
+  void printPretty(raw_ostream &OS,
+                   const PrintingPolicy &Policy) const;
+  const char *getSpelling() const;
+
+
+  static bool classof(const Attr *A) { return A->getKind() == attr::UsingIfExists; }
 };
 
 class UuidAttr : public InheritableAttr {

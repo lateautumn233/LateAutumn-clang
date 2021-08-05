@@ -371,7 +371,13 @@ STMT_RANGE(OMPLoopDirective, OMPDistributeDirective, OMPTeamsDistributeSimdDirec
 OMPTILEDIRECTIVE(OMPTileDirective, OMPLoopBasedDirective)
 #undef OMPTILEDIRECTIVE
 
-STMT_RANGE(OMPLoopBasedDirective, OMPDistributeDirective, OMPTileDirective)
+#ifndef OMPUNROLLDIRECTIVE
+#  define OMPUNROLLDIRECTIVE(Type, Base) OMPLOOPBASEDDIRECTIVE(Type, Base)
+#endif
+OMPUNROLLDIRECTIVE(OMPUnrollDirective, OMPLoopBasedDirective)
+#undef OMPUNROLLDIRECTIVE
+
+STMT_RANGE(OMPLoopBasedDirective, OMPDistributeDirective, OMPUnrollDirective)
 
 #undef OMPLOOPBASEDDIRECTIVE
 
@@ -1350,6 +1356,12 @@ RECOVERYEXPR(RecoveryExpr, Expr)
 #endif
 REQUIRESEXPR(RequiresExpr, Expr)
 #undef REQUIRESEXPR
+
+#ifndef SYCLUNIQUESTABLENAMEEXPR
+#  define SYCLUNIQUESTABLENAMEEXPR(Type, Base) EXPR(Type, Base)
+#endif
+SYCLUNIQUESTABLENAMEEXPR(SYCLUniqueStableNameExpr, Expr)
+#undef SYCLUNIQUESTABLENAMEEXPR
 
 #ifndef SHUFFLEVECTOREXPR
 #  define SHUFFLEVECTOREXPR(Type, Base) EXPR(Type, Base)

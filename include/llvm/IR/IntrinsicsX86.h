@@ -13,7 +13,7 @@ namespace llvm {
 namespace Intrinsic {
 enum X86Intrinsics : unsigned {
 // Enum values for intrinsics
-    x86_3dnow_pavgusb = 8799,                         // llvm.x86.3dnow.pavgusb
+    x86_3dnow_pavgusb = 9065,                         // llvm.x86.3dnow.pavgusb
     x86_3dnow_pf2id,                           // llvm.x86.3dnow.pf2id
     x86_3dnow_pfacc,                           // llvm.x86.3dnow.pfacc
     x86_3dnow_pfadd,                           // llvm.x86.3dnow.pfadd
@@ -1128,6 +1128,7 @@ enum X86Intrinsics : unsigned {
     x86_tileloadd64,                           // llvm.x86.tileloadd64
     x86_tileloadd64_internal,                  // llvm.x86.tileloadd64.internal
     x86_tileloaddt164,                         // llvm.x86.tileloaddt164
+    x86_tileloaddt164_internal,                // llvm.x86.tileloaddt164.internal
     x86_tilerelease,                           // llvm.x86.tilerelease
     x86_tilestored64,                          // llvm.x86.tilestored64
     x86_tilestored64_internal,                 // llvm.x86.tilestored64.internal

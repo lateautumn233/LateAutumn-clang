@@ -913,7 +913,7 @@ AST_MATCHER_P(Expr, ignoringImplicit, internal::Matcher<Expr>,
 ///    varDecl(hasInitializer(integerLiteral()))
 ///    varDecl(hasInitializer(declRefExpr()))
 /// \endcode
-/// only match the declarations for b, c, and d.
+/// only match the declarations for a.
 AST_MATCHER_P(Expr, ignoringImpCasts,
               internal::Matcher<Expr>, InnerMatcher) {
   return InnerMatcher.matches(*Node.IgnoreImpCasts(), Finder, Builder);
@@ -1213,7 +1213,7 @@ AST_MATCHER_P(TemplateArgument, equalsIntegralValue,
               std::string, Value) {
   if (Node.getKind() != TemplateArgument::Integral)
     return false;
-  return Node.getAsIntegral().toString(10) == Value;
+  return toString(Node.getAsIntegral(), 10) == Value;
 }
 
 /// Matches an Objective-C autorelease pool statement.
@@ -1751,6 +1751,18 @@ extern const internal::VariadicDynCastAllOfMatcher<Stmt,
 /// usingDecl()
 ///   matches \code using X::x \endcode
 extern const internal::VariadicDynCastAllOfMatcher<Decl, UsingDecl> usingDecl;
+
+/// Matches using-enum declarations.
+///
+/// Given
+/// \code
+///   namespace X { enum x {...}; }
+///   using enum X::x;
+/// \endcode
+/// usingEnumDecl()
+///   matches \code using enum X::x \endcode
+extern const internal::VariadicDynCastAllOfMatcher<Decl, UsingEnumDecl>
+    usingEnumDecl;
 
 /// Matches using namespace declarations.
 ///
@@ -6197,7 +6209,7 @@ AST_POLYMORPHIC_MATCHER_P(
 /// \endcode
 /// usingDecl(hasAnyUsingShadowDecl(hasName("b"))))
 ///   matches \code using X::b \endcode
-AST_MATCHER_P(UsingDecl, hasAnyUsingShadowDecl,
+AST_MATCHER_P(BaseUsingDecl, hasAnyUsingShadowDecl,
               internal::Matcher<UsingShadowDecl>, InnerMatcher) {
   return matchesFirstInPointerRange(InnerMatcher, Node.shadow_begin(),
                                     Node.shadow_end(), Finder,
@@ -7543,7 +7555,12 @@ AST_MATCHER_P(DecompositionDecl, hasAnyBinding, internal::Matcher<BindingDecl>,
   });
 }
 
-/// Matches declaration of the function the statement belongs to
+/// Matches declaration of the function the statement belongs to.
+///
+/// Deprecated. Use forCallable() to correctly handle the situation when
+/// the declaration is not a function (but a block or an Objective-C method).
+/// forFunction() not only fails to take non-functions into account but also
+/// may match the wrong declaration in their presence.
 ///
 /// Given:
 /// \code
@@ -7560,20 +7577,79 @@ AST_MATCHER_P(Stmt, forFunction, internal::Matcher<FunctionDecl>,
   const auto &Parents = Finder->getASTContext().getParents(Node);
 
   llvm::SmallVector<DynTypedNode, 8> Stack(Parents.begin(), Parents.end());
-  while(!Stack.empty()) {
+  while (!Stack.empty()) {
     const auto &CurNode = Stack.back();
     Stack.pop_back();
-    if(const auto *FuncDeclNode = CurNode.get<FunctionDecl>()) {
-      if(InnerMatcher.matches(*FuncDeclNode, Finder, Builder)) {
+    if (const auto *FuncDeclNode = CurNode.get<FunctionDecl>()) {
+      if (InnerMatcher.matches(*FuncDeclNode, Finder, Builder)) {
         return true;
       }
-    } else if(const auto *LambdaExprNode = CurNode.get<LambdaExpr>()) {
-      if(InnerMatcher.matches(*LambdaExprNode->getCallOperator(),
-                              Finder, Builder)) {
+    } else if (const auto *LambdaExprNode = CurNode.get<LambdaExpr>()) {
+      if (InnerMatcher.matches(*LambdaExprNode->getCallOperator(), Finder,
+                               Builder)) {
         return true;
       }
     } else {
-      for(const auto &Parent: Finder->getASTContext().getParents(CurNode))
+      for (const auto &Parent : Finder->getASTContext().getParents(CurNode))
+        Stack.push_back(Parent);
+    }
+  }
+  return false;
+}
+
+/// Matches declaration of the function, method, or block the statement
+/// belongs to.
+///
+/// Given:
+/// \code
+/// F& operator=(const F& o) {
+///   std::copy_if(o.begin(), o.end(), begin(), [](V v) { return v > 0; });
+///   return *this;
+/// }
+/// \endcode
+/// returnStmt(forCallable(functionDecl(hasName("operator="))))
+///   matches 'return *this'
+///   but does not match 'return v > 0'
+///
+/// Given:
+/// \code
+/// -(void) foo {
+///   int x = 1;
+///   dispatch_sync(queue, ^{ int y = 2; });
+/// }
+/// \endcode
+/// declStmt(forCallable(objcMethodDecl()))
+///   matches 'int x = 1'
+///   but does not match 'int y = 2'.
+/// whereas declStmt(forCallable(blockDecl()))
+///   matches 'int y = 2'
+///   but does not match 'int x = 1'.
+AST_MATCHER_P(Stmt, forCallable, internal::Matcher<Decl>, InnerMatcher) {
+  const auto &Parents = Finder->getASTContext().getParents(Node);
+
+  llvm::SmallVector<DynTypedNode, 8> Stack(Parents.begin(), Parents.end());
+  while (!Stack.empty()) {
+    const auto &CurNode = Stack.back();
+    Stack.pop_back();
+    if (const auto *FuncDeclNode = CurNode.get<FunctionDecl>()) {
+      if (InnerMatcher.matches(*FuncDeclNode, Finder, Builder)) {
+        return true;
+      }
+    } else if (const auto *LambdaExprNode = CurNode.get<LambdaExpr>()) {
+      if (InnerMatcher.matches(*LambdaExprNode->getCallOperator(), Finder,
+                               Builder)) {
+        return true;
+      }
+    } else if (const auto *ObjCMethodDeclNode = CurNode.get<ObjCMethodDecl>()) {
+      if (InnerMatcher.matches(*ObjCMethodDeclNode, Finder, Builder)) {
+        return true;
+      }
+    } else if (const auto *BlockDeclNode = CurNode.get<BlockDecl>()) {
+      if (InnerMatcher.matches(*BlockDeclNode, Finder, Builder)) {
+        return true;
+      }
+    } else {
+      for (const auto &Parent : Finder->getASTContext().getParents(CurNode))
         Stack.push_back(Parent);
     }
   }

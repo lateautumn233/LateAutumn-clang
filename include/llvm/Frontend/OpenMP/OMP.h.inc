@@ -99,13 +99,14 @@ enum class Directive {
   OMPD_threadprivate,
   OMPD_tile,
   OMPD_unknown,
+  OMPD_unroll,
   OMPD_workshare,
   OMPD_dispatch,
   OMPD_interop,
   OMPD_masked,
 };
 
-static constexpr std::size_t Directive_enumSize = 93;
+static constexpr std::size_t Directive_enumSize = 94;
 
 constexpr auto OMPD_allocate = llvm::omp::Directive::OMPD_allocate;
 constexpr auto OMPD_assumes = llvm::omp::Directive::OMPD_assumes;
@@ -196,6 +197,7 @@ constexpr auto OMPD_teams_distribute_simd = llvm::omp::Directive::OMPD_teams_dis
 constexpr auto OMPD_threadprivate = llvm::omp::Directive::OMPD_threadprivate;
 constexpr auto OMPD_tile = llvm::omp::Directive::OMPD_tile;
 constexpr auto OMPD_unknown = llvm::omp::Directive::OMPD_unknown;
+constexpr auto OMPD_unroll = llvm::omp::Directive::OMPD_unroll;
 constexpr auto OMPD_workshare = llvm::omp::Directive::OMPD_workshare;
 constexpr auto OMPD_dispatch = llvm::omp::Directive::OMPD_dispatch;
 constexpr auto OMPD_interop = llvm::omp::Directive::OMPD_interop;
@@ -229,6 +231,7 @@ enum class Clause {
   OMPC_firstprivate,
   OMPC_flush,
   OMPC_from,
+  OMPC_full,
   OMPC_grainsize,
   OMPC_hint,
   OMPC_if,
@@ -254,6 +257,7 @@ enum class Clause {
   OMPC_num_threads,
   OMPC_order,
   OMPC_ordered,
+  OMPC_partial,
   OMPC_priority,
   OMPC_private,
   OMPC_proc_bind,
@@ -287,7 +291,7 @@ enum class Clause {
   OMPC_write,
 };
 
-static constexpr std::size_t Clause_enumSize = 83;
+static constexpr std::size_t Clause_enumSize = 85;
 
 constexpr auto OMPC_acq_rel = llvm::omp::Clause::OMPC_acq_rel;
 constexpr auto OMPC_acquire = llvm::omp::Clause::OMPC_acquire;
@@ -316,6 +320,7 @@ constexpr auto OMPC_final = llvm::omp::Clause::OMPC_final;
 constexpr auto OMPC_firstprivate = llvm::omp::Clause::OMPC_firstprivate;
 constexpr auto OMPC_flush = llvm::omp::Clause::OMPC_flush;
 constexpr auto OMPC_from = llvm::omp::Clause::OMPC_from;
+constexpr auto OMPC_full = llvm::omp::Clause::OMPC_full;
 constexpr auto OMPC_grainsize = llvm::omp::Clause::OMPC_grainsize;
 constexpr auto OMPC_hint = llvm::omp::Clause::OMPC_hint;
 constexpr auto OMPC_if = llvm::omp::Clause::OMPC_if;
@@ -341,6 +346,7 @@ constexpr auto OMPC_num_teams = llvm::omp::Clause::OMPC_num_teams;
 constexpr auto OMPC_num_threads = llvm::omp::Clause::OMPC_num_threads;
 constexpr auto OMPC_order = llvm::omp::Clause::OMPC_order;
 constexpr auto OMPC_ordered = llvm::omp::Clause::OMPC_ordered;
+constexpr auto OMPC_partial = llvm::omp::Clause::OMPC_partial;
 constexpr auto OMPC_priority = llvm::omp::Clause::OMPC_priority;
 constexpr auto OMPC_private = llvm::omp::Clause::OMPC_private;
 constexpr auto OMPC_proc_bind = llvm::omp::Clause::OMPC_proc_bind;

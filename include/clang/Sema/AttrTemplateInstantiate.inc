@@ -832,6 +832,10 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
       const auto *A = cast<NoMips16Attr>(At);
       return A->clone(C);
     }
+    case attr::NoProfileFunction: {
+      const auto *A = cast<NoProfileFunctionAttr>(At);
+      return A->clone(C);
+    }
     case attr::NoReturn: {
       const auto *A = cast<NoReturnAttr>(At);
       return A->clone(C);
@@ -1351,6 +1355,14 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
       const auto *A = cast<SwiftAsyncAttr>(At);
       return A->clone(C);
     }
+    case attr::SwiftAsyncCall: {
+      const auto *A = cast<SwiftAsyncCallAttr>(At);
+      return A->clone(C);
+    }
+    case attr::SwiftAsyncContext: {
+      const auto *A = cast<SwiftAsyncContextAttr>(At);
+      return A->clone(C);
+    }
     case attr::SwiftAsyncError: {
       const auto *A = cast<SwiftAsyncErrorAttr>(At);
       return A->clone(C);
@@ -1513,6 +1525,10 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
     }
     case attr::Used: {
       const auto *A = cast<UsedAttr>(At);
+      return A->clone(C);
+    }
+    case attr::UsingIfExists: {
+      const auto *A = cast<UsingIfExistsAttr>(At);
       return A->clone(C);
     }
     case attr::Uuid: {
@@ -2103,6 +2119,9 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
     case attr::NoMips16: {
       return nullptr;
     }
+    case attr::NoProfileFunction: {
+      return nullptr;
+    }
     case attr::NoReturn: {
       return nullptr;
     }
@@ -2453,6 +2472,12 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
     case attr::SwiftAsync: {
       return nullptr;
     }
+    case attr::SwiftAsyncCall: {
+      return nullptr;
+    }
+    case attr::SwiftAsyncContext: {
+      return nullptr;
+    }
     case attr::SwiftAsyncError: {
       return nullptr;
     }
@@ -2559,6 +2584,9 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
       return nullptr;
     }
     case attr::Used: {
+      return nullptr;
+    }
+    case attr::UsingIfExists: {
       return nullptr;
     }
     case attr::Uuid: {

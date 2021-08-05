@@ -11,6 +11,7 @@
     addressofreturnaddress,                    // llvm.addressofreturnaddress
     adjust_trampoline,                         // llvm.adjust.trampoline
     annotation,                                // llvm.annotation
+    arithmetic_fence,                          // llvm.arithmetic.fence
     assume,                                    // llvm.assume
     bitreverse,                                // llvm.bitreverse
     bswap,                                     // llvm.bswap
@@ -124,6 +125,8 @@
     experimental_constrained_trunc,            // llvm.experimental.constrained.trunc
     experimental_constrained_uitofp,           // llvm.experimental.constrained.uitofp
     experimental_deoptimize,                   // llvm.experimental.deoptimize
+    experimental_gc_get_pointer_base,          // llvm.experimental.gc.get.pointer.base
+    experimental_gc_get_pointer_offset,        // llvm.experimental.gc.get.pointer.offset
     experimental_gc_relocate,                  // llvm.experimental.gc.relocate
     experimental_gc_result,                    // llvm.experimental.gc.result
     experimental_gc_statepoint,                // llvm.experimental.gc.statepoint
@@ -254,6 +257,10 @@
     sadd_with_overflow,                        // llvm.sadd.with.overflow
     sdiv_fix,                                  // llvm.sdiv.fix
     sdiv_fix_sat,                              // llvm.sdiv.fix.sat
+    seh_scope_begin,                           // llvm.seh.scope.begin
+    seh_scope_end,                             // llvm.seh.scope.end
+    seh_try_begin,                             // llvm.seh.try.begin
+    seh_try_end,                               // llvm.seh.try.end
     set_loop_iterations,                       // llvm.set.loop.iterations
     set_rounding,                              // llvm.set.rounding
     sideeffect,                                // llvm.sideeffect
@@ -275,6 +282,7 @@
     stacksave,                                 // llvm.stacksave
     start_loop_iterations,                     // llvm.start.loop.iterations
     strip_invariant_group,                     // llvm.strip.invariant.group
+    swift_async_context_addr,                  // llvm.swift.async.context.addr
     test_set_loop_iterations,                  // llvm.test.set.loop.iterations
     test_start_loop_iterations,                // llvm.test.start.loop.iterations
     thread_pointer,                            // llvm.thread.pointer
@@ -315,12 +323,21 @@
     vp_add,                                    // llvm.vp.add
     vp_and,                                    // llvm.vp.and
     vp_ashr,                                   // llvm.vp.ashr
+    vp_fadd,                                   // llvm.vp.fadd
+    vp_fdiv,                                   // llvm.vp.fdiv
+    vp_fmul,                                   // llvm.vp.fmul
+    vp_frem,                                   // llvm.vp.frem
+    vp_fsub,                                   // llvm.vp.fsub
+    vp_gather,                                 // llvm.vp.gather
+    vp_load,                                   // llvm.vp.load
     vp_lshr,                                   // llvm.vp.lshr
     vp_mul,                                    // llvm.vp.mul
     vp_or,                                     // llvm.vp.or
+    vp_scatter,                                // llvm.vp.scatter
     vp_sdiv,                                   // llvm.vp.sdiv
     vp_shl,                                    // llvm.vp.shl
     vp_srem,                                   // llvm.vp.srem
+    vp_store,                                  // llvm.vp.store
     vp_sub,                                    // llvm.vp.sub
     vp_udiv,                                   // llvm.vp.udiv
     vp_urem,                                   // llvm.vp.urem
@@ -329,4 +346,4 @@
     write_register,                            // llvm.write_register
     xray_customevent,                          // llvm.xray.customevent
     xray_typedevent,                           // llvm.xray.typedevent
-    num_intrinsics = 10063
+    num_intrinsics = 10330

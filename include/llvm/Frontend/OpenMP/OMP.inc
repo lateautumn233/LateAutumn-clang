@@ -2171,6 +2171,22 @@ namespace omp {
   static OmpClauseSet requiredClauses_OMPD_unknown {
   };
 
+  // Sets for unroll
+
+  static OmpClauseSet allowedClauses_OMPD_unroll {
+  };
+
+  static OmpClauseSet allowedOnceClauses_OMPD_unroll {
+    llvm::omp::Clause::OMPC_full,
+    llvm::omp::Clause::OMPC_partial,
+  };
+
+  static OmpClauseSet allowedExclusiveClauses_OMPD_unroll {
+  };
+
+  static OmpClauseSet requiredClauses_OMPD_unroll {
+  };
+
   // Sets for workshare
 
   static OmpClauseSet allowedClauses_OMPD_workshare {
@@ -2960,6 +2976,14 @@ namespace omp {
       llvm::omp::requiredClauses_OMPD_unknown,
     }
   },
+  {llvm::omp::Directive::OMPD_unroll,
+    {
+      llvm::omp::allowedClauses_OMPD_unroll,
+      llvm::omp::allowedOnceClauses_OMPD_unroll,
+      llvm::omp::allowedExclusiveClauses_OMPD_unroll,
+      llvm::omp::requiredClauses_OMPD_unroll,
+    }
+  },
   {llvm::omp::Directive::OMPD_workshare,
     {
       llvm::omp::allowedClauses_OMPD_workshare,
@@ -3026,6 +3050,7 @@ WRAPPER_CLASS(Final, ScalarLogicalExpr);
 WRAPPER_CLASS(Firstprivate, OmpObjectList);
 EMPTY_CLASS(Flush);
 WRAPPER_CLASS(From, OmpObjectList);
+EMPTY_CLASS(Full);
 WRAPPER_CLASS(Grainsize, ScalarIntExpr);
 WRAPPER_CLASS(Hint, ConstantExpr);
 WRAPPER_CLASS(If, OmpIfClause);
@@ -3051,6 +3076,7 @@ WRAPPER_CLASS(NumTeams, ScalarIntExpr);
 WRAPPER_CLASS(NumThreads, ScalarIntExpr);
 EMPTY_CLASS(Order);
 WRAPPER_CLASS(Ordered, std::optional<ScalarIntConstantExpr>);
+EMPTY_CLASS(Partial);
 WRAPPER_CLASS(Priority, ScalarIntExpr);
 WRAPPER_CLASS(Private, OmpObjectList);
 WRAPPER_CLASS(ProcBind, OmpProcBindClause);
@@ -3115,6 +3141,7 @@ AcqRel
 , Firstprivate
 , Flush
 , From
+, Full
 , Grainsize
 , Hint
 , If
@@ -3140,6 +3167,7 @@ AcqRel
 , NumThreads
 , Order
 , Ordered
+, Partial
 , Priority
 , Private
 , ProcBind
@@ -3204,6 +3232,7 @@ NODE(OmpClause, Final)
 NODE(OmpClause, Firstprivate)
 NODE(OmpClause, Flush)
 NODE(OmpClause, From)
+NODE(OmpClause, Full)
 NODE(OmpClause, Grainsize)
 NODE(OmpClause, Hint)
 NODE(OmpClause, If)
@@ -3229,6 +3258,7 @@ NODE(OmpClause, NumTeams)
 NODE(OmpClause, NumThreads)
 NODE(OmpClause, Order)
 NODE(OmpClause, Ordered)
+NODE(OmpClause, Partial)
 NODE(OmpClause, Priority)
 NODE(OmpClause, Private)
 NODE(OmpClause, ProcBind)
@@ -3366,6 +3396,7 @@ void Unparse(const OmpClause::From &x) {
   Walk(x.v);
   Put(")");
 }
+void Before(const OmpClause::Full &) { Word("FULL"); }
 void Unparse(const OmpClause::Grainsize &x) {
   Word("GRAINSIZE");
   Put("(");
@@ -3459,6 +3490,7 @@ void Unparse(const OmpClause::Ordered &x) {
   Word("ORDERED");
   Walk("(", x.v, ")");
 }
+void Before(const OmpClause::Partial &) { Word("PARTIAL"); }
 void Unparse(const OmpClause::Priority &x) {
   Word("PRIORITY");
   Put("(");
@@ -3588,6 +3620,7 @@ void Enter(const parser::OmpClause::Final &);
 void Enter(const parser::OmpClause::Firstprivate &);
 void Enter(const parser::OmpClause::Flush &);
 void Enter(const parser::OmpClause::From &);
+void Enter(const parser::OmpClause::Full &);
 void Enter(const parser::OmpClause::Grainsize &);
 void Enter(const parser::OmpClause::Hint &);
 void Enter(const parser::OmpClause::If &);
@@ -3613,6 +3646,7 @@ void Enter(const parser::OmpClause::NumTeams &);
 void Enter(const parser::OmpClause::NumThreads &);
 void Enter(const parser::OmpClause::Order &);
 void Enter(const parser::OmpClause::Ordered &);
+void Enter(const parser::OmpClause::Partial &);
 void Enter(const parser::OmpClause::Priority &);
 void Enter(const parser::OmpClause::Private &);
 void Enter(const parser::OmpClause::ProcBind &);
@@ -3704,6 +3738,8 @@ if constexpr (std::is_same_v<A, parser::OmpClause::Flush>)
   return llvm::omp::Clause::OMPC_flush;
 if constexpr (std::is_same_v<A, parser::OmpClause::From>)
   return llvm::omp::Clause::OMPC_from;
+if constexpr (std::is_same_v<A, parser::OmpClause::Full>)
+  return llvm::omp::Clause::OMPC_full;
 if constexpr (std::is_same_v<A, parser::OmpClause::Grainsize>)
   return llvm::omp::Clause::OMPC_grainsize;
 if constexpr (std::is_same_v<A, parser::OmpClause::Hint>)
@@ -3754,6 +3790,8 @@ if constexpr (std::is_same_v<A, parser::OmpClause::Order>)
   return llvm::omp::Clause::OMPC_order;
 if constexpr (std::is_same_v<A, parser::OmpClause::Ordered>)
   return llvm::omp::Clause::OMPC_ordered;
+if constexpr (std::is_same_v<A, parser::OmpClause::Partial>)
+  return llvm::omp::Clause::OMPC_partial;
 if constexpr (std::is_same_v<A, parser::OmpClause::Priority>)
   return llvm::omp::Clause::OMPC_priority;
 if constexpr (std::is_same_v<A, parser::OmpClause::Private>)
@@ -3873,6 +3911,7 @@ __CLAUSE(final, OMPFinalClause)
 __CLAUSE(firstprivate, OMPFirstprivateClause)
 __IMPLICIT_CLAUSE_CLASS(flush, "flush", OMPFlushClause)
 __CLAUSE(from, OMPFromClause)
+__CLAUSE(full, OMPFullClause)
 __CLAUSE(grainsize, OMPGrainsizeClause)
 __CLAUSE(hint, OMPHintClause)
 __CLAUSE(if, OMPIfClause)
@@ -3898,6 +3937,7 @@ __CLAUSE(num_teams, OMPNumTeamsClause)
 __CLAUSE(num_threads, OMPNumThreadsClause)
 __CLAUSE(order, OMPOrderClause)
 __CLAUSE(ordered, OMPOrderedClause)
+__CLAUSE(partial, OMPPartialClause)
 __CLAUSE(priority, OMPPriorityClause)
 __CLAUSE(private, OMPPrivateClause)
 __CLAUSE(proc_bind, OMPProcBindClause)
@@ -4033,6 +4073,7 @@ Directive llvm::omp::getOpenMPDirectiveKind(llvm::StringRef Str) {
     .Case("threadprivate",OMPD_threadprivate)
     .Case("tile",OMPD_tile)
     .Case("unknown",OMPD_unknown)
+    .Case("unroll",OMPD_unroll)
     .Case("workshare",OMPD_workshare)
     .Case("dispatch",OMPD_dispatch)
     .Case("interop",OMPD_interop)
@@ -4220,6 +4261,8 @@ llvm::StringRef llvm::omp::getOpenMPDirectiveName(Directive Kind) {
       return "tile";
     case OMPD_unknown:
       return "unknown";
+    case OMPD_unroll:
+      return "unroll";
     case OMPD_workshare:
       return "workshare";
     case OMPD_dispatch:
@@ -4261,6 +4304,7 @@ Clause llvm::omp::getOpenMPClauseKind(llvm::StringRef Str) {
     .Case("firstprivate",OMPC_firstprivate)
     .Case("flush",OMPC_unknown)
     .Case("from",OMPC_from)
+    .Case("full",OMPC_full)
     .Case("grainsize",OMPC_grainsize)
     .Case("hint",OMPC_hint)
     .Case("if",OMPC_if)
@@ -4286,6 +4330,7 @@ Clause llvm::omp::getOpenMPClauseKind(llvm::StringRef Str) {
     .Case("num_threads",OMPC_num_threads)
     .Case("order",OMPC_order)
     .Case("ordered",OMPC_ordered)
+    .Case("partial",OMPC_partial)
     .Case("priority",OMPC_priority)
     .Case("private",OMPC_private)
     .Case("proc_bind",OMPC_proc_bind)
@@ -4376,6 +4421,8 @@ llvm::StringRef llvm::omp::getOpenMPClauseName(Clause Kind) {
       return "flush";
     case OMPC_from:
       return "from";
+    case OMPC_full:
+      return "full";
     case OMPC_grainsize:
       return "grainsize";
     case OMPC_hint:
@@ -4426,6 +4473,8 @@ llvm::StringRef llvm::omp::getOpenMPClauseName(Clause Kind) {
       return "order";
     case OMPC_ordered:
       return "ordered";
+    case OMPC_partial:
+      return "partial";
     case OMPC_priority:
       return "priority";
     case OMPC_private:
@@ -6500,9 +6549,9 @@ bool llvm::omp::isAllowedClauseForDirective(Directive D, Clause C, unsigned Vers
     case OMPD_taskgroup:
       switch (C) {
         case OMPC_task_reduction:
-          return 1 <= Version && 2147483647 >= Version;
+          return 50 <= Version && 2147483647 >= Version;
         case OMPC_allocate:
-          return 1 <= Version && 2147483647 >= Version;
+          return 50 <= Version && 2147483647 >= Version;
         default:
           return false;
       }
@@ -6895,6 +6944,16 @@ bool llvm::omp::isAllowedClauseForDirective(Directive D, Clause C, unsigned Vers
       break;
     case OMPD_unknown:
       return false;
+      break;
+    case OMPD_unroll:
+      switch (C) {
+        case OMPC_full:
+          return 51 <= Version && 2147483647 >= Version;
+        case OMPC_partial:
+          return 51 <= Version && 2147483647 >= Version;
+        default:
+          return false;
+      }
       break;
     case OMPD_workshare:
       return false;

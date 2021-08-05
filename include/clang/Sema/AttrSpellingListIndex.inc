@@ -1357,6 +1357,15 @@
         return 2;
     break;
   }
+  case AT_NoProfileFunction: {
+    if (Name == "no_profile_instrument_function" && getSyntax() == AttributeCommonInfo::AS_GNU && Scope == "")
+        return 0;
+    if (Name == "no_profile_instrument_function" && getSyntax() == AttributeCommonInfo::AS_CXX11 && Scope == "gnu")
+        return 1;
+    if (Name == "no_profile_instrument_function" && getSyntax() == AttributeCommonInfo::AS_C2x && Scope == "gnu")
+        return 2;
+    break;
+  }
   case AT_NoReturn: {
     if (Name == "noreturn" && getSyntax() == AttributeCommonInfo::AS_GNU && Scope == "")
         return 0;
@@ -2313,6 +2322,24 @@
         return 2;
     break;
   }
+  case AT_SwiftAsyncCall: {
+    if (Name == "swiftasynccall" && getSyntax() == AttributeCommonInfo::AS_GNU && Scope == "")
+        return 0;
+    if (Name == "swiftasynccall" && getSyntax() == AttributeCommonInfo::AS_CXX11 && Scope == "clang")
+        return 1;
+    if (Name == "swiftasynccall" && getSyntax() == AttributeCommonInfo::AS_C2x && Scope == "clang")
+        return 2;
+    break;
+  }
+  case AT_SwiftAsyncContext: {
+    if (Name == "swift_async_context" && getSyntax() == AttributeCommonInfo::AS_GNU && Scope == "")
+        return 0;
+    if (Name == "swift_async_context" && getSyntax() == AttributeCommonInfo::AS_CXX11 && Scope == "clang")
+        return 1;
+    if (Name == "swift_async_context" && getSyntax() == AttributeCommonInfo::AS_C2x && Scope == "clang")
+        return 2;
+    break;
+  }
   case AT_SwiftAsyncError: {
     if (Name == "swift_async_error" && getSyntax() == AttributeCommonInfo::AS_GNU && Scope == "")
         return 0;
@@ -2579,6 +2606,13 @@
         return 1;
     if (Name == "used" && getSyntax() == AttributeCommonInfo::AS_C2x && Scope == "gnu")
         return 2;
+    break;
+  }
+  case AT_UsingIfExists: {
+    if (Name == "using_if_exists" && getSyntax() == AttributeCommonInfo::AS_GNU && Scope == "")
+        return 0;
+    if (Name == "using_if_exists" && getSyntax() == AttributeCommonInfo::AS_CXX11 && Scope == "clang")
+        return 1;
     break;
   }
   case AT_Uuid: {
