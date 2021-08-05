@@ -7,7 +7,7 @@ OUTPUT_FORMAT("elf32-bigarm", "elf32-bigarm",
 	      "elf32-littlearm")
 OUTPUT_ARCH(arm)
 ENTRY(_start)
-SEARCH_DIR("/drone/src/install/aarch64-unknown-linux-gnu/lib");
+SEARCH_DIR("/root/LateAutumn-clang/aarch64-unknown-linux-gnu/lib");
 SECTIONS
 {
   /* Read-only sections, merged into text segment: */
