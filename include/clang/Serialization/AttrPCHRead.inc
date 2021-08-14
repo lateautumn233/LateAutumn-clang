@@ -491,6 +491,17 @@
     New->setPackExpansion(isPackExpansion);
     break;
   }
+  case attr::BTFTag: {
+    bool isInherited = Record.readInt();
+    bool isImplicit = Record.readInt();
+    bool isPackExpansion = Record.readInt();
+    std::string bTFTag= Record.readString();
+    New = new (Context) BTFTagAttr(Context, Info, bTFTag);
+    cast<InheritableAttr>(New)->setInherited(isInherited);
+    New->setImplicit(isImplicit);
+    New->setPackExpansion(isPackExpansion);
+    break;
+  }
   case attr::Blocks: {
     bool isInherited = Record.readInt();
     bool isImplicit = Record.readInt();

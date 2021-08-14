@@ -1706,6 +1706,52 @@ public:
   static bool classof(const Attr *A) { return A->getKind() == attr::BPFPreserveAccessIndex; }
 };
 
+class BTFTagAttr : public InheritableAttr {
+unsigned bTFTagLength;
+char *bTFTag;
+
+public:
+  enum Spelling {
+    GNU_btf_tag = 0,
+    CXX11_clang_btf_tag = 1,
+    C2x_clang_btf_tag = 2,
+  SpellingNotCalculated = 15
+
+  };
+
+  // Factory methods
+  static BTFTagAttr *CreateImplicit(ASTContext &Ctx, llvm::StringRef BTFTag, const AttributeCommonInfo &CommonInfo = {SourceRange{}});
+  static BTFTagAttr *Create(ASTContext &Ctx, llvm::StringRef BTFTag, const AttributeCommonInfo &CommonInfo);
+  static BTFTagAttr *CreateImplicit(ASTContext &Ctx, llvm::StringRef BTFTag, SourceRange Range, AttributeCommonInfo::Syntax Syntax);
+  static BTFTagAttr *Create(ASTContext &Ctx, llvm::StringRef BTFTag, SourceRange Range, AttributeCommonInfo::Syntax Syntax);
+
+  // Constructors
+  BTFTagAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
+              , llvm::StringRef BTFTag
+             );
+
+  BTFTagAttr *clone(ASTContext &C) const;
+  void printPretty(raw_ostream &OS,
+                   const PrintingPolicy &Policy) const;
+  const char *getSpelling() const;
+  llvm::StringRef getBTFTag() const {
+    return llvm::StringRef(bTFTag, bTFTagLength);
+  }
+  unsigned getBTFTagLength() const {
+    return bTFTagLength;
+  }
+  void setBTFTag(ASTContext &C, llvm::StringRef S) {
+    bTFTagLength = S.size();
+    this->bTFTag = new (C, 1) char [bTFTagLength];
+    if (!S.empty())
+      std::memcpy(this->bTFTag, S.data(), bTFTagLength);
+  }
+
+
+
+  static bool classof(const Attr *A) { return A->getKind() == attr::BTFTag; }
+};
+
 class BlocksAttr : public InheritableAttr {
 public:
   enum BlockType {

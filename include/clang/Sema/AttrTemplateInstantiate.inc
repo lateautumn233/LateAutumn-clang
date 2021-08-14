@@ -254,6 +254,10 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
       const auto *A = cast<BPFPreserveAccessIndexAttr>(At);
       return A->clone(C);
     }
+    case attr::BTFTag: {
+      const auto *A = cast<BTFTagAttr>(At);
+      return A->clone(C);
+    }
     case attr::Blocks: {
       const auto *A = cast<BlocksAttr>(At);
       return A->clone(C);
@@ -1729,6 +1733,9 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
       return nullptr;
     }
     case attr::BPFPreserveAccessIndex: {
+      return nullptr;
+    }
+    case attr::BTFTag: {
       return nullptr;
     }
     case attr::Blocks: {

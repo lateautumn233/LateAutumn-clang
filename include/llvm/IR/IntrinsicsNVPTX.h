@@ -13,7 +13,7 @@ namespace llvm {
 namespace Intrinsic {
 enum NVVMIntrinsics : unsigned {
 // Enum values for intrinsics
-    nvvm_add_rm_d = 4918,                             // llvm.nvvm.add.rm.d
+    nvvm_add_rm_d = 4919,                             // llvm.nvvm.add.rm.d
     nvvm_add_rm_f,                             // llvm.nvvm.add.rm.f
     nvvm_add_rm_ftz_f,                         // llvm.nvvm.add.rm.ftz.f
     nvvm_add_rn_d,                             // llvm.nvvm.add.rn.d
@@ -201,6 +201,12 @@ enum NVVMIntrinsics : unsigned {
     nvvm_ldg_global_f,                         // llvm.nvvm.ldg.global.f
     nvvm_ldg_global_i,                         // llvm.nvvm.ldg.global.i
     nvvm_ldg_global_p,                         // llvm.nvvm.ldg.global.p
+    nvvm_ldmatrix_sync_aligned_m8n8_x1_b16,    // llvm.nvvm.ldmatrix.sync.aligned.m8n8.x1.b16
+    nvvm_ldmatrix_sync_aligned_m8n8_x1_trans_b16,  // llvm.nvvm.ldmatrix.sync.aligned.m8n8.x1.trans.b16
+    nvvm_ldmatrix_sync_aligned_m8n8_x2_b16,    // llvm.nvvm.ldmatrix.sync.aligned.m8n8.x2.b16
+    nvvm_ldmatrix_sync_aligned_m8n8_x2_trans_b16,  // llvm.nvvm.ldmatrix.sync.aligned.m8n8.x2.trans.b16
+    nvvm_ldmatrix_sync_aligned_m8n8_x4_b16,    // llvm.nvvm.ldmatrix.sync.aligned.m8n8.x4.b16
+    nvvm_ldmatrix_sync_aligned_m8n8_x4_trans_b16,  // llvm.nvvm.ldmatrix.sync.aligned.m8n8.x4.trans.b16
     nvvm_ldu_global_f,                         // llvm.nvvm.ldu.global.f
     nvvm_ldu_global_i,                         // llvm.nvvm.ldu.global.i
     nvvm_ldu_global_p,                         // llvm.nvvm.ldu.global.p

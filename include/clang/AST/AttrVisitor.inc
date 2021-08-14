@@ -172,6 +172,10 @@
   bool VisitBPFPreserveAccessIndexAttr(BPFPreserveAccessIndexAttr *A) {
     return true; 
   }
+  bool TraverseBTFTagAttr(BTFTagAttr *A);
+  bool VisitBTFTagAttr(BTFTagAttr *A) {
+    return true; 
+  }
   bool TraverseBlocksAttr(BlocksAttr *A);
   bool VisitBlocksAttr(BlocksAttr *A) {
     return true; 
@@ -1817,6 +1821,15 @@ bool VISITORCLASS<Derived>::TraverseBPFPreserveAccessIndexAttr(BPFPreserveAccess
   if (!getDerived().VisitAttr(A))
     return false;
   if (!getDerived().VisitBPFPreserveAccessIndexAttr(A))
+    return false;
+  return true;
+}
+
+template <typename Derived>
+bool VISITORCLASS<Derived>::TraverseBTFTagAttr(BTFTagAttr *A) {
+  if (!getDerived().VisitAttr(A))
+    return false;
+  if (!getDerived().VisitBTFTagAttr(A))
     return false;
   return true;
 }
@@ -4745,6 +4758,8 @@ bool VISITORCLASS<Derived>::TraverseAttr(Attr *A) {
       return getDerived().TraverseAvailabilityAttr(cast<AvailabilityAttr>(A));
     case attr::BPFPreserveAccessIndex:
       return getDerived().TraverseBPFPreserveAccessIndexAttr(cast<BPFPreserveAccessIndexAttr>(A));
+    case attr::BTFTag:
+      return getDerived().TraverseBTFTagAttr(cast<BTFTagAttr>(A));
     case attr::Blocks:
       return getDerived().TraverseBlocksAttr(cast<BlocksAttr>(A));
     case attr::Builtin:

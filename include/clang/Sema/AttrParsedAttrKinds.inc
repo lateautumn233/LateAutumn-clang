@@ -193,7 +193,7 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       return AttributeCommonInfo::AT_Unused;	 // "unused"
     }
     break;
-  case 7:	 // 21 strings to match.
+  case 7:	 // 22 strings to match.
     switch (Name[0]) {
     default: break;
     case '_':	 // 1 string to match.
@@ -213,10 +213,19 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
         return AttributeCommonInfo::AT_Aligned;	 // "aligned"
       }
       break;
-    case 'b':	 // 1 string to match.
-      if (memcmp(Name.data()+1, "ounded", 6) != 0)
-        break;
-      return AttributeCommonInfo::IgnoredAttribute;	 // "bounded"
+    case 'b':	 // 2 strings to match.
+      switch (Name[1]) {
+      default: break;
+      case 'o':	 // 1 string to match.
+        if (memcmp(Name.data()+2, "unded", 5) != 0)
+          break;
+        return AttributeCommonInfo::IgnoredAttribute;	 // "bounded"
+      case 't':	 // 1 string to match.
+        if (memcmp(Name.data()+2, "f_tag", 5) != 0)
+          break;
+        return AttributeCommonInfo::AT_BTFTag;	 // "btf_tag"
+      }
+      break;
     case 'c':	 // 1 string to match.
       if (memcmp(Name.data()+1, "leanup", 6) != 0)
         break;
@@ -2551,14 +2560,18 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       break;
     }
     break;
-  case 14:	 // 14 strings to match.
+  case 14:	 // 15 strings to match.
     switch (Name[0]) {
     default: break;
-    case 'c':	 // 5 strings to match.
+    case 'c':	 // 6 strings to match.
       if (memcmp(Name.data()+1, "lang::", 6) != 0)
         break;
       switch (Name[7]) {
       default: break;
+      case 'b':	 // 1 string to match.
+        if (memcmp(Name.data()+8, "tf_tag", 6) != 0)
+          break;
+        return AttributeCommonInfo::AT_BTFTag;	 // "clang::btf_tag"
       case 'm':	 // 1 string to match.
         if (memcmp(Name.data()+8, "insize", 6) != 0)
           break;
@@ -4327,14 +4340,18 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       break;
     }
     break;
-  case 14:	 // 14 strings to match.
+  case 14:	 // 15 strings to match.
     switch (Name[0]) {
     default: break;
-    case 'c':	 // 5 strings to match.
+    case 'c':	 // 6 strings to match.
       if (memcmp(Name.data()+1, "lang::", 6) != 0)
         break;
       switch (Name[7]) {
       default: break;
+      case 'b':	 // 1 string to match.
+        if (memcmp(Name.data()+8, "tf_tag", 6) != 0)
+          break;
+        return AttributeCommonInfo::AT_BTFTag;	 // "clang::btf_tag"
       case 'm':	 // 1 string to match.
         if (memcmp(Name.data()+8, "insize", 6) != 0)
           break;

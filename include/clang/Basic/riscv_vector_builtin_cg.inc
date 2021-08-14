@@ -10,6 +10,9 @@ case RISCV::BI__builtin_rvv_vget_v_i32m8_i32m1:
 case RISCV::BI__builtin_rvv_vget_v_i64m2_i64m1:
 case RISCV::BI__builtin_rvv_vget_v_i64m4_i64m1:
 case RISCV::BI__builtin_rvv_vget_v_i64m8_i64m1:
+case RISCV::BI__builtin_rvv_vget_v_f16m2_f16m1:
+case RISCV::BI__builtin_rvv_vget_v_f16m4_f16m1:
+case RISCV::BI__builtin_rvv_vget_v_f16m8_f16m1:
 case RISCV::BI__builtin_rvv_vget_v_f32m2_f32m1:
 case RISCV::BI__builtin_rvv_vget_v_f32m4_f32m1:
 case RISCV::BI__builtin_rvv_vget_v_f32m8_f32m1:
@@ -36,6 +39,8 @@ case RISCV::BI__builtin_rvv_vget_v_i32m4_i32m2:
 case RISCV::BI__builtin_rvv_vget_v_i32m8_i32m2:
 case RISCV::BI__builtin_rvv_vget_v_i64m4_i64m2:
 case RISCV::BI__builtin_rvv_vget_v_i64m8_i64m2:
+case RISCV::BI__builtin_rvv_vget_v_f16m4_f16m2:
+case RISCV::BI__builtin_rvv_vget_v_f16m8_f16m2:
 case RISCV::BI__builtin_rvv_vget_v_f32m4_f32m2:
 case RISCV::BI__builtin_rvv_vget_v_f32m8_f32m2:
 case RISCV::BI__builtin_rvv_vget_v_f64m4_f64m2:
@@ -52,6 +57,7 @@ case RISCV::BI__builtin_rvv_vget_v_i8m8_i8m4:
 case RISCV::BI__builtin_rvv_vget_v_i16m8_i16m4:
 case RISCV::BI__builtin_rvv_vget_v_i32m8_i32m4:
 case RISCV::BI__builtin_rvv_vget_v_i64m8_i64m4:
+case RISCV::BI__builtin_rvv_vget_v_f16m8_f16m4:
 case RISCV::BI__builtin_rvv_vget_v_f32m8_f32m4:
 case RISCV::BI__builtin_rvv_vget_v_f64m8_f64m4:
 case RISCV::BI__builtin_rvv_vget_v_u8m8_u8m4:
@@ -73,6 +79,7 @@ case RISCV::BI__builtin_rvv_vset_v_i8m1_i8m2:
 case RISCV::BI__builtin_rvv_vset_v_i16m1_i16m2:
 case RISCV::BI__builtin_rvv_vset_v_i32m1_i32m2:
 case RISCV::BI__builtin_rvv_vset_v_i64m1_i64m2:
+case RISCV::BI__builtin_rvv_vset_v_f16m1_f16m2:
 case RISCV::BI__builtin_rvv_vset_v_f32m1_f32m2:
 case RISCV::BI__builtin_rvv_vset_v_f64m1_f64m2:
 case RISCV::BI__builtin_rvv_vset_v_u8m1_u8m2:
@@ -87,6 +94,8 @@ case RISCV::BI__builtin_rvv_vset_v_i32m1_i32m4:
 case RISCV::BI__builtin_rvv_vset_v_i32m2_i32m4:
 case RISCV::BI__builtin_rvv_vset_v_i64m1_i64m4:
 case RISCV::BI__builtin_rvv_vset_v_i64m2_i64m4:
+case RISCV::BI__builtin_rvv_vset_v_f16m1_f16m4:
+case RISCV::BI__builtin_rvv_vset_v_f16m2_f16m4:
 case RISCV::BI__builtin_rvv_vset_v_f32m1_f32m4:
 case RISCV::BI__builtin_rvv_vset_v_f32m2_f32m4:
 case RISCV::BI__builtin_rvv_vset_v_f64m1_f64m4:
@@ -111,6 +120,9 @@ case RISCV::BI__builtin_rvv_vset_v_i32m4_i32m8:
 case RISCV::BI__builtin_rvv_vset_v_i64m1_i64m8:
 case RISCV::BI__builtin_rvv_vset_v_i64m2_i64m8:
 case RISCV::BI__builtin_rvv_vset_v_i64m4_i64m8:
+case RISCV::BI__builtin_rvv_vset_v_f16m1_f16m8:
+case RISCV::BI__builtin_rvv_vset_v_f16m2_f16m8:
+case RISCV::BI__builtin_rvv_vset_v_f16m4_f16m8:
 case RISCV::BI__builtin_rvv_vset_v_f32m1_f32m8:
 case RISCV::BI__builtin_rvv_vset_v_f32m2_f32m8:
 case RISCV::BI__builtin_rvv_vset_v_f32m4_f32m8:
@@ -6240,7 +6252,7 @@ case RISCV::BI__builtin_rvv_vle8ff_v_u8mf8:
         llvm::Value *V = Builder.CreateExtractValue(LoadValue, {0});
         // Store new_vl.
         clang::CharUnits Align =
-            CGM.getNaturalTypeAlignment(getContext().getSizeType());
+            CGM.getNaturalPointeeTypeAlignment(E->getArg(1)->getType());
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {1}),
                             Address(NewVL, Align));
         return V;
@@ -6319,7 +6331,7 @@ case RISCV::BI__builtin_rvv_vle8ff_v_u8mf8_m:
         llvm::Value *V = Builder.CreateExtractValue(LoadValue, {0});
         // Store new_vl.
         clang::CharUnits Align =
-            CGM.getNaturalTypeAlignment(getContext().getSizeType());
+            CGM.getNaturalPointeeTypeAlignment(E->getArg(3)->getType());
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {1}),
                             Address(NewVL, Align));
         return V;
@@ -6949,14 +6961,14 @@ case RISCV::BI__builtin_rvv_vloxseg2ei64_v_u32mf2:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType(), Ops[NF + 2]->getType()};
       // intrinsic: (ptr, index, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -7153,7 +7165,7 @@ case RISCV::BI__builtin_rvv_vloxseg2ei64_v_u32mf2_m:
 
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType(), Ops[2 * NF + 3]->getType()};
       // intrinsic: (maskedoff0, ..., ptr, index, mask, vl)
       SmallVector<llvm::Value*, 12> Operands;
@@ -7166,8 +7178,8 @@ case RISCV::BI__builtin_rvv_vloxseg2ei64_v_u32mf2_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -7327,14 +7339,14 @@ case RISCV::BI__builtin_rvv_vloxseg3ei64_v_u32mf2:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType(), Ops[NF + 2]->getType()};
       // intrinsic: (ptr, index, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -7494,7 +7506,7 @@ case RISCV::BI__builtin_rvv_vloxseg3ei64_v_u32mf2_m:
 
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType(), Ops[2 * NF + 3]->getType()};
       // intrinsic: (maskedoff0, ..., ptr, index, mask, vl)
       SmallVector<llvm::Value*, 12> Operands;
@@ -7507,8 +7519,8 @@ case RISCV::BI__builtin_rvv_vloxseg3ei64_v_u32mf2_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -7668,14 +7680,14 @@ case RISCV::BI__builtin_rvv_vloxseg4ei64_v_u32mf2:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType(), Ops[NF + 2]->getType()};
       // intrinsic: (ptr, index, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -7835,7 +7847,7 @@ case RISCV::BI__builtin_rvv_vloxseg4ei64_v_u32mf2_m:
 
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType(), Ops[2 * NF + 3]->getType()};
       // intrinsic: (maskedoff0, ..., ptr, index, mask, vl)
       SmallVector<llvm::Value*, 12> Operands;
@@ -7848,8 +7860,8 @@ case RISCV::BI__builtin_rvv_vloxseg4ei64_v_u32mf2_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -7967,14 +7979,14 @@ case RISCV::BI__builtin_rvv_vloxseg5ei64_v_u32mf2:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType(), Ops[NF + 2]->getType()};
       // intrinsic: (ptr, index, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -8092,7 +8104,7 @@ case RISCV::BI__builtin_rvv_vloxseg5ei64_v_u32mf2_m:
 
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType(), Ops[2 * NF + 3]->getType()};
       // intrinsic: (maskedoff0, ..., ptr, index, mask, vl)
       SmallVector<llvm::Value*, 12> Operands;
@@ -8105,8 +8117,8 @@ case RISCV::BI__builtin_rvv_vloxseg5ei64_v_u32mf2_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -8224,14 +8236,14 @@ case RISCV::BI__builtin_rvv_vloxseg6ei64_v_u32mf2:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType(), Ops[NF + 2]->getType()};
       // intrinsic: (ptr, index, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -8349,7 +8361,7 @@ case RISCV::BI__builtin_rvv_vloxseg6ei64_v_u32mf2_m:
 
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType(), Ops[2 * NF + 3]->getType()};
       // intrinsic: (maskedoff0, ..., ptr, index, mask, vl)
       SmallVector<llvm::Value*, 12> Operands;
@@ -8362,8 +8374,8 @@ case RISCV::BI__builtin_rvv_vloxseg6ei64_v_u32mf2_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -8481,14 +8493,14 @@ case RISCV::BI__builtin_rvv_vloxseg7ei64_v_u32mf2:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType(), Ops[NF + 2]->getType()};
       // intrinsic: (ptr, index, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -8606,7 +8618,7 @@ case RISCV::BI__builtin_rvv_vloxseg7ei64_v_u32mf2_m:
 
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType(), Ops[2 * NF + 3]->getType()};
       // intrinsic: (maskedoff0, ..., ptr, index, mask, vl)
       SmallVector<llvm::Value*, 12> Operands;
@@ -8619,8 +8631,8 @@ case RISCV::BI__builtin_rvv_vloxseg7ei64_v_u32mf2_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -8738,14 +8750,14 @@ case RISCV::BI__builtin_rvv_vloxseg8ei64_v_u32mf2:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType(), Ops[NF + 2]->getType()};
       // intrinsic: (ptr, index, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -8863,7 +8875,7 @@ case RISCV::BI__builtin_rvv_vloxseg8ei64_v_u32mf2_m:
 
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType(), Ops[2 * NF + 3]->getType()};
       // intrinsic: (maskedoff0, ..., ptr, index, mask, vl)
       SmallVector<llvm::Value*, 12> Operands;
@@ -8876,8 +8888,8 @@ case RISCV::BI__builtin_rvv_vloxseg8ei64_v_u32mf2_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -9069,14 +9081,14 @@ case RISCV::BI__builtin_rvv_vlseg2e64_v_f64m4:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType()};
       // intrinsic: (ptr, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -9139,7 +9151,7 @@ case RISCV::BI__builtin_rvv_vlseg2e64_v_f64m4_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, vl)
       // intrinsic: (maskedoff0, ..., ptr, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -9150,8 +9162,8 @@ case RISCV::BI__builtin_rvv_vlseg2e64_v_f64m4_m:
       assert(Operands.size() == NF + 3);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -9213,15 +9225,15 @@ case RISCV::BI__builtin_rvv_vlseg2e64ff_v_f64m4:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, new_vl, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 2]->getType()};
       // intrinsic: (ptr, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 2]};
       Value *NewVL = Ops[NF + 1];
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
                             Address(Ops[I], Align));
@@ -9285,7 +9297,7 @@ case RISCV::BI__builtin_rvv_vlseg2e64ff_v_f64m4_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, new_vl, vl)
       // intrinsic: (maskedoff0, ..., ptr, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 3]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -9297,8 +9309,8 @@ case RISCV::BI__builtin_rvv_vlseg2e64ff_v_f64m4_m:
       assert(Operands.size() == NF + 3);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
                             Address(Ops[I], Align));
@@ -9350,14 +9362,14 @@ case RISCV::BI__builtin_rvv_vlseg3e64_v_f64m2:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType()};
       // intrinsic: (ptr, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -9409,7 +9421,7 @@ case RISCV::BI__builtin_rvv_vlseg3e64_v_f64m2_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, vl)
       // intrinsic: (maskedoff0, ..., ptr, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -9420,8 +9432,8 @@ case RISCV::BI__builtin_rvv_vlseg3e64_v_f64m2_m:
       assert(Operands.size() == NF + 3);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -9472,15 +9484,15 @@ case RISCV::BI__builtin_rvv_vlseg3e64ff_v_f64m2:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, new_vl, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 2]->getType()};
       // intrinsic: (ptr, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 2]};
       Value *NewVL = Ops[NF + 1];
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
                             Address(Ops[I], Align));
@@ -9533,7 +9545,7 @@ case RISCV::BI__builtin_rvv_vlseg3e64ff_v_f64m2_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, new_vl, vl)
       // intrinsic: (maskedoff0, ..., ptr, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 3]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -9545,8 +9557,8 @@ case RISCV::BI__builtin_rvv_vlseg3e64ff_v_f64m2_m:
       assert(Operands.size() == NF + 3);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
                             Address(Ops[I], Align));
@@ -9598,14 +9610,14 @@ case RISCV::BI__builtin_rvv_vlseg4e64_v_f64m2:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType()};
       // intrinsic: (ptr, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -9657,7 +9669,7 @@ case RISCV::BI__builtin_rvv_vlseg4e64_v_f64m2_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, vl)
       // intrinsic: (maskedoff0, ..., ptr, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -9668,8 +9680,8 @@ case RISCV::BI__builtin_rvv_vlseg4e64_v_f64m2_m:
       assert(Operands.size() == NF + 3);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -9720,15 +9732,15 @@ case RISCV::BI__builtin_rvv_vlseg4e64ff_v_f64m2:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, new_vl, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 2]->getType()};
       // intrinsic: (ptr, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 2]};
       Value *NewVL = Ops[NF + 1];
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
                             Address(Ops[I], Align));
@@ -9781,7 +9793,7 @@ case RISCV::BI__builtin_rvv_vlseg4e64ff_v_f64m2_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, new_vl, vl)
       // intrinsic: (maskedoff0, ..., ptr, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 3]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -9793,8 +9805,8 @@ case RISCV::BI__builtin_rvv_vlseg4e64ff_v_f64m2_m:
       assert(Operands.size() == NF + 3);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
                             Address(Ops[I], Align));
@@ -9835,14 +9847,14 @@ case RISCV::BI__builtin_rvv_vlseg5e64_v_f64m1:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType()};
       // intrinsic: (ptr, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -9883,7 +9895,7 @@ case RISCV::BI__builtin_rvv_vlseg5e64_v_f64m1_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, vl)
       // intrinsic: (maskedoff0, ..., ptr, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -9894,8 +9906,8 @@ case RISCV::BI__builtin_rvv_vlseg5e64_v_f64m1_m:
       assert(Operands.size() == NF + 3);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -9935,15 +9947,15 @@ case RISCV::BI__builtin_rvv_vlseg5e64ff_v_f64m1:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, new_vl, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 2]->getType()};
       // intrinsic: (ptr, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 2]};
       Value *NewVL = Ops[NF + 1];
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
                             Address(Ops[I], Align));
@@ -9985,7 +9997,7 @@ case RISCV::BI__builtin_rvv_vlseg5e64ff_v_f64m1_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, new_vl, vl)
       // intrinsic: (maskedoff0, ..., ptr, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 3]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -9997,8 +10009,8 @@ case RISCV::BI__builtin_rvv_vlseg5e64ff_v_f64m1_m:
       assert(Operands.size() == NF + 3);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
                             Address(Ops[I], Align));
@@ -10039,14 +10051,14 @@ case RISCV::BI__builtin_rvv_vlseg6e64_v_f64m1:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType()};
       // intrinsic: (ptr, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -10087,7 +10099,7 @@ case RISCV::BI__builtin_rvv_vlseg6e64_v_f64m1_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, vl)
       // intrinsic: (maskedoff0, ..., ptr, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -10098,8 +10110,8 @@ case RISCV::BI__builtin_rvv_vlseg6e64_v_f64m1_m:
       assert(Operands.size() == NF + 3);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -10139,15 +10151,15 @@ case RISCV::BI__builtin_rvv_vlseg6e64ff_v_f64m1:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, new_vl, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 2]->getType()};
       // intrinsic: (ptr, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 2]};
       Value *NewVL = Ops[NF + 1];
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
                             Address(Ops[I], Align));
@@ -10189,7 +10201,7 @@ case RISCV::BI__builtin_rvv_vlseg6e64ff_v_f64m1_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, new_vl, vl)
       // intrinsic: (maskedoff0, ..., ptr, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 3]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -10201,8 +10213,8 @@ case RISCV::BI__builtin_rvv_vlseg6e64ff_v_f64m1_m:
       assert(Operands.size() == NF + 3);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
                             Address(Ops[I], Align));
@@ -10243,14 +10255,14 @@ case RISCV::BI__builtin_rvv_vlseg7e64_v_f64m1:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType()};
       // intrinsic: (ptr, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -10291,7 +10303,7 @@ case RISCV::BI__builtin_rvv_vlseg7e64_v_f64m1_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, vl)
       // intrinsic: (maskedoff0, ..., ptr, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -10302,8 +10314,8 @@ case RISCV::BI__builtin_rvv_vlseg7e64_v_f64m1_m:
       assert(Operands.size() == NF + 3);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -10343,15 +10355,15 @@ case RISCV::BI__builtin_rvv_vlseg7e64ff_v_f64m1:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, new_vl, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 2]->getType()};
       // intrinsic: (ptr, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 2]};
       Value *NewVL = Ops[NF + 1];
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
                             Address(Ops[I], Align));
@@ -10393,7 +10405,7 @@ case RISCV::BI__builtin_rvv_vlseg7e64ff_v_f64m1_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, new_vl, vl)
       // intrinsic: (maskedoff0, ..., ptr, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 3]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -10405,8 +10417,8 @@ case RISCV::BI__builtin_rvv_vlseg7e64ff_v_f64m1_m:
       assert(Operands.size() == NF + 3);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
                             Address(Ops[I], Align));
@@ -10447,14 +10459,14 @@ case RISCV::BI__builtin_rvv_vlseg8e64_v_f64m1:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType()};
       // intrinsic: (ptr, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -10495,7 +10507,7 @@ case RISCV::BI__builtin_rvv_vlseg8e64_v_f64m1_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, vl)
       // intrinsic: (maskedoff0, ..., ptr, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -10506,8 +10518,8 @@ case RISCV::BI__builtin_rvv_vlseg8e64_v_f64m1_m:
       assert(Operands.size() == NF + 3);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -10547,15 +10559,15 @@ case RISCV::BI__builtin_rvv_vlseg8e64ff_v_f64m1:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, new_vl, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 2]->getType()};
       // intrinsic: (ptr, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 2]};
       Value *NewVL = Ops[NF + 1];
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
                             Address(Ops[I], Align));
@@ -10597,7 +10609,7 @@ case RISCV::BI__builtin_rvv_vlseg8e64ff_v_f64m1_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, new_vl, vl)
       // intrinsic: (maskedoff0, ..., ptr, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 3]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -10609,8 +10621,8 @@ case RISCV::BI__builtin_rvv_vlseg8e64ff_v_f64m1_m:
       assert(Operands.size() == NF + 3);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
                             Address(Ops[I], Align));
@@ -10673,14 +10685,14 @@ case RISCV::BI__builtin_rvv_vlsseg2e64_v_f64m4:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, stride, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 2]->getType()};
       // intrinsic: (ptr, stride, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -10743,7 +10755,7 @@ case RISCV::BI__builtin_rvv_vlsseg2e64_v_f64m4_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, stride, vl)
       // intrinsic: (maskedoff0, ..., ptr, stride, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 3]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -10755,8 +10767,8 @@ case RISCV::BI__builtin_rvv_vlsseg2e64_v_f64m4_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -10807,14 +10819,14 @@ case RISCV::BI__builtin_rvv_vlsseg3e64_v_f64m2:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, stride, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 2]->getType()};
       // intrinsic: (ptr, stride, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -10866,7 +10878,7 @@ case RISCV::BI__builtin_rvv_vlsseg3e64_v_f64m2_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, stride, vl)
       // intrinsic: (maskedoff0, ..., ptr, stride, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 3]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -10878,8 +10890,8 @@ case RISCV::BI__builtin_rvv_vlsseg3e64_v_f64m2_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -10930,14 +10942,14 @@ case RISCV::BI__builtin_rvv_vlsseg4e64_v_f64m2:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, stride, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 2]->getType()};
       // intrinsic: (ptr, stride, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -10989,7 +11001,7 @@ case RISCV::BI__builtin_rvv_vlsseg4e64_v_f64m2_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, stride, vl)
       // intrinsic: (maskedoff0, ..., ptr, stride, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 3]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -11001,8 +11013,8 @@ case RISCV::BI__builtin_rvv_vlsseg4e64_v_f64m2_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -11042,14 +11054,14 @@ case RISCV::BI__builtin_rvv_vlsseg5e64_v_f64m1:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, stride, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 2]->getType()};
       // intrinsic: (ptr, stride, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -11090,7 +11102,7 @@ case RISCV::BI__builtin_rvv_vlsseg5e64_v_f64m1_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, stride, vl)
       // intrinsic: (maskedoff0, ..., ptr, stride, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 3]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -11102,8 +11114,8 @@ case RISCV::BI__builtin_rvv_vlsseg5e64_v_f64m1_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -11143,14 +11155,14 @@ case RISCV::BI__builtin_rvv_vlsseg6e64_v_f64m1:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, stride, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 2]->getType()};
       // intrinsic: (ptr, stride, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -11191,7 +11203,7 @@ case RISCV::BI__builtin_rvv_vlsseg6e64_v_f64m1_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, stride, vl)
       // intrinsic: (maskedoff0, ..., ptr, stride, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 3]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -11203,8 +11215,8 @@ case RISCV::BI__builtin_rvv_vlsseg6e64_v_f64m1_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -11244,14 +11256,14 @@ case RISCV::BI__builtin_rvv_vlsseg7e64_v_f64m1:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, stride, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 2]->getType()};
       // intrinsic: (ptr, stride, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -11292,7 +11304,7 @@ case RISCV::BI__builtin_rvv_vlsseg7e64_v_f64m1_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, stride, vl)
       // intrinsic: (maskedoff0, ..., ptr, stride, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 3]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -11304,8 +11316,8 @@ case RISCV::BI__builtin_rvv_vlsseg7e64_v_f64m1_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -11345,14 +11357,14 @@ case RISCV::BI__builtin_rvv_vlsseg8e64_v_f64m1:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, stride, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 2]->getType()};
       // intrinsic: (ptr, stride, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -11393,7 +11405,7 @@ case RISCV::BI__builtin_rvv_vlsseg8e64_v_f64m1_m:
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, stride, vl)
       // intrinsic: (maskedoff0, ..., ptr, stride, mask, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 3]->getType()};
       SmallVector<llvm::Value*, 12> Operands;
       for (unsigned I = 0; I < NF; ++I)
@@ -11405,8 +11417,8 @@ case RISCV::BI__builtin_rvv_vlsseg8e64_v_f64m1_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -12039,14 +12051,14 @@ case RISCV::BI__builtin_rvv_vluxseg2ei64_v_f64m4:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType(), Ops[NF + 2]->getType()};
       // intrinsic: (ptr, index, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -12243,7 +12255,7 @@ case RISCV::BI__builtin_rvv_vluxseg2ei64_v_f64m4_m:
 
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType(), Ops[2 * NF + 3]->getType()};
       // intrinsic: (maskedoff0, ..., ptr, index, mask, vl)
       SmallVector<llvm::Value*, 12> Operands;
@@ -12256,8 +12268,8 @@ case RISCV::BI__builtin_rvv_vluxseg2ei64_v_f64m4_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -12417,14 +12429,14 @@ case RISCV::BI__builtin_rvv_vluxseg3ei64_v_f64m2:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType(), Ops[NF + 2]->getType()};
       // intrinsic: (ptr, index, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -12584,7 +12596,7 @@ case RISCV::BI__builtin_rvv_vluxseg3ei64_v_f64m2_m:
 
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType(), Ops[2 * NF + 3]->getType()};
       // intrinsic: (maskedoff0, ..., ptr, index, mask, vl)
       SmallVector<llvm::Value*, 12> Operands;
@@ -12597,8 +12609,8 @@ case RISCV::BI__builtin_rvv_vluxseg3ei64_v_f64m2_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -12758,14 +12770,14 @@ case RISCV::BI__builtin_rvv_vluxseg4ei64_v_f64m2:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType(), Ops[NF + 2]->getType()};
       // intrinsic: (ptr, index, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -12925,7 +12937,7 @@ case RISCV::BI__builtin_rvv_vluxseg4ei64_v_f64m2_m:
 
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType(), Ops[2 * NF + 3]->getType()};
       // intrinsic: (maskedoff0, ..., ptr, index, mask, vl)
       SmallVector<llvm::Value*, 12> Operands;
@@ -12938,8 +12950,8 @@ case RISCV::BI__builtin_rvv_vluxseg4ei64_v_f64m2_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -13057,14 +13069,14 @@ case RISCV::BI__builtin_rvv_vluxseg5ei64_v_f64m1:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType(), Ops[NF + 2]->getType()};
       // intrinsic: (ptr, index, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -13182,7 +13194,7 @@ case RISCV::BI__builtin_rvv_vluxseg5ei64_v_f64m1_m:
 
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType(), Ops[2 * NF + 3]->getType()};
       // intrinsic: (maskedoff0, ..., ptr, index, mask, vl)
       SmallVector<llvm::Value*, 12> Operands;
@@ -13195,8 +13207,8 @@ case RISCV::BI__builtin_rvv_vluxseg5ei64_v_f64m1_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -13314,14 +13326,14 @@ case RISCV::BI__builtin_rvv_vluxseg6ei64_v_f64m1:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType(), Ops[NF + 2]->getType()};
       // intrinsic: (ptr, index, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -13439,7 +13451,7 @@ case RISCV::BI__builtin_rvv_vluxseg6ei64_v_f64m1_m:
 
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType(), Ops[2 * NF + 3]->getType()};
       // intrinsic: (maskedoff0, ..., ptr, index, mask, vl)
       SmallVector<llvm::Value*, 12> Operands;
@@ -13452,8 +13464,8 @@ case RISCV::BI__builtin_rvv_vluxseg6ei64_v_f64m1_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -13571,14 +13583,14 @@ case RISCV::BI__builtin_rvv_vluxseg7ei64_v_f64m1:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType(), Ops[NF + 2]->getType()};
       // intrinsic: (ptr, index, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -13696,7 +13708,7 @@ case RISCV::BI__builtin_rvv_vluxseg7ei64_v_f64m1_m:
 
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType(), Ops[2 * NF + 3]->getType()};
       // intrinsic: (maskedoff0, ..., ptr, index, mask, vl)
       SmallVector<llvm::Value*, 12> Operands;
@@ -13709,8 +13721,8 @@ case RISCV::BI__builtin_rvv_vluxseg7ei64_v_f64m1_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -13828,14 +13840,14 @@ case RISCV::BI__builtin_rvv_vluxseg8ei64_v_f64m1:
 
     {
       // builtin: (val0 address, val1 address, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[NF + 1]->getType(), Ops[NF + 2]->getType()};
       // intrinsic: (ptr, index, vl)
       llvm::Value *Operands[] = {Ops[NF], Ops[NF + 1], Ops[NF + 2]};
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
@@ -13953,7 +13965,7 @@ case RISCV::BI__builtin_rvv_vluxseg8ei64_v_f64m1_m:
 
     {
       // builtin: (val0 address, ..., mask, maskedoff0, ..., ptr, index, vl)
-      IntrinsicTypes = {Ops[0]->getType()->getPointerElementType(),
+      IntrinsicTypes = {ConvertType(E->getArg(0)->getType()->getPointeeType()),
                         Ops[2 * NF + 2]->getType(), Ops[2 * NF + 3]->getType()};
       // intrinsic: (maskedoff0, ..., ptr, index, mask, vl)
       SmallVector<llvm::Value*, 12> Operands;
@@ -13966,8 +13978,8 @@ case RISCV::BI__builtin_rvv_vluxseg8ei64_v_f64m1_m:
       assert(Operands.size() == NF + 4);
       llvm::Function *F = CGM.getIntrinsic(ID, IntrinsicTypes);
       llvm::Value *LoadValue = Builder.CreateCall(F, Operands, "");
-      clang::CharUnits Align = CharUnits::fromQuantity(
-                                 IntrinsicTypes[0]->getScalarSizeInBits() / 8);
+      clang::CharUnits Align =
+          CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),

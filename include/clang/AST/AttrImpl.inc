@@ -4177,6 +4177,105 @@ const char *BPFPreserveAccessIndexAttr::getSpelling() const {
 }
 
 
+// BTFTagAttr implementation
+
+BTFTagAttr *BTFTagAttr::CreateImplicit(ASTContext &Ctx, llvm::StringRef BTFTag, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) BTFTagAttr(Ctx, CommonInfo, BTFTag);
+  A->setImplicit(true);
+  if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
+    A->setAttributeSpellingListIndex(0);
+  return A;
+}
+
+BTFTagAttr *BTFTagAttr::Create(ASTContext &Ctx, llvm::StringRef BTFTag, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) BTFTagAttr(Ctx, CommonInfo, BTFTag);
+  if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
+    A->setAttributeSpellingListIndex(0);
+  return A;
+}
+
+BTFTagAttr *BTFTagAttr::CreateImplicit(ASTContext &Ctx, llvm::StringRef BTFTag, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
+  return CreateImplicit(Ctx, BTFTag, I);
+}
+
+BTFTagAttr *BTFTagAttr::Create(ASTContext &Ctx, llvm::StringRef BTFTag, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
+  return Create(Ctx, BTFTag, I);
+}
+
+BTFTagAttr::BTFTagAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
+              , llvm::StringRef BTFTag
+             )
+  : InheritableAttr(Ctx, CommonInfo, attr::BTFTag, false, false)
+              , bTFTagLength(BTFTag.size()),bTFTag(new (Ctx, 1) char[bTFTagLength])
+  {
+    if (!BTFTag.empty())
+      std::memcpy(bTFTag, BTFTag.data(), bTFTagLength);
+}
+
+
+
+BTFTagAttr *BTFTagAttr::clone(ASTContext &C) const {
+  auto *A = new (C) BTFTagAttr(C, *this, getBTFTag());
+  A->Inherited = Inherited;
+  A->IsPackExpansion = IsPackExpansion;
+  A->setImplicit(Implicit);
+  return A;
+}
+
+void BTFTagAttr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
+  bool IsFirstArgument = true; (void)IsFirstArgument;
+  unsigned TrailingOmittedArgs = 0; (void)TrailingOmittedArgs;
+  switch (getAttributeSpellingListIndex()) {
+  default:
+    llvm_unreachable("Unknown attribute spelling!");
+    break;
+  case 0 : {
+    OS << " __attribute__((btf_tag";
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "\"" << getBTFTag() << "\"";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "))";
+    break;
+  }
+  case 1 : {
+    OS << " [[clang::btf_tag";
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "\"" << getBTFTag() << "\"";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "]]";
+    break;
+  }
+  case 2 : {
+    OS << " [[clang::btf_tag";
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "\"" << getBTFTag() << "\"";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "]]";
+    break;
+  }
+}
+}
+
+const char *BTFTagAttr::getSpelling() const {
+  switch (getAttributeSpellingListIndex()) {
+  default:
+    llvm_unreachable("Unknown attribute spelling!");
+    return "(No spelling)";
+  case 0:
+    return "btf_tag";
+  case 1:
+    return "btf_tag";
+  case 2:
+    return "btf_tag";
+  }
+}
+
+
 // BlocksAttr implementation
 
 BlocksAttr *BlocksAttr::CreateImplicit(ASTContext &Ctx, BlockType Type, const AttributeCommonInfo &CommonInfo) {
@@ -30842,6 +30941,8 @@ const char *Attr::getSpelling() const {
     return cast<AvailabilityAttr>(this)->getSpelling();
   case attr::BPFPreserveAccessIndex:
     return cast<BPFPreserveAccessIndexAttr>(this)->getSpelling();
+  case attr::BTFTag:
+    return cast<BTFTagAttr>(this)->getSpelling();
   case attr::Blocks:
     return cast<BlocksAttr>(this)->getSpelling();
   case attr::Builtin:
@@ -31530,6 +31631,8 @@ Attr *Attr::clone(ASTContext &C) const {
     return cast<AvailabilityAttr>(this)->clone(C);
   case attr::BPFPreserveAccessIndex:
     return cast<BPFPreserveAccessIndexAttr>(this)->clone(C);
+  case attr::BTFTag:
+    return cast<BTFTagAttr>(this)->clone(C);
   case attr::Blocks:
     return cast<BlocksAttr>(this)->clone(C);
   case attr::Builtin:
@@ -32218,6 +32321,8 @@ void Attr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
     return cast<AvailabilityAttr>(this)->printPretty(OS, Policy);
   case attr::BPFPreserveAccessIndex:
     return cast<BPFPreserveAccessIndexAttr>(this)->printPretty(OS, Policy);
+  case attr::BTFTag:
+    return cast<BTFTagAttr>(this)->printPretty(OS, Policy);
   case attr::Blocks:
     return cast<BlocksAttr>(this)->printPretty(OS, Policy);
   case attr::Builtin:
