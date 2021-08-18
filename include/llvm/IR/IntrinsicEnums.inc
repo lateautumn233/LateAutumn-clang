@@ -334,6 +334,19 @@
     vp_lshr,                                   // llvm.vp.lshr
     vp_mul,                                    // llvm.vp.mul
     vp_or,                                     // llvm.vp.or
+    vp_reduce_add,                             // llvm.vp.reduce.add
+    vp_reduce_and,                             // llvm.vp.reduce.and
+    vp_reduce_fadd,                            // llvm.vp.reduce.fadd
+    vp_reduce_fmax,                            // llvm.vp.reduce.fmax
+    vp_reduce_fmin,                            // llvm.vp.reduce.fmin
+    vp_reduce_fmul,                            // llvm.vp.reduce.fmul
+    vp_reduce_mul,                             // llvm.vp.reduce.mul
+    vp_reduce_or,                              // llvm.vp.reduce.or
+    vp_reduce_smax,                            // llvm.vp.reduce.smax
+    vp_reduce_smin,                            // llvm.vp.reduce.smin
+    vp_reduce_umax,                            // llvm.vp.reduce.umax
+    vp_reduce_umin,                            // llvm.vp.reduce.umin
+    vp_reduce_xor,                             // llvm.vp.reduce.xor
     vp_scatter,                                // llvm.vp.scatter
     vp_sdiv,                                   // llvm.vp.sdiv
     vp_shl,                                    // llvm.vp.shl
@@ -347,4 +360,4 @@
     write_register,                            // llvm.write_register
     xray_customevent,                          // llvm.xray.customevent
     xray_typedevent,                           // llvm.xray.typedevent
-    num_intrinsics = 10338
+    num_intrinsics = 10444

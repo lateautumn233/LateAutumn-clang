@@ -360,6 +360,7 @@ CHECKER_OPTION("bool", "deadcode.DeadStores", "WarnForDeadNestedAssignments", "W
 CHECKER_OPTION("bool", "deadcode.DeadStores", "ShowFixIts", "Enable fix-it hints for this checker", "false", "alpha", false)
 CHECKER_OPTION("bool", "alpha.osx.cocoa.DirectIvarAssignment", "AnnotatedFunctions", "Check for direct assignments to instance variables in the methods annotated with objc_no_direct_instance_variable_assignment", "false", "alpha", false)
 CHECKER_OPTION("bool", "unix.DynamicMemoryModeling", "Optimistic", "If set to true, the checker assumes that all the allocating and deallocating functions are annotated with ownership_holds, ownership_takes and ownership_returns.", "false", "alpha", false)
+CHECKER_OPTION("bool", "unix.DynamicMemoryModeling", "AddNoOwnershipChangeNotes", "Add an additional note to the bug report for leak-like bugs. Dynamically allocated objects passed to functions that neither deallocated it, or have taken responsibility of the ownership are noted, similarly to NoStoreFuncVisitor.", "false", "alpha", true)
 CHECKER_OPTION("string", "alpha.security.taint.TaintPropagation", "Config", "Specifies the name of the configuration file.", "", "alpha", false)
 CHECKER_OPTION("int", "alpha.security.MmapWriteExec", "MmapProtExec", "Specifies the value of PROT_EXEC", "0x04", "released", false)
 CHECKER_OPTION("int", "alpha.security.MmapWriteExec", "MmapProtRead", "Specifies the value of PROT_READ", "0x01", "released", false)
