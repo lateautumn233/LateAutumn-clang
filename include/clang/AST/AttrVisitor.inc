@@ -376,6 +376,10 @@
   bool VisitDiagnoseIfAttr(DiagnoseIfAttr *A) {
     return true; 
   }
+  bool TraverseDisableSanitizerInstrumentationAttr(DisableSanitizerInstrumentationAttr *A);
+  bool VisitDisableSanitizerInstrumentationAttr(DisableSanitizerInstrumentationAttr *A) {
+    return true; 
+  }
   bool TraverseDisableTailCallsAttr(DisableTailCallsAttr *A);
   bool VisitDisableTailCallsAttr(DisableTailCallsAttr *A) {
     return true; 
@@ -2286,6 +2290,15 @@ bool VISITORCLASS<Derived>::TraverseDiagnoseIfAttr(DiagnoseIfAttr *A) {
   if (!getDerived().VisitDiagnoseIfAttr(A))
     return false;
   if (!getDerived().TraverseStmt(A->getCond()))
+    return false;
+  return true;
+}
+
+template <typename Derived>
+bool VISITORCLASS<Derived>::TraverseDisableSanitizerInstrumentationAttr(DisableSanitizerInstrumentationAttr *A) {
+  if (!getDerived().VisitAttr(A))
+    return false;
+  if (!getDerived().VisitDisableSanitizerInstrumentationAttr(A))
     return false;
   return true;
 }
@@ -4860,6 +4873,8 @@ bool VISITORCLASS<Derived>::TraverseAttr(Attr *A) {
       return getDerived().TraverseDestructorAttr(cast<DestructorAttr>(A));
     case attr::DiagnoseIf:
       return getDerived().TraverseDiagnoseIfAttr(cast<DiagnoseIfAttr>(A));
+    case attr::DisableSanitizerInstrumentation:
+      return getDerived().TraverseDisableSanitizerInstrumentationAttr(cast<DisableSanitizerInstrumentationAttr>(A));
     case attr::DisableTailCalls:
       return getDerived().TraverseDisableTailCallsAttr(cast<DisableTailCallsAttr>(A));
     case attr::EmptyBases:

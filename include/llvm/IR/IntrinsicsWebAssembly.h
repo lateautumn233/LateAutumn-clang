@@ -13,7 +13,7 @@ namespace llvm {
 namespace Intrinsic {
 enum WASMIntrinsics : unsigned {
 // Enum values for intrinsics
-    wasm_alltrue = 9052,                              // llvm.wasm.alltrue
+    wasm_alltrue = 9068,                              // llvm.wasm.alltrue
     wasm_anytrue,                              // llvm.wasm.anytrue
     wasm_avgr_unsigned,                        // llvm.wasm.avgr.unsigned
     wasm_bitmask,                              // llvm.wasm.bitmask
@@ -33,6 +33,8 @@ enum WASMIntrinsics : unsigned {
     wasm_memory_size,                          // llvm.wasm.memory.size
     wasm_narrow_signed,                        // llvm.wasm.narrow.signed
     wasm_narrow_unsigned,                      // llvm.wasm.narrow.unsigned
+    wasm_pmax,                                 // llvm.wasm.pmax
+    wasm_pmin,                                 // llvm.wasm.pmin
     wasm_q15mulr_sat_signed,                   // llvm.wasm.q15mulr.sat.signed
     wasm_rethrow,                              // llvm.wasm.rethrow
     wasm_shuffle,                              // llvm.wasm.shuffle

@@ -8617,6 +8617,87 @@ const char *DiagnoseIfAttr::getSpelling() const {
 }
 
 
+// DisableSanitizerInstrumentationAttr implementation
+
+DisableSanitizerInstrumentationAttr *DisableSanitizerInstrumentationAttr::CreateImplicit(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) DisableSanitizerInstrumentationAttr(Ctx, CommonInfo);
+  A->setImplicit(true);
+  if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
+    A->setAttributeSpellingListIndex(0);
+  return A;
+}
+
+DisableSanitizerInstrumentationAttr *DisableSanitizerInstrumentationAttr::Create(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) DisableSanitizerInstrumentationAttr(Ctx, CommonInfo);
+  if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
+    A->setAttributeSpellingListIndex(0);
+  return A;
+}
+
+DisableSanitizerInstrumentationAttr *DisableSanitizerInstrumentationAttr::CreateImplicit(ASTContext &Ctx, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
+  return CreateImplicit(Ctx, I);
+}
+
+DisableSanitizerInstrumentationAttr *DisableSanitizerInstrumentationAttr::Create(ASTContext &Ctx, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
+  return Create(Ctx, I);
+}
+
+DisableSanitizerInstrumentationAttr::DisableSanitizerInstrumentationAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
+             )
+  : InheritableAttr(Ctx, CommonInfo, attr::DisableSanitizerInstrumentation, false, false)
+  {
+}
+
+DisableSanitizerInstrumentationAttr *DisableSanitizerInstrumentationAttr::clone(ASTContext &C) const {
+  auto *A = new (C) DisableSanitizerInstrumentationAttr(C, *this);
+  A->Inherited = Inherited;
+  A->IsPackExpansion = IsPackExpansion;
+  A->setImplicit(Implicit);
+  return A;
+}
+
+void DisableSanitizerInstrumentationAttr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
+  bool IsFirstArgument = true; (void)IsFirstArgument;
+  unsigned TrailingOmittedArgs = 0; (void)TrailingOmittedArgs;
+  switch (getAttributeSpellingListIndex()) {
+  default:
+    llvm_unreachable("Unknown attribute spelling!");
+    break;
+  case 0 : {
+    OS << " __attribute__((disable_sanitizer_instrumentation";
+    OS << "))";
+    break;
+  }
+  case 1 : {
+    OS << " [[clang::disable_sanitizer_instrumentation";
+    OS << "]]";
+    break;
+  }
+  case 2 : {
+    OS << " [[clang::disable_sanitizer_instrumentation";
+    OS << "]]";
+    break;
+  }
+}
+}
+
+const char *DisableSanitizerInstrumentationAttr::getSpelling() const {
+  switch (getAttributeSpellingListIndex()) {
+  default:
+    llvm_unreachable("Unknown attribute spelling!");
+    return "(No spelling)";
+  case 0:
+    return "disable_sanitizer_instrumentation";
+  case 1:
+    return "disable_sanitizer_instrumentation";
+  case 2:
+    return "disable_sanitizer_instrumentation";
+  }
+}
+
+
 // DisableTailCallsAttr implementation
 
 DisableTailCallsAttr *DisableTailCallsAttr::CreateImplicit(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo) {
@@ -31043,6 +31124,8 @@ const char *Attr::getSpelling() const {
     return cast<DestructorAttr>(this)->getSpelling();
   case attr::DiagnoseIf:
     return cast<DiagnoseIfAttr>(this)->getSpelling();
+  case attr::DisableSanitizerInstrumentation:
+    return cast<DisableSanitizerInstrumentationAttr>(this)->getSpelling();
   case attr::DisableTailCalls:
     return cast<DisableTailCallsAttr>(this)->getSpelling();
   case attr::EmptyBases:
@@ -31733,6 +31816,8 @@ Attr *Attr::clone(ASTContext &C) const {
     return cast<DestructorAttr>(this)->clone(C);
   case attr::DiagnoseIf:
     return cast<DiagnoseIfAttr>(this)->clone(C);
+  case attr::DisableSanitizerInstrumentation:
+    return cast<DisableSanitizerInstrumentationAttr>(this)->clone(C);
   case attr::DisableTailCalls:
     return cast<DisableTailCallsAttr>(this)->clone(C);
   case attr::EmptyBases:
@@ -32423,6 +32508,8 @@ void Attr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
     return cast<DestructorAttr>(this)->printPretty(OS, Policy);
   case attr::DiagnoseIf:
     return cast<DiagnoseIfAttr>(this)->printPretty(OS, Policy);
+  case attr::DisableSanitizerInstrumentation:
+    return cast<DisableSanitizerInstrumentationAttr>(this)->printPretty(OS, Policy);
   case attr::DisableTailCalls:
     return cast<DisableTailCallsAttr>(this)->printPretty(OS, Policy);
   case attr::EmptyBases:

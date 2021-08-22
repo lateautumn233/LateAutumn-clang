@@ -330,12 +330,6 @@ public:
   /// adds the attribute to the list of attributes.
   void addAttribute(unsigned i, Attribute Attr);
 
-  /// adds the attribute to the list of attributes.
-  void addAttribute(unsigned i, Attribute::AttrKind Kind);
-
-  /// adds the attributes to the list of attributes.
-  void addAttributes(unsigned i, const AttrBuilder &Attrs);
-
   /// Add function attributes to this function.
   void addFnAttr(Attribute::AttrKind Kind);
 
@@ -424,20 +418,8 @@ public:
   void removeParamUndefImplyingAttrs(unsigned ArgNo);
 
   /// Return the stack alignment for the function.
-  unsigned getFnStackAlignment() const {
-    if (!hasFnAttribute(Attribute::StackAlignment))
-      return 0;
-    if (const auto MA =
-            AttributeSets.getStackAlignment(AttributeList::FunctionIndex))
-      return MA->value();
-    return 0;
-  }
-
-  /// Return the stack alignment for the function.
   MaybeAlign getFnStackAlign() const {
-    if (!hasFnAttribute(Attribute::StackAlignment))
-      return None;
-    return AttributeSets.getStackAlignment(AttributeList::FunctionIndex);
+    return AttributeSets.getFnStackAlignment();
   }
 
   /// Returns true if the function has ssp, sspstrong, or sspreq fn attrs.
@@ -488,24 +470,10 @@ public:
     return AttributeSets.getParamByRefType(ArgNo);
   }
 
-  /// Extract the number of dereferenceable bytes for a call or
-  /// parameter (0=unknown).
-  /// @param i AttributeList index, referring to a return value or argument.
-  uint64_t getDereferenceableBytes(unsigned i) const {
-    return AttributeSets.getDereferenceableBytes(i);
-  }
-
   /// Extract the number of dereferenceable bytes for a parameter.
   /// @param ArgNo Index of an argument, with 0 being the first function arg.
   uint64_t getParamDereferenceableBytes(unsigned ArgNo) const {
     return AttributeSets.getParamDereferenceableBytes(ArgNo);
-  }
-
-  /// Extract the number of dereferenceable_or_null bytes for a call or
-  /// parameter (0=unknown).
-  /// @param i AttributeList index, referring to a return value or argument.
-  uint64_t getDereferenceableOrNullBytes(unsigned i) const {
-    return AttributeSets.getDereferenceableOrNullBytes(i);
   }
 
   /// Extract the number of dereferenceable_or_null bytes for a

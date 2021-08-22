@@ -657,50 +657,25 @@ public:
 
   /// \brief Add the dereferenceable attribute to the attribute set at the given
   /// index. Returns a new list because attribute lists are immutable.
-  LLVM_NODISCARD AttributeList addDereferenceableAttr(LLVMContext &C,
-                                                      unsigned Index,
-                                                      uint64_t Bytes) const;
+  LLVM_NODISCARD AttributeList addDereferenceableRetAttr(LLVMContext &C,
+                                                         uint64_t Bytes) const;
 
   /// \brief Add the dereferenceable attribute to the attribute set at the given
   /// arg index. Returns a new list because attribute lists are immutable.
   LLVM_NODISCARD AttributeList addDereferenceableParamAttr(
-      LLVMContext &C, unsigned ArgNo, uint64_t Bytes) const {
-    return addDereferenceableAttr(C, ArgNo + FirstArgIndex, Bytes);
-  }
-
-  /// Add the dereferenceable_or_null attribute to the attribute set at
-  /// the given index. Returns a new list because attribute lists are immutable.
-  LLVM_NODISCARD AttributeList addDereferenceableOrNullAttr(
-      LLVMContext &C, unsigned Index, uint64_t Bytes) const;
+      LLVMContext &C, unsigned ArgNo, uint64_t Bytes) const;
 
   /// Add the dereferenceable_or_null attribute to the attribute set at
   /// the given arg index. Returns a new list because attribute lists are
   /// immutable.
   LLVM_NODISCARD AttributeList addDereferenceableOrNullParamAttr(
-      LLVMContext &C, unsigned ArgNo, uint64_t Bytes) const {
-    return addDereferenceableOrNullAttr(C, ArgNo + FirstArgIndex, Bytes);
-  }
-
-  /// Add the allocsize attribute to the attribute set at the given index.
-  /// Returns a new list because attribute lists are immutable.
-  LLVM_NODISCARD AttributeList
-  addAllocSizeAttr(LLVMContext &C, unsigned Index, unsigned ElemSizeArg,
-                   const Optional<unsigned> &NumElemsArg);
+      LLVMContext &C, unsigned ArgNo, uint64_t Bytes) const;
 
   /// Add the allocsize attribute to the attribute set at the given arg index.
   /// Returns a new list because attribute lists are immutable.
   LLVM_NODISCARD AttributeList
   addAllocSizeParamAttr(LLVMContext &C, unsigned ArgNo, unsigned ElemSizeArg,
-                        const Optional<unsigned> &NumElemsArg) {
-    return addAllocSizeAttr(C, ArgNo + FirstArgIndex, ElemSizeArg, NumElemsArg);
-  }
-
-  /// Add the vscale_range attribute to the attribute set at the given index.
-  /// Returns a new list because attribute lists are immutable.
-  LLVM_NODISCARD AttributeList addVScaleRangeAttr(LLVMContext &C,
-                                                  unsigned Index,
-                                                  unsigned MinValue,
-                                                  unsigned MaxValue);
+                        const Optional<unsigned> &NumElemsArg);
 
   //===--------------------------------------------------------------------===//
   // AttributeList Accessors
@@ -824,34 +799,26 @@ public:
   /// Return the elementtype type for the specified function parameter.
   Type *getParamElementType(unsigned ArgNo) const;
 
-  /// Get the stack alignment.
-  MaybeAlign getStackAlignment(unsigned Index) const;
+  /// Get the stack alignment of the function.
+  MaybeAlign getFnStackAlignment() const;
 
-  /// Get the number of dereferenceable bytes (or zero if unknown).
-  uint64_t getDereferenceableBytes(unsigned Index) const;
+  /// Get the stack alignment of the return value.
+  MaybeAlign getRetStackAlignment() const;
 
-  /// Get the number of dereferenceable bytes (or zero if unknown) of an
+  /// Get the number of dereferenceable bytes (or zero if unknown) of the return
+  /// value.
+  uint64_t getRetDereferenceableBytes() const;
+
+  /// Get the number of dereferenceable bytes (or zero if unknown) of an arg.
+  uint64_t getParamDereferenceableBytes(unsigned Index) const;
+
+  /// Get the number of dereferenceable_or_null bytes (or zero if unknown) of
+  /// the return value.
+  uint64_t getRetDereferenceableOrNullBytes() const;
+
+  /// Get the number of dereferenceable_or_null bytes (or zero if unknown) of an
   /// arg.
-  uint64_t getParamDereferenceableBytes(unsigned ArgNo) const {
-    return getDereferenceableBytes(ArgNo + FirstArgIndex);
-  }
-
-  /// Get the number of dereferenceable_or_null bytes (or zero if
-  /// unknown).
-  uint64_t getDereferenceableOrNullBytes(unsigned Index) const;
-
-  /// Get the number of dereferenceable_or_null bytes (or zero if
-  /// unknown) of an arg.
-  uint64_t getParamDereferenceableOrNullBytes(unsigned ArgNo) const {
-    return getDereferenceableOrNullBytes(ArgNo + FirstArgIndex);
-  }
-
-  /// Get the allocsize argument numbers (or pair(0, 0) if unknown).
-  std::pair<unsigned, Optional<unsigned>>
-  getAllocSizeArgs(unsigned Index) const;
-
-  /// Get the vscale_range argument numbers (or pair(0, 0) if unknown).
-  std::pair<unsigned, unsigned> getVScaleRangeArgs(unsigned Index) const;
+  uint64_t getParamDereferenceableOrNullBytes(unsigned ArgNo) const;
 
   /// Return the attributes at the index as a string.
   std::string getAsString(unsigned Index, bool InAttrGrp = false) const;

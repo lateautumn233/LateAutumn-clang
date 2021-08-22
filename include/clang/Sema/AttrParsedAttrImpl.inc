@@ -138,6 +138,8 @@ static constexpr ParsedAttrInfo::Spelling AMDGPUFlatWorkGroupSizeSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "amdgpu_flat_work_group_size"},
   {AttributeCommonInfo::AS_CXX11, "clang::amdgpu_flat_work_group_size"},
 };
+static constexpr const char *AMDGPUFlatWorkGroupSizeArgNames[] = {
+"Min","Max",};
 struct ParsedAttrInfoAMDGPUFlatWorkGroupSize final : public ParsedAttrInfo {
   ParsedAttrInfoAMDGPUFlatWorkGroupSize() {
     AttrKind = ParsedAttr::AT_AMDGPUFlatWorkGroupSize;
@@ -150,6 +152,7 @@ struct ParsedAttrInfoAMDGPUFlatWorkGroupSize final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = AMDGPUFlatWorkGroupSizeSpellings;
+    ArgNames = AMDGPUFlatWorkGroupSizeArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -177,6 +180,8 @@ static constexpr ParsedAttrInfo::Spelling AMDGPUNumSGPRSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "amdgpu_num_sgpr"},
   {AttributeCommonInfo::AS_CXX11, "clang::amdgpu_num_sgpr"},
 };
+static constexpr const char *AMDGPUNumSGPRArgNames[] = {
+"NumSGPR",};
 struct ParsedAttrInfoAMDGPUNumSGPR final : public ParsedAttrInfo {
   ParsedAttrInfoAMDGPUNumSGPR() {
     AttrKind = ParsedAttr::AT_AMDGPUNumSGPR;
@@ -189,6 +194,7 @@ struct ParsedAttrInfoAMDGPUNumSGPR final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = AMDGPUNumSGPRSpellings;
+    ArgNames = AMDGPUNumSGPRArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -216,6 +222,8 @@ static constexpr ParsedAttrInfo::Spelling AMDGPUNumVGPRSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "amdgpu_num_vgpr"},
   {AttributeCommonInfo::AS_CXX11, "clang::amdgpu_num_vgpr"},
 };
+static constexpr const char *AMDGPUNumVGPRArgNames[] = {
+"NumVGPR",};
 struct ParsedAttrInfoAMDGPUNumVGPR final : public ParsedAttrInfo {
   ParsedAttrInfoAMDGPUNumVGPR() {
     AttrKind = ParsedAttr::AT_AMDGPUNumVGPR;
@@ -228,6 +236,7 @@ struct ParsedAttrInfoAMDGPUNumVGPR final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = AMDGPUNumVGPRSpellings;
+    ArgNames = AMDGPUNumVGPRArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -255,6 +264,8 @@ static constexpr ParsedAttrInfo::Spelling AMDGPUWavesPerEUSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "amdgpu_waves_per_eu"},
   {AttributeCommonInfo::AS_CXX11, "clang::amdgpu_waves_per_eu"},
 };
+static constexpr const char *AMDGPUWavesPerEUArgNames[] = {
+"Min","Max",};
 struct ParsedAttrInfoAMDGPUWavesPerEU final : public ParsedAttrInfo {
   ParsedAttrInfoAMDGPUWavesPerEU() {
     AttrKind = ParsedAttr::AT_AMDGPUWavesPerEU;
@@ -267,6 +278,7 @@ struct ParsedAttrInfoAMDGPUWavesPerEU final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = AMDGPUWavesPerEUSpellings;
+    ArgNames = AMDGPUWavesPerEUArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -295,6 +307,8 @@ static constexpr ParsedAttrInfo::Spelling InterruptSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::interrupt"},
   {AttributeCommonInfo::AS_C2x, "gnu::interrupt"},
 };
+static constexpr const char *InterruptArgNames[] = {
+"Interrupt",};
 struct ParsedAttrInfoInterrupt final : public ParsedAttrInfo {
   ParsedAttrInfoInterrupt() {
     AttrKind = ParsedAttr::AT_Interrupt;
@@ -307,6 +321,7 @@ struct ParsedAttrInfoInterrupt final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 0;
     Spellings = InterruptSpellings;
+    ArgNames = InterruptArgNames;
   }
 bool existsInTarget(const TargetInfo &Target) const override {
   const llvm::Triple &T = Target.getTriple(); (void)T;
@@ -365,6 +380,8 @@ static constexpr ParsedAttrInfo::Spelling AbiTagSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "abi_tag"},
   {AttributeCommonInfo::AS_CXX11, "gnu::abi_tag"},
 };
+static constexpr const char *AbiTagArgNames[] = {
+"Tags...",};
 struct ParsedAttrInfoAbiTag final : public ParsedAttrInfo {
   ParsedAttrInfoAbiTag() {
     AttrKind = ParsedAttr::AT_AbiTag;
@@ -377,6 +394,7 @@ struct ParsedAttrInfoAbiTag final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 1;
     Spellings = AbiTagSpellings;
+    ArgNames = AbiTagArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isStruct(D) && !isa<VarDecl>(D) && !isa<FunctionDecl>(D) && !isa<NamespaceDecl>(D)) {
@@ -411,6 +429,8 @@ static constexpr ParsedAttrInfo::Spelling AcquireCapabilitySpellings[] = {
   {AttributeCommonInfo::AS_GNU, "exclusive_lock_function"},
   {AttributeCommonInfo::AS_GNU, "shared_lock_function"},
 };
+static constexpr const char *AcquireCapabilityArgNames[] = {
+"Args...",};
 struct ParsedAttrInfoAcquireCapability final : public ParsedAttrInfo {
   ParsedAttrInfoAcquireCapability() {
     AttrKind = ParsedAttr::AT_AcquireCapability;
@@ -423,6 +443,7 @@ struct ParsedAttrInfoAcquireCapability final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = AcquireCapabilitySpellings;
+    ArgNames = AcquireCapabilityArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -471,6 +492,8 @@ static constexpr ParsedAttrInfo::Spelling AcquireHandleSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::acquire_handle"},
   {AttributeCommonInfo::AS_C2x, "clang::acquire_handle"},
 };
+static constexpr const char *AcquireHandleArgNames[] = {
+"HandleType",};
 struct ParsedAttrInfoAcquireHandle final : public ParsedAttrInfo {
   ParsedAttrInfoAcquireHandle() {
     AttrKind = ParsedAttr::AT_AcquireHandle;
@@ -483,6 +506,7 @@ struct ParsedAttrInfoAcquireHandle final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = AcquireHandleSpellings;
+    ArgNames = AcquireHandleArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D) && !isa<TypedefNameDecl>(D) && !isa<ParmVarDecl>(D)) {
@@ -511,6 +535,8 @@ const ParsedAttrInfoAcquireHandle ParsedAttrInfoAcquireHandle::Instance;
 static constexpr ParsedAttrInfo::Spelling AcquiredAfterSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "acquired_after"},
 };
+static constexpr const char *AcquiredAfterArgNames[] = {
+"Args...",};
 struct ParsedAttrInfoAcquiredAfter final : public ParsedAttrInfo {
   ParsedAttrInfoAcquiredAfter() {
     AttrKind = ParsedAttr::AT_AcquiredAfter;
@@ -523,6 +549,7 @@ struct ParsedAttrInfoAcquiredAfter final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = AcquiredAfterSpellings;
+    ArgNames = AcquiredAfterArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FieldDecl>(D) && !isSharedVar(D)) {
@@ -545,6 +572,8 @@ const ParsedAttrInfoAcquiredAfter ParsedAttrInfoAcquiredAfter::Instance;
 static constexpr ParsedAttrInfo::Spelling AcquiredBeforeSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "acquired_before"},
 };
+static constexpr const char *AcquiredBeforeArgNames[] = {
+"Args...",};
 struct ParsedAttrInfoAcquiredBefore final : public ParsedAttrInfo {
   ParsedAttrInfoAcquiredBefore() {
     AttrKind = ParsedAttr::AT_AcquiredBefore;
@@ -557,6 +586,7 @@ struct ParsedAttrInfoAcquiredBefore final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = AcquiredBeforeSpellings;
+    ArgNames = AcquiredBeforeArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FieldDecl>(D) && !isSharedVar(D)) {
@@ -581,6 +611,8 @@ static constexpr ParsedAttrInfo::Spelling AddressSpaceSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::address_space"},
   {AttributeCommonInfo::AS_C2x, "clang::address_space"},
 };
+static constexpr const char *AddressSpaceArgNames[] = {
+"AddressSpace",};
 struct ParsedAttrInfoAddressSpace final : public ParsedAttrInfo {
   ParsedAttrInfoAddressSpace() {
     AttrKind = ParsedAttr::AT_AddressSpace;
@@ -593,6 +625,7 @@ struct ParsedAttrInfoAddressSpace final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = AddressSpaceSpellings;
+    ArgNames = AddressSpaceArgNames;
   }
 static const ParsedAttrInfoAddressSpace Instance;
 };
@@ -602,6 +635,8 @@ static constexpr ParsedAttrInfo::Spelling AliasSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::alias"},
   {AttributeCommonInfo::AS_C2x, "gnu::alias"},
 };
+static constexpr const char *AliasArgNames[] = {
+"Aliasee",};
 struct ParsedAttrInfoAlias final : public ParsedAttrInfo {
   ParsedAttrInfoAlias() {
     AttrKind = ParsedAttr::AT_Alias;
@@ -614,6 +649,7 @@ struct ParsedAttrInfoAlias final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 1;
     Spellings = AliasSpellings;
+    ArgNames = AliasArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D) && !isGlobalVar(D)) {
@@ -641,6 +677,8 @@ const ParsedAttrInfoAlias ParsedAttrInfoAlias::Instance;
 static constexpr ParsedAttrInfo::Spelling AlignValueSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "align_value"},
 };
+static constexpr const char *AlignValueArgNames[] = {
+"Alignment",};
 struct ParsedAttrInfoAlignValue final : public ParsedAttrInfo {
   ParsedAttrInfoAlignValue() {
     AttrKind = ParsedAttr::AT_AlignValue;
@@ -653,6 +691,7 @@ struct ParsedAttrInfoAlignValue final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = AlignValueSpellings;
+    ArgNames = AlignValueArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<VarDecl>(D) && !isa<TypedefNameDecl>(D)) {
@@ -685,6 +724,8 @@ static constexpr ParsedAttrInfo::Spelling AlignedSpellings[] = {
   {AttributeCommonInfo::AS_Keyword, "alignas"},
   {AttributeCommonInfo::AS_Keyword, "_Alignas"},
 };
+static constexpr const char *AlignedArgNames[] = {
+"Alignment",};
 struct ParsedAttrInfoAligned final : public ParsedAttrInfo {
   ParsedAttrInfoAligned() {
     AttrKind = ParsedAttr::AT_Aligned;
@@ -697,6 +738,7 @@ struct ParsedAttrInfoAligned final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 0;
     Spellings = AlignedSpellings;
+    ArgNames = AlignedArgNames;
   }
 unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override {
   enum Spelling {
@@ -730,6 +772,8 @@ static constexpr ParsedAttrInfo::Spelling AllocAlignSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::alloc_align"},
   {AttributeCommonInfo::AS_C2x, "gnu::alloc_align"},
 };
+static constexpr const char *AllocAlignArgNames[] = {
+"ParamIndex",};
 struct ParsedAttrInfoAllocAlign final : public ParsedAttrInfo {
   ParsedAttrInfoAllocAlign() {
     AttrKind = ParsedAttr::AT_AllocAlign;
@@ -742,6 +786,7 @@ struct ParsedAttrInfoAllocAlign final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 0;
     Spellings = AllocAlignSpellings;
+    ArgNames = AllocAlignArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isHasFunctionProto(D)) {
@@ -766,6 +811,8 @@ static constexpr ParsedAttrInfo::Spelling AllocSizeSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::alloc_size"},
   {AttributeCommonInfo::AS_C2x, "gnu::alloc_size"},
 };
+static constexpr const char *AllocSizeArgNames[] = {
+"ElemSizeParam","NumElemsParam",};
 struct ParsedAttrInfoAllocSize final : public ParsedAttrInfo {
   ParsedAttrInfoAllocSize() {
     AttrKind = ParsedAttr::AT_AllocSize;
@@ -778,6 +825,7 @@ struct ParsedAttrInfoAllocSize final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 0;
     Spellings = AllocSizeSpellings;
+    ArgNames = AllocSizeArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isHasFunctionProto(D)) {
@@ -943,6 +991,8 @@ static constexpr ParsedAttrInfo::Spelling AnnotateSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::annotate"},
   {AttributeCommonInfo::AS_C2x, "clang::annotate"},
 };
+static constexpr const char *AnnotateArgNames[] = {
+"Annotation","Args...",};
 struct ParsedAttrInfoAnnotate final : public ParsedAttrInfo {
   ParsedAttrInfoAnnotate() {
     AttrKind = ParsedAttr::AT_Annotate;
@@ -955,6 +1005,7 @@ struct ParsedAttrInfoAnnotate final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = AnnotateSpellings;
+    ArgNames = AnnotateArgNames;
   }
 static const ParsedAttrInfoAnnotate Instance;
 };
@@ -1088,6 +1139,8 @@ static constexpr ParsedAttrInfo::Spelling ArgumentWithTypeTagSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::pointer_with_type_tag"},
   {AttributeCommonInfo::AS_C2x, "clang::pointer_with_type_tag"},
 };
+static constexpr const char *ArgumentWithTypeTagArgNames[] = {
+"ArgumentKind","ArgumentIdx","TypeTagIdx",};
 struct ParsedAttrInfoArgumentWithTypeTag final : public ParsedAttrInfo {
   ParsedAttrInfoArgumentWithTypeTag() {
     AttrKind = ParsedAttr::AT_ArgumentWithTypeTag;
@@ -1100,6 +1153,7 @@ struct ParsedAttrInfoArgumentWithTypeTag final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = ArgumentWithTypeTagSpellings;
+    ArgNames = ArgumentWithTypeTagArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isHasFunctionProto(D)) {
@@ -1148,6 +1202,8 @@ static constexpr ParsedAttrInfo::Spelling ArmBuiltinAliasSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::__clang_arm_builtin_alias"},
   {AttributeCommonInfo::AS_C2x, "clang::__clang_arm_builtin_alias"},
 };
+static constexpr const char *ArmBuiltinAliasArgNames[] = {
+"BuiltinName",};
 struct ParsedAttrInfoArmBuiltinAlias final : public ParsedAttrInfo {
   ParsedAttrInfoArmBuiltinAlias() {
     AttrKind = ParsedAttr::AT_ArmBuiltinAlias;
@@ -1160,6 +1216,7 @@ struct ParsedAttrInfoArmBuiltinAlias final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = ArmBuiltinAliasSpellings;
+    ArgNames = ArmBuiltinAliasArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -1217,6 +1274,8 @@ const ParsedAttrInfoArmMveStrictPolymorphism ParsedAttrInfoArmMveStrictPolymorph
 static constexpr ParsedAttrInfo::Spelling ArmSveVectorBitsSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "arm_sve_vector_bits"},
 };
+static constexpr const char *ArmSveVectorBitsArgNames[] = {
+"NumBits",};
 struct ParsedAttrInfoArmSveVectorBits final : public ParsedAttrInfo {
   ParsedAttrInfoArmSveVectorBits() {
     AttrKind = ParsedAttr::AT_ArmSveVectorBits;
@@ -1229,6 +1288,7 @@ struct ParsedAttrInfoArmSveVectorBits final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = ArmSveVectorBitsSpellings;
+    ArgNames = ArmSveVectorBitsArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<TypedefNameDecl>(D)) {
@@ -1295,6 +1355,8 @@ static constexpr ParsedAttrInfo::Spelling AssertCapabilitySpellings[] = {
   {AttributeCommonInfo::AS_GNU, "assert_shared_capability"},
   {AttributeCommonInfo::AS_CXX11, "clang::assert_shared_capability"},
 };
+static constexpr const char *AssertCapabilityArgNames[] = {
+"Args...",};
 struct ParsedAttrInfoAssertCapability final : public ParsedAttrInfo {
   ParsedAttrInfoAssertCapability() {
     AttrKind = ParsedAttr::AT_AssertCapability;
@@ -1307,6 +1369,7 @@ struct ParsedAttrInfoAssertCapability final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = AssertCapabilitySpellings;
+    ArgNames = AssertCapabilityArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -1349,6 +1412,8 @@ const ParsedAttrInfoAssertCapability ParsedAttrInfoAssertCapability::Instance;
 static constexpr ParsedAttrInfo::Spelling AssertExclusiveLockSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "assert_exclusive_lock"},
 };
+static constexpr const char *AssertExclusiveLockArgNames[] = {
+"Args...",};
 struct ParsedAttrInfoAssertExclusiveLock final : public ParsedAttrInfo {
   ParsedAttrInfoAssertExclusiveLock() {
     AttrKind = ParsedAttr::AT_AssertExclusiveLock;
@@ -1361,6 +1426,7 @@ struct ParsedAttrInfoAssertExclusiveLock final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = AssertExclusiveLockSpellings;
+    ArgNames = AssertExclusiveLockArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -1383,6 +1449,8 @@ const ParsedAttrInfoAssertExclusiveLock ParsedAttrInfoAssertExclusiveLock::Insta
 static constexpr ParsedAttrInfo::Spelling AssertSharedLockSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "assert_shared_lock"},
 };
+static constexpr const char *AssertSharedLockArgNames[] = {
+"Args...",};
 struct ParsedAttrInfoAssertSharedLock final : public ParsedAttrInfo {
   ParsedAttrInfoAssertSharedLock() {
     AttrKind = ParsedAttr::AT_AssertSharedLock;
@@ -1395,6 +1463,7 @@ struct ParsedAttrInfoAssertSharedLock final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = AssertSharedLockSpellings;
+    ArgNames = AssertSharedLockArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -1419,6 +1488,8 @@ static constexpr ParsedAttrInfo::Spelling AssumeAlignedSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::assume_aligned"},
   {AttributeCommonInfo::AS_C2x, "gnu::assume_aligned"},
 };
+static constexpr const char *AssumeAlignedArgNames[] = {
+"Alignment","Offset",};
 struct ParsedAttrInfoAssumeAligned final : public ParsedAttrInfo {
   ParsedAttrInfoAssumeAligned() {
     AttrKind = ParsedAttr::AT_AssumeAligned;
@@ -1431,6 +1502,7 @@ struct ParsedAttrInfoAssumeAligned final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 1;
     Spellings = AssumeAlignedSpellings;
+    ArgNames = AssumeAlignedArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<ObjCMethodDecl>(D) && !isa<FunctionDecl>(D)) {
@@ -1460,6 +1532,8 @@ static constexpr ParsedAttrInfo::Spelling AssumptionSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::assume"},
   {AttributeCommonInfo::AS_C2x, "clang::assume"},
 };
+static constexpr const char *AssumptionArgNames[] = {
+"Assumption",};
 struct ParsedAttrInfoAssumption final : public ParsedAttrInfo {
   ParsedAttrInfoAssumption() {
     AttrKind = ParsedAttr::AT_Assumption;
@@ -1472,6 +1546,7 @@ struct ParsedAttrInfoAssumption final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = AssumptionSpellings;
+    ArgNames = AssumptionArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D) && !isa<ObjCMethodDecl>(D)) {
@@ -1501,6 +1576,8 @@ static constexpr ParsedAttrInfo::Spelling AvailabilitySpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::availability"},
   {AttributeCommonInfo::AS_C2x, "clang::availability"},
 };
+static constexpr const char *AvailabilityArgNames[] = {
+"platform","introduced","deprecated","obsoleted","unavailable","message","strict","replacement","priority",};
 struct ParsedAttrInfoAvailability final : public ParsedAttrInfo {
   ParsedAttrInfoAvailability() {
     AttrKind = ParsedAttr::AT_Availability;
@@ -1513,6 +1590,7 @@ struct ParsedAttrInfoAvailability final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = AvailabilitySpellings;
+    ArgNames = AvailabilityArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<NamedDecl>(D)) {
@@ -1604,6 +1682,8 @@ static constexpr ParsedAttrInfo::Spelling BTFTagSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::btf_tag"},
   {AttributeCommonInfo::AS_C2x, "clang::btf_tag"},
 };
+static constexpr const char *BTFTagArgNames[] = {
+"BTFTag",};
 struct ParsedAttrInfoBTFTag final : public ParsedAttrInfo {
   ParsedAttrInfoBTFTag() {
     AttrKind = ParsedAttr::AT_BTFTag;
@@ -1616,6 +1696,7 @@ struct ParsedAttrInfoBTFTag final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = BTFTagSpellings;
+    ArgNames = BTFTagArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<VarDecl>(D) && !isa<FunctionDecl>(D) && !isa<RecordDecl>(D) && !isa<FieldDecl>(D)) {
@@ -1651,6 +1732,8 @@ static constexpr ParsedAttrInfo::Spelling BlocksSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::blocks"},
   {AttributeCommonInfo::AS_C2x, "clang::blocks"},
 };
+static constexpr const char *BlocksArgNames[] = {
+"Type",};
 struct ParsedAttrInfoBlocks final : public ParsedAttrInfo {
   ParsedAttrInfoBlocks() {
     AttrKind = ParsedAttr::AT_Blocks;
@@ -1663,6 +1746,7 @@ struct ParsedAttrInfoBlocks final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = BlocksSpellings;
+    ArgNames = BlocksArgNames;
   }
 static const ParsedAttrInfoBlocks Instance;
 };
@@ -1672,6 +1756,8 @@ static constexpr ParsedAttrInfo::Spelling BuiltinAliasSpellings[] = {
   {AttributeCommonInfo::AS_C2x, "clang::builtin_alias"},
   {AttributeCommonInfo::AS_GNU, "clang_builtin_alias"},
 };
+static constexpr const char *BuiltinAliasArgNames[] = {
+"BuiltinName",};
 struct ParsedAttrInfoBuiltinAlias final : public ParsedAttrInfo {
   ParsedAttrInfoBuiltinAlias() {
     AttrKind = ParsedAttr::AT_BuiltinAlias;
@@ -1684,6 +1770,7 @@ struct ParsedAttrInfoBuiltinAlias final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = BuiltinAliasSpellings;
+    ArgNames = BuiltinAliasArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -1847,6 +1934,8 @@ const ParsedAttrInfoCFConsumed ParsedAttrInfoCFConsumed::Instance;
 static constexpr ParsedAttrInfo::Spelling CFGuardSpellings[] = {
   {AttributeCommonInfo::AS_Declspec, "guard"},
 };
+static constexpr const char *CFGuardArgNames[] = {
+"Guard",};
 struct ParsedAttrInfoCFGuard final : public ParsedAttrInfo {
   ParsedAttrInfoCFGuard() {
     AttrKind = ParsedAttr::AT_CFGuard;
@@ -1859,6 +1948,7 @@ struct ParsedAttrInfoCFGuard final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = CFGuardSpellings;
+    ArgNames = CFGuardArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -2027,6 +2117,8 @@ static constexpr ParsedAttrInfo::Spelling CPUDispatchSpellings[] = {
   {AttributeCommonInfo::AS_C2x, "clang::cpu_dispatch"},
   {AttributeCommonInfo::AS_Declspec, "cpu_dispatch"},
 };
+static constexpr const char *CPUDispatchArgNames[] = {
+"Cpus...",};
 struct ParsedAttrInfoCPUDispatch final : public ParsedAttrInfo {
   ParsedAttrInfoCPUDispatch() {
     AttrKind = ParsedAttr::AT_CPUDispatch;
@@ -2039,6 +2131,7 @@ struct ParsedAttrInfoCPUDispatch final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = CPUDispatchSpellings;
+    ArgNames = CPUDispatchArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -2068,6 +2161,8 @@ static constexpr ParsedAttrInfo::Spelling CPUSpecificSpellings[] = {
   {AttributeCommonInfo::AS_C2x, "clang::cpu_specific"},
   {AttributeCommonInfo::AS_Declspec, "cpu_specific"},
 };
+static constexpr const char *CPUSpecificArgNames[] = {
+"Cpus...",};
 struct ParsedAttrInfoCPUSpecific final : public ParsedAttrInfo {
   ParsedAttrInfoCPUSpecific() {
     AttrKind = ParsedAttr::AT_CPUSpecific;
@@ -2080,6 +2175,7 @@ struct ParsedAttrInfoCPUSpecific final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = CPUSpecificSpellings;
+    ArgNames = CPUSpecificArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -2491,6 +2587,8 @@ static constexpr ParsedAttrInfo::Spelling CUDALaunchBoundsSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "launch_bounds"},
   {AttributeCommonInfo::AS_Declspec, "__launch_bounds__"},
 };
+static constexpr const char *CUDALaunchBoundsArgNames[] = {
+"MaxThreads","MinBlocks",};
 struct ParsedAttrInfoCUDALaunchBounds final : public ParsedAttrInfo {
   ParsedAttrInfoCUDALaunchBounds() {
     AttrKind = ParsedAttr::AT_CUDALaunchBounds;
@@ -2503,6 +2601,7 @@ struct ParsedAttrInfoCUDALaunchBounds final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = CUDALaunchBoundsSpellings;
+    ArgNames = CUDALaunchBoundsArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<ObjCMethodDecl>(D) && !isFunctionLike(D)) {
@@ -2637,6 +2736,8 @@ static constexpr ParsedAttrInfo::Spelling CallableWhenSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "callable_when"},
   {AttributeCommonInfo::AS_CXX11, "clang::callable_when"},
 };
+static constexpr const char *CallableWhenArgNames[] = {
+"CallableStates...",};
 struct ParsedAttrInfoCallableWhen final : public ParsedAttrInfo {
   ParsedAttrInfoCallableWhen() {
     AttrKind = ParsedAttr::AT_CallableWhen;
@@ -2649,6 +2750,7 @@ struct ParsedAttrInfoCallableWhen final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = CallableWhenSpellings;
+    ArgNames = CallableWhenArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<CXXMethodDecl>(D)) {
@@ -2677,6 +2779,8 @@ static constexpr ParsedAttrInfo::Spelling CallbackSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::callback"},
   {AttributeCommonInfo::AS_C2x, "clang::callback"},
 };
+static constexpr const char *CallbackArgNames[] = {
+"Encoding...",};
 struct ParsedAttrInfoCallback final : public ParsedAttrInfo {
   ParsedAttrInfoCallback() {
     AttrKind = ParsedAttr::AT_Callback;
@@ -2689,6 +2793,7 @@ struct ParsedAttrInfoCallback final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = CallbackSpellings;
+    ArgNames = CallbackArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -2762,6 +2867,8 @@ static constexpr ParsedAttrInfo::Spelling CapabilitySpellings[] = {
   {AttributeCommonInfo::AS_GNU, "shared_capability"},
   {AttributeCommonInfo::AS_CXX11, "clang::shared_capability"},
 };
+static constexpr const char *CapabilityArgNames[] = {
+"Name",};
 struct ParsedAttrInfoCapability final : public ParsedAttrInfo {
   ParsedAttrInfoCapability() {
     AttrKind = ParsedAttr::AT_Capability;
@@ -2774,6 +2881,7 @@ struct ParsedAttrInfoCapability final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = CapabilitySpellings;
+    ArgNames = CapabilityArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<RecordDecl>(D) && !isa<TypedefNameDecl>(D)) {
@@ -2864,6 +2972,8 @@ static constexpr ParsedAttrInfo::Spelling CleanupSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::cleanup"},
   {AttributeCommonInfo::AS_C2x, "gnu::cleanup"},
 };
+static constexpr const char *CleanupArgNames[] = {
+"FunctionDecl",};
 struct ParsedAttrInfoCleanup final : public ParsedAttrInfo {
   ParsedAttrInfoCleanup() {
     AttrKind = ParsedAttr::AT_Cleanup;
@@ -2876,6 +2986,7 @@ struct ParsedAttrInfoCleanup final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 1;
     Spellings = CleanupSpellings;
+    ArgNames = CleanupArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isLocalVar(D)) {
@@ -2977,6 +3088,8 @@ const ParsedAttrInfoCmseNSEntry ParsedAttrInfoCmseNSEntry::Instance;
 static constexpr ParsedAttrInfo::Spelling CodeSegSpellings[] = {
   {AttributeCommonInfo::AS_Declspec, "code_seg"},
 };
+static constexpr const char *CodeSegArgNames[] = {
+"Name",};
 struct ParsedAttrInfoCodeSeg final : public ParsedAttrInfo {
   ParsedAttrInfoCodeSeg() {
     AttrKind = ParsedAttr::AT_CodeSeg;
@@ -2989,6 +3102,7 @@ struct ParsedAttrInfoCodeSeg final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = CodeSegSpellings;
+    ArgNames = CodeSegArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D) && !isa<CXXRecordDecl>(D)) {
@@ -3216,6 +3330,8 @@ static constexpr ParsedAttrInfo::Spelling ConstructorSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::constructor"},
   {AttributeCommonInfo::AS_C2x, "gnu::constructor"},
 };
+static constexpr const char *ConstructorArgNames[] = {
+"Priority",};
 struct ParsedAttrInfoConstructor final : public ParsedAttrInfo {
   ParsedAttrInfoConstructor() {
     AttrKind = ParsedAttr::AT_Constructor;
@@ -3228,6 +3344,7 @@ struct ParsedAttrInfoConstructor final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 1;
     Spellings = ConstructorSpellings;
+    ArgNames = ConstructorArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -3255,6 +3372,8 @@ static constexpr ParsedAttrInfo::Spelling ConsumableSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "consumable"},
   {AttributeCommonInfo::AS_CXX11, "clang::consumable"},
 };
+static constexpr const char *ConsumableArgNames[] = {
+"DefaultState",};
 struct ParsedAttrInfoConsumable final : public ParsedAttrInfo {
   ParsedAttrInfoConsumable() {
     AttrKind = ParsedAttr::AT_Consumable;
@@ -3267,6 +3386,7 @@ struct ParsedAttrInfoConsumable final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = ConsumableSpellings;
+    ArgNames = ConsumableArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<CXXRecordDecl>(D)) {
@@ -3599,6 +3719,8 @@ static constexpr ParsedAttrInfo::Spelling DeprecatedSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "deprecated"},
   {AttributeCommonInfo::AS_C2x, "deprecated"},
 };
+static constexpr const char *DeprecatedArgNames[] = {
+"Message","Replacement",};
 struct ParsedAttrInfoDeprecated final : public ParsedAttrInfo {
   ParsedAttrInfoDeprecated() {
     AttrKind = ParsedAttr::AT_Deprecated;
@@ -3611,6 +3733,7 @@ struct ParsedAttrInfoDeprecated final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 0;
     Spellings = DeprecatedSpellings;
+    ArgNames = DeprecatedArgNames;
   }
 static const ParsedAttrInfoDeprecated Instance;
 };
@@ -3620,6 +3743,8 @@ static constexpr ParsedAttrInfo::Spelling DestructorSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::destructor"},
   {AttributeCommonInfo::AS_C2x, "gnu::destructor"},
 };
+static constexpr const char *DestructorArgNames[] = {
+"Priority",};
 struct ParsedAttrInfoDestructor final : public ParsedAttrInfo {
   ParsedAttrInfoDestructor() {
     AttrKind = ParsedAttr::AT_Destructor;
@@ -3632,6 +3757,7 @@ struct ParsedAttrInfoDestructor final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 1;
     Spellings = DestructorSpellings;
+    ArgNames = DestructorArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -3658,6 +3784,8 @@ const ParsedAttrInfoDestructor ParsedAttrInfoDestructor::Instance;
 static constexpr ParsedAttrInfo::Spelling DiagnoseIfSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "diagnose_if"},
 };
+static constexpr const char *DiagnoseIfArgNames[] = {
+"Cond","Message","DiagnosticType",};
 struct ParsedAttrInfoDiagnoseIf final : public ParsedAttrInfo {
   ParsedAttrInfoDiagnoseIf() {
     AttrKind = ParsedAttr::AT_DiagnoseIf;
@@ -3670,6 +3798,7 @@ struct ParsedAttrInfoDiagnoseIf final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = DiagnoseIfSpellings;
+    ArgNames = DiagnoseIfArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D) && !isa<ObjCMethodDecl>(D) && !isa<ObjCPropertyDecl>(D)) {
@@ -3689,6 +3818,53 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
 static const ParsedAttrInfoDiagnoseIf Instance;
 };
 const ParsedAttrInfoDiagnoseIf ParsedAttrInfoDiagnoseIf::Instance;
+static constexpr ParsedAttrInfo::Spelling DisableSanitizerInstrumentationSpellings[] = {
+  {AttributeCommonInfo::AS_GNU, "disable_sanitizer_instrumentation"},
+  {AttributeCommonInfo::AS_CXX11, "clang::disable_sanitizer_instrumentation"},
+  {AttributeCommonInfo::AS_C2x, "clang::disable_sanitizer_instrumentation"},
+};
+struct ParsedAttrInfoDisableSanitizerInstrumentation final : public ParsedAttrInfo {
+  ParsedAttrInfoDisableSanitizerInstrumentation() {
+    AttrKind = ParsedAttr::AT_DisableSanitizerInstrumentation;
+    NumArgs = 0;
+    OptArgs = 0;
+    HasCustomParsing = 0;
+    IsTargetSpecific = 0;
+    IsType = 0;
+    IsStmt = 0;
+    IsKnownToGCC = 0;
+    IsSupportedByPragmaAttribute = 1;
+    Spellings = DisableSanitizerInstrumentationSpellings;
+  }
+bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
+  if (!isa<FunctionDecl>(D) && !isa<ObjCMethodDecl>(D) && !isGlobalVar(D)) {
+    S.Diag(Attr.getLoc(), diag::warn_attribute_wrong_decl_type_str)
+      << Attr << "functions, Objective-C methods, and global variables";
+    return false;
+  }
+  return true;
+}
+
+bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const override {
+  S.Diag(AL.getLoc(), diag::err_decl_attribute_invalid_on_stmt)
+    << AL << St->getBeginLoc();
+  return false;
+}
+
+void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectMatchRule, bool>> &MatchRules, const LangOptions &LangOpts) const override {
+  MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
+  MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_method, /*IsSupported=*/LangOpts.ObjC));
+  MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_global, /*IsSupported=*/true));
+}
+
+AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const override {
+  D->addAttr(::new (S.Context) DisableSanitizerInstrumentationAttr(S.Context, Attr));
+  return AttributeApplied;
+}
+
+static const ParsedAttrInfoDisableSanitizerInstrumentation Instance;
+};
+const ParsedAttrInfoDisableSanitizerInstrumentation ParsedAttrInfoDisableSanitizerInstrumentation::Instance;
 static constexpr ParsedAttrInfo::Spelling DisableTailCallsSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "disable_tail_calls"},
   {AttributeCommonInfo::AS_CXX11, "clang::disable_tail_calls"},
@@ -3793,6 +3969,8 @@ const ParsedAttrInfoEmptyBases ParsedAttrInfoEmptyBases::Instance;
 static constexpr ParsedAttrInfo::Spelling EnableIfSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "enable_if"},
 };
+static constexpr const char *EnableIfArgNames[] = {
+"Cond","Message",};
 struct ParsedAttrInfoEnableIf final : public ParsedAttrInfo {
   ParsedAttrInfoEnableIf() {
     AttrKind = ParsedAttr::AT_EnableIf;
@@ -3805,6 +3983,7 @@ struct ParsedAttrInfoEnableIf final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = EnableIfSpellings;
+    ArgNames = EnableIfArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -3833,6 +4012,8 @@ static constexpr ParsedAttrInfo::Spelling EnforceTCBSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::enforce_tcb"},
   {AttributeCommonInfo::AS_C2x, "clang::enforce_tcb"},
 };
+static constexpr const char *EnforceTCBArgNames[] = {
+"TCBName",};
 struct ParsedAttrInfoEnforceTCB final : public ParsedAttrInfo {
   ParsedAttrInfoEnforceTCB() {
     AttrKind = ParsedAttr::AT_EnforceTCB;
@@ -3845,6 +4026,7 @@ struct ParsedAttrInfoEnforceTCB final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = EnforceTCBSpellings;
+    ArgNames = EnforceTCBArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -3873,6 +4055,8 @@ static constexpr ParsedAttrInfo::Spelling EnforceTCBLeafSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::enforce_tcb_leaf"},
   {AttributeCommonInfo::AS_C2x, "clang::enforce_tcb_leaf"},
 };
+static constexpr const char *EnforceTCBLeafArgNames[] = {
+"TCBName",};
 struct ParsedAttrInfoEnforceTCBLeaf final : public ParsedAttrInfo {
   ParsedAttrInfoEnforceTCBLeaf() {
     AttrKind = ParsedAttr::AT_EnforceTCBLeaf;
@@ -3885,6 +4069,7 @@ struct ParsedAttrInfoEnforceTCBLeaf final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = EnforceTCBLeafSpellings;
+    ArgNames = EnforceTCBLeafArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -3913,6 +4098,8 @@ static constexpr ParsedAttrInfo::Spelling EnumExtensibilitySpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::enum_extensibility"},
   {AttributeCommonInfo::AS_C2x, "clang::enum_extensibility"},
 };
+static constexpr const char *EnumExtensibilityArgNames[] = {
+"Extensibility",};
 struct ParsedAttrInfoEnumExtensibility final : public ParsedAttrInfo {
   ParsedAttrInfoEnumExtensibility() {
     AttrKind = ParsedAttr::AT_EnumExtensibility;
@@ -3925,6 +4112,7 @@ struct ParsedAttrInfoEnumExtensibility final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = EnumExtensibilitySpellings;
+    ArgNames = EnumExtensibilityArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<EnumDecl>(D)) {
@@ -3998,6 +4186,8 @@ const ParsedAttrInfoExcludeFromExplicitInstantiation ParsedAttrInfoExcludeFromEx
 static constexpr ParsedAttrInfo::Spelling ExclusiveTrylockFunctionSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "exclusive_trylock_function"},
 };
+static constexpr const char *ExclusiveTrylockFunctionArgNames[] = {
+"SuccessValue","Args...",};
 struct ParsedAttrInfoExclusiveTrylockFunction final : public ParsedAttrInfo {
   ParsedAttrInfoExclusiveTrylockFunction() {
     AttrKind = ParsedAttr::AT_ExclusiveTrylockFunction;
@@ -4010,6 +4200,7 @@ struct ParsedAttrInfoExclusiveTrylockFunction final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = ExclusiveTrylockFunctionSpellings;
+    ArgNames = ExclusiveTrylockFunctionArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -4032,6 +4223,8 @@ const ParsedAttrInfoExclusiveTrylockFunction ParsedAttrInfoExclusiveTrylockFunct
 static constexpr ParsedAttrInfo::Spelling ExtVectorTypeSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "ext_vector_type"},
 };
+static constexpr const char *ExtVectorTypeArgNames[] = {
+"NumElements",};
 struct ParsedAttrInfoExtVectorType final : public ParsedAttrInfo {
   ParsedAttrInfoExtVectorType() {
     AttrKind = ParsedAttr::AT_ExtVectorType;
@@ -4044,6 +4237,7 @@ struct ParsedAttrInfoExtVectorType final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = ExtVectorTypeSpellings;
+    ArgNames = ExtVectorTypeArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<TypedefNameDecl>(D)) {
@@ -4068,6 +4262,8 @@ static constexpr ParsedAttrInfo::Spelling ExternalSourceSymbolSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::external_source_symbol"},
   {AttributeCommonInfo::AS_C2x, "clang::external_source_symbol"},
 };
+static constexpr const char *ExternalSourceSymbolArgNames[] = {
+"language","definedIn","generatedDeclaration",};
 struct ParsedAttrInfoExternalSourceSymbol final : public ParsedAttrInfo {
   ParsedAttrInfoExternalSourceSymbol() {
     AttrKind = ParsedAttr::AT_ExternalSourceSymbol;
@@ -4080,6 +4276,7 @@ struct ParsedAttrInfoExternalSourceSymbol final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = ExternalSourceSymbolSpellings;
+    ArgNames = ExternalSourceSymbolArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<NamedDecl>(D)) {
@@ -4274,6 +4471,8 @@ static constexpr ParsedAttrInfo::Spelling FormatSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::format"},
   {AttributeCommonInfo::AS_C2x, "gnu::format"},
 };
+static constexpr const char *FormatArgNames[] = {
+"Type","FormatIdx","FirstArg",};
 struct ParsedAttrInfoFormat final : public ParsedAttrInfo {
   ParsedAttrInfoFormat() {
     AttrKind = ParsedAttr::AT_Format;
@@ -4286,6 +4485,7 @@ struct ParsedAttrInfoFormat final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 0;
     Spellings = FormatSpellings;
+    ArgNames = FormatArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<ObjCMethodDecl>(D) && !isa<BlockDecl>(D) && !isHasFunctionProto(D)) {
@@ -4310,6 +4510,8 @@ static constexpr ParsedAttrInfo::Spelling FormatArgSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::format_arg"},
   {AttributeCommonInfo::AS_C2x, "gnu::format_arg"},
 };
+static constexpr const char *FormatArgArgNames[] = {
+"FormatIdx",};
 struct ParsedAttrInfoFormatArg final : public ParsedAttrInfo {
   ParsedAttrInfoFormatArg() {
     AttrKind = ParsedAttr::AT_FormatArg;
@@ -4322,6 +4524,7 @@ struct ParsedAttrInfoFormatArg final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 0;
     Spellings = FormatArgSpellings;
+    ArgNames = FormatArgArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<ObjCMethodDecl>(D) && !isHasFunctionProto(D)) {
@@ -4384,6 +4587,8 @@ const ParsedAttrInfoGNUInline ParsedAttrInfoGNUInline::Instance;
 static constexpr ParsedAttrInfo::Spelling GuardedBySpellings[] = {
   {AttributeCommonInfo::AS_GNU, "guarded_by"},
 };
+static constexpr const char *GuardedByArgNames[] = {
+"Arg",};
 struct ParsedAttrInfoGuardedBy final : public ParsedAttrInfo {
   ParsedAttrInfoGuardedBy() {
     AttrKind = ParsedAttr::AT_GuardedBy;
@@ -4396,6 +4601,7 @@ struct ParsedAttrInfoGuardedBy final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = GuardedBySpellings;
+    ArgNames = GuardedByArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FieldDecl>(D) && !isSharedVar(D)) {
@@ -4641,6 +4847,8 @@ static constexpr ParsedAttrInfo::Spelling IBOutletCollectionSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::iboutletcollection"},
   {AttributeCommonInfo::AS_C2x, "clang::iboutletcollection"},
 };
+static constexpr const char *IBOutletCollectionArgNames[] = {
+"Interface",};
 struct ParsedAttrInfoIBOutletCollection final : public ParsedAttrInfo {
   ParsedAttrInfoIBOutletCollection() {
     AttrKind = ParsedAttr::AT_IBOutletCollection;
@@ -4653,6 +4861,7 @@ struct ParsedAttrInfoIBOutletCollection final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = IBOutletCollectionSpellings;
+    ArgNames = IBOutletCollectionArgNames;
   }
 static const ParsedAttrInfoIBOutletCollection Instance;
 };
@@ -4662,6 +4871,8 @@ static constexpr ParsedAttrInfo::Spelling IFuncSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::ifunc"},
   {AttributeCommonInfo::AS_C2x, "gnu::ifunc"},
 };
+static constexpr const char *IFuncArgNames[] = {
+"Resolver",};
 struct ParsedAttrInfoIFunc final : public ParsedAttrInfo {
   ParsedAttrInfoIFunc() {
     AttrKind = ParsedAttr::AT_IFunc;
@@ -4674,6 +4885,7 @@ struct ParsedAttrInfoIFunc final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 1;
     Spellings = IFuncSpellings;
+    ArgNames = IFuncArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -4706,6 +4918,8 @@ static constexpr ParsedAttrInfo::Spelling InitPrioritySpellings[] = {
   {AttributeCommonInfo::AS_GNU, "init_priority"},
   {AttributeCommonInfo::AS_CXX11, "gnu::init_priority"},
 };
+static constexpr const char *InitPriorityArgNames[] = {
+"Priority",};
 struct ParsedAttrInfoInitPriority final : public ParsedAttrInfo {
   ParsedAttrInfoInitPriority() {
     AttrKind = ParsedAttr::AT_InitPriority;
@@ -4718,6 +4932,7 @@ struct ParsedAttrInfoInitPriority final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 1;
     Spellings = InitPrioritySpellings;
+    ArgNames = InitPriorityArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<VarDecl>(D)) {
@@ -4867,6 +5082,8 @@ const ParsedAttrInfoLTOVisibilityPublic ParsedAttrInfoLTOVisibilityPublic::Insta
 static constexpr ParsedAttrInfo::Spelling LayoutVersionSpellings[] = {
   {AttributeCommonInfo::AS_Declspec, "layout_version"},
 };
+static constexpr const char *LayoutVersionArgNames[] = {
+"Version",};
 struct ParsedAttrInfoLayoutVersion final : public ParsedAttrInfo {
   ParsedAttrInfoLayoutVersion() {
     AttrKind = ParsedAttr::AT_LayoutVersion;
@@ -4879,6 +5096,7 @@ struct ParsedAttrInfoLayoutVersion final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = LayoutVersionSpellings;
+    ArgNames = LayoutVersionArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<CXXRecordDecl>(D)) {
@@ -5062,6 +5280,8 @@ const ParsedAttrInfoLoaderUninitialized ParsedAttrInfoLoaderUninitialized::Insta
 static constexpr ParsedAttrInfo::Spelling LockReturnedSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "lock_returned"},
 };
+static constexpr const char *LockReturnedArgNames[] = {
+"Arg",};
 struct ParsedAttrInfoLockReturned final : public ParsedAttrInfo {
   ParsedAttrInfoLockReturned() {
     AttrKind = ParsedAttr::AT_LockReturned;
@@ -5074,6 +5294,7 @@ struct ParsedAttrInfoLockReturned final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = LockReturnedSpellings;
+    ArgNames = LockReturnedArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -5134,6 +5355,8 @@ const ParsedAttrInfoLockable ParsedAttrInfoLockable::Instance;
 static constexpr ParsedAttrInfo::Spelling LocksExcludedSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "locks_excluded"},
 };
+static constexpr const char *LocksExcludedArgNames[] = {
+"Args...",};
 struct ParsedAttrInfoLocksExcluded final : public ParsedAttrInfo {
   ParsedAttrInfoLocksExcluded() {
     AttrKind = ParsedAttr::AT_LocksExcluded;
@@ -5146,6 +5369,7 @@ struct ParsedAttrInfoLocksExcluded final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = LocksExcludedSpellings;
+    ArgNames = LocksExcludedArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -5172,6 +5396,8 @@ static constexpr ParsedAttrInfo::Spelling LoopHintSpellings[] = {
   {AttributeCommonInfo::AS_Pragma, "unroll_and_jam"},
   {AttributeCommonInfo::AS_Pragma, "nounroll_and_jam"},
 };
+static constexpr const char *LoopHintArgNames[] = {
+"Option","State","Value",};
 struct ParsedAttrInfoLoopHint final : public ParsedAttrInfo {
   ParsedAttrInfoLoopHint() {
     AttrKind = ParsedAttr::AT_LoopHint;
@@ -5184,6 +5410,7 @@ struct ParsedAttrInfoLoopHint final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = LoopHintSpellings;
+    ArgNames = LoopHintArgNames;
   }
 unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override {
   enum Spelling {
@@ -5447,6 +5674,8 @@ static constexpr ParsedAttrInfo::Spelling MatrixTypeSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::matrix_type"},
   {AttributeCommonInfo::AS_C2x, "clang::matrix_type"},
 };
+static constexpr const char *MatrixTypeArgNames[] = {
+"NumRows","NumColumns",};
 struct ParsedAttrInfoMatrixType final : public ParsedAttrInfo {
   ParsedAttrInfoMatrixType() {
     AttrKind = ParsedAttr::AT_MatrixType;
@@ -5459,6 +5688,7 @@ struct ParsedAttrInfoMatrixType final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = MatrixTypeSpellings;
+    ArgNames = MatrixTypeArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<TypedefNameDecl>(D)) {
@@ -5611,6 +5841,8 @@ static constexpr ParsedAttrInfo::Spelling MinVectorWidthSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::min_vector_width"},
   {AttributeCommonInfo::AS_C2x, "clang::min_vector_width"},
 };
+static constexpr const char *MinVectorWidthArgNames[] = {
+"VectorWidth",};
 struct ParsedAttrInfoMinVectorWidth final : public ParsedAttrInfo {
   ParsedAttrInfoMinVectorWidth() {
     AttrKind = ParsedAttr::AT_MinVectorWidth;
@@ -5623,6 +5855,7 @@ struct ParsedAttrInfoMinVectorWidth final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = MinVectorWidthSpellings;
+    ArgNames = MinVectorWidthArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -5893,6 +6126,8 @@ static constexpr ParsedAttrInfo::Spelling ModeSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::mode"},
   {AttributeCommonInfo::AS_C2x, "gnu::mode"},
 };
+static constexpr const char *ModeArgNames[] = {
+"Mode",};
 struct ParsedAttrInfoMode final : public ParsedAttrInfo {
   ParsedAttrInfoMode() {
     AttrKind = ParsedAttr::AT_Mode;
@@ -5905,6 +6140,7 @@ struct ParsedAttrInfoMode final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 0;
     Spellings = ModeSpellings;
+    ArgNames = ModeArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<VarDecl>(D) && !isa<EnumDecl>(D) && !isa<TypedefNameDecl>(D) && !isa<FieldDecl>(D)) {
@@ -6048,6 +6284,8 @@ const ParsedAttrInfoNSConsumesSelf ParsedAttrInfoNSConsumesSelf::Instance;
 static constexpr ParsedAttrInfo::Spelling NSErrorDomainSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "ns_error_domain"},
 };
+static constexpr const char *NSErrorDomainArgNames[] = {
+"ErrorDomain",};
 struct ParsedAttrInfoNSErrorDomain final : public ParsedAttrInfo {
   ParsedAttrInfoNSErrorDomain() {
     AttrKind = ParsedAttr::AT_NSErrorDomain;
@@ -6060,6 +6298,7 @@ struct ParsedAttrInfoNSErrorDomain final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = NSErrorDomainSpellings;
+    ArgNames = NSErrorDomainArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<EnumDecl>(D)) {
@@ -6203,6 +6442,8 @@ static constexpr ParsedAttrInfo::Spelling NeonPolyVectorTypeSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::neon_polyvector_type"},
   {AttributeCommonInfo::AS_C2x, "clang::neon_polyvector_type"},
 };
+static constexpr const char *NeonPolyVectorTypeArgNames[] = {
+"NumElements",};
 struct ParsedAttrInfoNeonPolyVectorType final : public ParsedAttrInfo {
   ParsedAttrInfoNeonPolyVectorType() {
     AttrKind = ParsedAttr::AT_NeonPolyVectorType;
@@ -6215,6 +6456,7 @@ struct ParsedAttrInfoNeonPolyVectorType final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = NeonPolyVectorTypeSpellings;
+    ArgNames = NeonPolyVectorTypeArgNames;
   }
 static const ParsedAttrInfoNeonPolyVectorType Instance;
 };
@@ -6224,6 +6466,8 @@ static constexpr ParsedAttrInfo::Spelling NeonVectorTypeSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::neon_vector_type"},
   {AttributeCommonInfo::AS_C2x, "clang::neon_vector_type"},
 };
+static constexpr const char *NeonVectorTypeArgNames[] = {
+"NumElements",};
 struct ParsedAttrInfoNeonVectorType final : public ParsedAttrInfo {
   ParsedAttrInfoNeonVectorType() {
     AttrKind = ParsedAttr::AT_NeonVectorType;
@@ -6236,6 +6480,7 @@ struct ParsedAttrInfoNeonVectorType final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = NeonVectorTypeSpellings;
+    ArgNames = NeonVectorTypeArgNames;
   }
 static const ParsedAttrInfoNeonVectorType Instance;
 };
@@ -6284,6 +6529,8 @@ static constexpr ParsedAttrInfo::Spelling NoBuiltinSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::no_builtin"},
   {AttributeCommonInfo::AS_C2x, "clang::no_builtin"},
 };
+static constexpr const char *NoBuiltinArgNames[] = {
+"BuiltinNames...",};
 struct ParsedAttrInfoNoBuiltin final : public ParsedAttrInfo {
   ParsedAttrInfoNoBuiltin() {
     AttrKind = ParsedAttr::AT_NoBuiltin;
@@ -6296,6 +6543,7 @@ struct ParsedAttrInfoNoBuiltin final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = NoBuiltinSpellings;
+    ArgNames = NoBuiltinArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -6874,6 +7122,8 @@ static constexpr ParsedAttrInfo::Spelling NoSanitizeSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::no_sanitize"},
   {AttributeCommonInfo::AS_C2x, "clang::no_sanitize"},
 };
+static constexpr const char *NoSanitizeArgNames[] = {
+"Sanitizers...",};
 struct ParsedAttrInfoNoSanitize final : public ParsedAttrInfo {
   ParsedAttrInfoNoSanitize() {
     AttrKind = ParsedAttr::AT_NoSanitize;
@@ -6886,6 +7136,7 @@ struct ParsedAttrInfoNoSanitize final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = NoSanitizeSpellings;
+    ArgNames = NoSanitizeArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D) && !isa<ObjCMethodDecl>(D) && !isGlobalVar(D)) {
@@ -7243,6 +7494,8 @@ static constexpr ParsedAttrInfo::Spelling NonNullSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::nonnull"},
   {AttributeCommonInfo::AS_C2x, "gnu::nonnull"},
 };
+static constexpr const char *NonNullArgNames[] = {
+"Args...",};
 struct ParsedAttrInfoNonNull final : public ParsedAttrInfo {
   ParsedAttrInfoNonNull() {
     AttrKind = ParsedAttr::AT_NonNull;
@@ -7255,6 +7508,7 @@ struct ParsedAttrInfoNonNull final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 0;
     Spellings = NonNullSpellings;
+    ArgNames = NonNullArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<ObjCMethodDecl>(D) && !isHasFunctionProto(D) && !isa<ParmVarDecl>(D)) {
@@ -7622,6 +7876,8 @@ static constexpr ParsedAttrInfo::Spelling ObjCBridgeSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::objc_bridge"},
   {AttributeCommonInfo::AS_C2x, "clang::objc_bridge"},
 };
+static constexpr const char *ObjCBridgeArgNames[] = {
+"BridgedType",};
 struct ParsedAttrInfoObjCBridge final : public ParsedAttrInfo {
   ParsedAttrInfoObjCBridge() {
     AttrKind = ParsedAttr::AT_ObjCBridge;
@@ -7634,6 +7890,7 @@ struct ParsedAttrInfoObjCBridge final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = ObjCBridgeSpellings;
+    ArgNames = ObjCBridgeArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<RecordDecl>(D) && !isa<TypedefNameDecl>(D)) {
@@ -7663,6 +7920,8 @@ static constexpr ParsedAttrInfo::Spelling ObjCBridgeMutableSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::objc_bridge_mutable"},
   {AttributeCommonInfo::AS_C2x, "clang::objc_bridge_mutable"},
 };
+static constexpr const char *ObjCBridgeMutableArgNames[] = {
+"BridgedType",};
 struct ParsedAttrInfoObjCBridgeMutable final : public ParsedAttrInfo {
   ParsedAttrInfoObjCBridgeMutable() {
     AttrKind = ParsedAttr::AT_ObjCBridgeMutable;
@@ -7675,6 +7934,7 @@ struct ParsedAttrInfoObjCBridgeMutable final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = ObjCBridgeMutableSpellings;
+    ArgNames = ObjCBridgeMutableArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<RecordDecl>(D)) {
@@ -7703,6 +7963,8 @@ static constexpr ParsedAttrInfo::Spelling ObjCBridgeRelatedSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::objc_bridge_related"},
   {AttributeCommonInfo::AS_C2x, "clang::objc_bridge_related"},
 };
+static constexpr const char *ObjCBridgeRelatedArgNames[] = {
+"RelatedClass","ClassMethod","InstanceMethod",};
 struct ParsedAttrInfoObjCBridgeRelated final : public ParsedAttrInfo {
   ParsedAttrInfoObjCBridgeRelated() {
     AttrKind = ParsedAttr::AT_ObjCBridgeRelated;
@@ -7715,6 +7977,7 @@ struct ParsedAttrInfoObjCBridgeRelated final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = ObjCBridgeRelatedSpellings;
+    ArgNames = ObjCBridgeRelatedArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<RecordDecl>(D)) {
@@ -8054,6 +8317,8 @@ static constexpr ParsedAttrInfo::Spelling ObjCGCSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::objc_gc"},
   {AttributeCommonInfo::AS_C2x, "clang::objc_gc"},
 };
+static constexpr const char *ObjCGCArgNames[] = {
+"Kind",};
 struct ParsedAttrInfoObjCGC final : public ParsedAttrInfo {
   ParsedAttrInfoObjCGC() {
     AttrKind = ParsedAttr::AT_ObjCGC;
@@ -8066,6 +8331,7 @@ struct ParsedAttrInfoObjCGC final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = ObjCGCSpellings;
+    ArgNames = ObjCGCArgNames;
   }
 static const ParsedAttrInfoObjCGC Instance;
 };
@@ -8134,6 +8400,8 @@ static constexpr ParsedAttrInfo::Spelling ObjCMethodFamilySpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::objc_method_family"},
   {AttributeCommonInfo::AS_C2x, "clang::objc_method_family"},
 };
+static constexpr const char *ObjCMethodFamilyArgNames[] = {
+"Family",};
 struct ParsedAttrInfoObjCMethodFamily final : public ParsedAttrInfo {
   ParsedAttrInfoObjCMethodFamily() {
     AttrKind = ParsedAttr::AT_ObjCMethodFamily;
@@ -8146,6 +8414,7 @@ struct ParsedAttrInfoObjCMethodFamily final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = ObjCMethodFamilySpellings;
+    ArgNames = ObjCMethodFamilyArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<ObjCMethodDecl>(D)) {
@@ -8294,6 +8563,8 @@ static constexpr ParsedAttrInfo::Spelling ObjCOwnershipSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::objc_ownership"},
   {AttributeCommonInfo::AS_C2x, "clang::objc_ownership"},
 };
+static constexpr const char *ObjCOwnershipArgNames[] = {
+"Kind",};
 struct ParsedAttrInfoObjCOwnership final : public ParsedAttrInfo {
   ParsedAttrInfoObjCOwnership() {
     AttrKind = ParsedAttr::AT_ObjCOwnership;
@@ -8306,6 +8577,7 @@ struct ParsedAttrInfoObjCOwnership final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = ObjCOwnershipSpellings;
+    ArgNames = ObjCOwnershipArgNames;
   }
 static const ParsedAttrInfoObjCOwnership Instance;
 };
@@ -8526,6 +8798,8 @@ static constexpr ParsedAttrInfo::Spelling ObjCRuntimeNameSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::objc_runtime_name"},
   {AttributeCommonInfo::AS_C2x, "clang::objc_runtime_name"},
 };
+static constexpr const char *ObjCRuntimeNameArgNames[] = {
+"MetadataName",};
 struct ParsedAttrInfoObjCRuntimeName final : public ParsedAttrInfo {
   ParsedAttrInfoObjCRuntimeName() {
     AttrKind = ParsedAttr::AT_ObjCRuntimeName;
@@ -8538,6 +8812,7 @@ struct ParsedAttrInfoObjCRuntimeName final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = ObjCRuntimeNameSpellings;
+    ArgNames = ObjCRuntimeNameArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<ObjCInterfaceDecl>(D) && !isa<ObjCProtocolDecl>(D)) {
@@ -8889,6 +9164,8 @@ const ParsedAttrInfoOpenCLGlobalHostAddressSpace ParsedAttrInfoOpenCLGlobalHostA
 static constexpr ParsedAttrInfo::Spelling OpenCLIntelReqdSubGroupSizeSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "intel_reqd_sub_group_size"},
 };
+static constexpr const char *OpenCLIntelReqdSubGroupSizeArgNames[] = {
+"SubGroupSize",};
 struct ParsedAttrInfoOpenCLIntelReqdSubGroupSize final : public ParsedAttrInfo {
   ParsedAttrInfoOpenCLIntelReqdSubGroupSize() {
     AttrKind = ParsedAttr::AT_OpenCLIntelReqdSubGroupSize;
@@ -8901,6 +9178,7 @@ struct ParsedAttrInfoOpenCLIntelReqdSubGroupSize final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = OpenCLIntelReqdSubGroupSizeSpellings;
+    ArgNames = OpenCLIntelReqdSubGroupSizeArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -9097,6 +9375,8 @@ const ParsedAttrInfoOpenCLPrivateAddressSpace ParsedAttrInfoOpenCLPrivateAddress
 static constexpr ParsedAttrInfo::Spelling OpenCLUnrollHintSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "opencl_unroll_hint"},
 };
+static constexpr const char *OpenCLUnrollHintArgNames[] = {
+"UnrollHint",};
 struct ParsedAttrInfoOpenCLUnrollHint final : public ParsedAttrInfo {
   ParsedAttrInfoOpenCLUnrollHint() {
     AttrKind = ParsedAttr::AT_OpenCLUnrollHint;
@@ -9109,6 +9389,7 @@ struct ParsedAttrInfoOpenCLUnrollHint final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = OpenCLUnrollHintSpellings;
+    ArgNames = OpenCLUnrollHintArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &AL, const Decl *D) const override {
   S.Diag(AL.getLoc(), diag::err_stmt_attribute_invalid_on_decl)
@@ -9217,6 +9498,8 @@ const ParsedAttrInfoOverloadable ParsedAttrInfoOverloadable::Instance;
 static constexpr ParsedAttrInfo::Spelling OwnerSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gsl::Owner"},
 };
+static constexpr const char *OwnerArgNames[] = {
+"DerefType",};
 struct ParsedAttrInfoOwner final : public ParsedAttrInfo {
   ParsedAttrInfoOwner() {
     AttrKind = ParsedAttr::AT_Owner;
@@ -9229,6 +9512,7 @@ struct ParsedAttrInfoOwner final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = OwnerSpellings;
+    ArgNames = OwnerArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isStruct(D)) {
@@ -9274,6 +9558,8 @@ static constexpr ParsedAttrInfo::Spelling OwnershipSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::ownership_takes"},
   {AttributeCommonInfo::AS_C2x, "clang::ownership_takes"},
 };
+static constexpr const char *OwnershipArgNames[] = {
+"Module","Args...",};
 struct ParsedAttrInfoOwnership final : public ParsedAttrInfo {
   ParsedAttrInfoOwnership() {
     AttrKind = ParsedAttr::AT_Ownership;
@@ -9286,6 +9572,7 @@ struct ParsedAttrInfoOwnership final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = OwnershipSpellings;
+    ArgNames = OwnershipArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isHasFunctionProto(D)) {
@@ -9360,6 +9647,8 @@ static constexpr ParsedAttrInfo::Spelling ParamTypestateSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "param_typestate"},
   {AttributeCommonInfo::AS_CXX11, "clang::param_typestate"},
 };
+static constexpr const char *ParamTypestateArgNames[] = {
+"ParamState",};
 struct ParsedAttrInfoParamTypestate final : public ParsedAttrInfo {
   ParsedAttrInfoParamTypestate() {
     AttrKind = ParsedAttr::AT_ParamTypestate;
@@ -9372,6 +9661,7 @@ struct ParsedAttrInfoParamTypestate final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = ParamTypestateSpellings;
+    ArgNames = ParamTypestateArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<ParmVarDecl>(D)) {
@@ -9426,6 +9716,8 @@ static constexpr ParsedAttrInfo::Spelling PassObjectSizeSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::pass_dynamic_object_size"},
   {AttributeCommonInfo::AS_C2x, "clang::pass_dynamic_object_size"},
 };
+static constexpr const char *PassObjectSizeArgNames[] = {
+"Type",};
 struct ParsedAttrInfoPassObjectSize final : public ParsedAttrInfo {
   ParsedAttrInfoPassObjectSize() {
     AttrKind = ParsedAttr::AT_PassObjectSize;
@@ -9438,6 +9730,7 @@ struct ParsedAttrInfoPassObjectSize final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = PassObjectSizeSpellings;
+    ArgNames = PassObjectSizeArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<ParmVarDecl>(D)) {
@@ -9490,6 +9783,8 @@ static constexpr ParsedAttrInfo::Spelling PatchableFunctionEntrySpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::patchable_function_entry"},
   {AttributeCommonInfo::AS_C2x, "gnu::patchable_function_entry"},
 };
+static constexpr const char *PatchableFunctionEntryArgNames[] = {
+"Count","Offset",};
 struct ParsedAttrInfoPatchableFunctionEntry final : public ParsedAttrInfo {
   ParsedAttrInfoPatchableFunctionEntry() {
     AttrKind = ParsedAttr::AT_PatchableFunctionEntry;
@@ -9502,6 +9797,7 @@ struct ParsedAttrInfoPatchableFunctionEntry final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 1;
     Spellings = PatchableFunctionEntrySpellings;
+    ArgNames = PatchableFunctionEntryArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D) && !isa<ObjCMethodDecl>(D)) {
@@ -9536,6 +9832,8 @@ static constexpr ParsedAttrInfo::Spelling PcsSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::pcs"},
   {AttributeCommonInfo::AS_C2x, "gnu::pcs"},
 };
+static constexpr const char *PcsArgNames[] = {
+"PCS",};
 struct ParsedAttrInfoPcs final : public ParsedAttrInfo {
   ParsedAttrInfoPcs() {
     AttrKind = ParsedAttr::AT_Pcs;
@@ -9548,6 +9846,7 @@ struct ParsedAttrInfoPcs final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 0;
     Spellings = PcsSpellings;
+    ArgNames = PcsArgNames;
   }
 static const ParsedAttrInfoPcs Instance;
 };
@@ -9555,6 +9854,8 @@ const ParsedAttrInfoPcs ParsedAttrInfoPcs::Instance;
 static constexpr ParsedAttrInfo::Spelling PointerSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gsl::Pointer"},
 };
+static constexpr const char *PointerArgNames[] = {
+"DerefType",};
 struct ParsedAttrInfoPointer final : public ParsedAttrInfo {
   ParsedAttrInfoPointer() {
     AttrKind = ParsedAttr::AT_Pointer;
@@ -9567,6 +9868,7 @@ struct ParsedAttrInfoPointer final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = PointerSpellings;
+    ArgNames = PointerArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isStruct(D)) {
@@ -9601,6 +9903,8 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
 static const ParsedAttrInfoPointer Instance;
 };
 const ParsedAttrInfoPointer ParsedAttrInfoPointer::Instance;
+static constexpr const char *PragmaClangBSSSectionArgNames[] = {
+"Name",};
 struct ParsedAttrInfoPragmaClangBSSSection final : public ParsedAttrInfo {
   ParsedAttrInfoPragmaClangBSSSection() {
     AttrKind = ParsedAttr::AT_PragmaClangBSSSection;
@@ -9612,6 +9916,7 @@ struct ParsedAttrInfoPragmaClangBSSSection final : public ParsedAttrInfo {
     IsStmt = 0;
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
+    ArgNames = PragmaClangBSSSectionArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isGlobalVar(D)) {
@@ -9631,6 +9936,8 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
 static const ParsedAttrInfoPragmaClangBSSSection Instance;
 };
 const ParsedAttrInfoPragmaClangBSSSection ParsedAttrInfoPragmaClangBSSSection::Instance;
+static constexpr const char *PragmaClangDataSectionArgNames[] = {
+"Name",};
 struct ParsedAttrInfoPragmaClangDataSection final : public ParsedAttrInfo {
   ParsedAttrInfoPragmaClangDataSection() {
     AttrKind = ParsedAttr::AT_PragmaClangDataSection;
@@ -9642,6 +9949,7 @@ struct ParsedAttrInfoPragmaClangDataSection final : public ParsedAttrInfo {
     IsStmt = 0;
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
+    ArgNames = PragmaClangDataSectionArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isGlobalVar(D)) {
@@ -9661,6 +9969,8 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
 static const ParsedAttrInfoPragmaClangDataSection Instance;
 };
 const ParsedAttrInfoPragmaClangDataSection ParsedAttrInfoPragmaClangDataSection::Instance;
+static constexpr const char *PragmaClangRelroSectionArgNames[] = {
+"Name",};
 struct ParsedAttrInfoPragmaClangRelroSection final : public ParsedAttrInfo {
   ParsedAttrInfoPragmaClangRelroSection() {
     AttrKind = ParsedAttr::AT_PragmaClangRelroSection;
@@ -9672,6 +9982,7 @@ struct ParsedAttrInfoPragmaClangRelroSection final : public ParsedAttrInfo {
     IsStmt = 0;
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
+    ArgNames = PragmaClangRelroSectionArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isGlobalVar(D)) {
@@ -9691,6 +10002,8 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
 static const ParsedAttrInfoPragmaClangRelroSection Instance;
 };
 const ParsedAttrInfoPragmaClangRelroSection ParsedAttrInfoPragmaClangRelroSection::Instance;
+static constexpr const char *PragmaClangRodataSectionArgNames[] = {
+"Name",};
 struct ParsedAttrInfoPragmaClangRodataSection final : public ParsedAttrInfo {
   ParsedAttrInfoPragmaClangRodataSection() {
     AttrKind = ParsedAttr::AT_PragmaClangRodataSection;
@@ -9702,6 +10015,7 @@ struct ParsedAttrInfoPragmaClangRodataSection final : public ParsedAttrInfo {
     IsStmt = 0;
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
+    ArgNames = PragmaClangRodataSectionArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isGlobalVar(D)) {
@@ -9721,6 +10035,8 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
 static const ParsedAttrInfoPragmaClangRodataSection Instance;
 };
 const ParsedAttrInfoPragmaClangRodataSection ParsedAttrInfoPragmaClangRodataSection::Instance;
+static constexpr const char *PragmaClangTextSectionArgNames[] = {
+"Name",};
 struct ParsedAttrInfoPragmaClangTextSection final : public ParsedAttrInfo {
   ParsedAttrInfoPragmaClangTextSection() {
     AttrKind = ParsedAttr::AT_PragmaClangTextSection;
@@ -9732,6 +10048,7 @@ struct ParsedAttrInfoPragmaClangTextSection final : public ParsedAttrInfo {
     IsStmt = 0;
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
+    ArgNames = PragmaClangTextSectionArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -9755,6 +10072,8 @@ static constexpr ParsedAttrInfo::Spelling PreferredNameSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "preferred_name"},
   {AttributeCommonInfo::AS_CXX11, "clang::preferred_name"},
 };
+static constexpr const char *PreferredNameArgNames[] = {
+"TypedefType",};
 struct ParsedAttrInfoPreferredName final : public ParsedAttrInfo {
   ParsedAttrInfoPreferredName() {
     AttrKind = ParsedAttr::AT_PreferredName;
@@ -9767,6 +10086,7 @@ struct ParsedAttrInfoPreferredName final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = PreferredNameSpellings;
+    ArgNames = PreferredNameArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isClassTmpl(D)) {
@@ -9831,6 +10151,8 @@ const ParsedAttrInfoPreserveMost ParsedAttrInfoPreserveMost::Instance;
 static constexpr ParsedAttrInfo::Spelling PtGuardedBySpellings[] = {
   {AttributeCommonInfo::AS_GNU, "pt_guarded_by"},
 };
+static constexpr const char *PtGuardedByArgNames[] = {
+"Arg",};
 struct ParsedAttrInfoPtGuardedBy final : public ParsedAttrInfo {
   ParsedAttrInfoPtGuardedBy() {
     AttrKind = ParsedAttr::AT_PtGuardedBy;
@@ -9843,6 +10165,7 @@ struct ParsedAttrInfoPtGuardedBy final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = PtGuardedBySpellings;
+    ArgNames = PtGuardedByArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FieldDecl>(D) && !isSharedVar(D)) {
@@ -9988,6 +10311,8 @@ static constexpr ParsedAttrInfo::Spelling RegparmSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::regparm"},
   {AttributeCommonInfo::AS_C2x, "gnu::regparm"},
 };
+static constexpr const char *RegparmArgNames[] = {
+"NumParams",};
 struct ParsedAttrInfoRegparm final : public ParsedAttrInfo {
   ParsedAttrInfoRegparm() {
     AttrKind = ParsedAttr::AT_Regparm;
@@ -10000,6 +10325,7 @@ struct ParsedAttrInfoRegparm final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 0;
     Spellings = RegparmSpellings;
+    ArgNames = RegparmArgNames;
   }
 static const ParsedAttrInfoRegparm Instance;
 };
@@ -10054,6 +10380,8 @@ static constexpr ParsedAttrInfo::Spelling ReleaseCapabilitySpellings[] = {
   {AttributeCommonInfo::AS_GNU, "unlock_function"},
   {AttributeCommonInfo::AS_CXX11, "clang::unlock_function"},
 };
+static constexpr const char *ReleaseCapabilityArgNames[] = {
+"Args...",};
 struct ParsedAttrInfoReleaseCapability final : public ParsedAttrInfo {
   ParsedAttrInfoReleaseCapability() {
     AttrKind = ParsedAttr::AT_ReleaseCapability;
@@ -10066,6 +10394,7 @@ struct ParsedAttrInfoReleaseCapability final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = ReleaseCapabilitySpellings;
+    ArgNames = ReleaseCapabilityArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -10118,6 +10447,8 @@ static constexpr ParsedAttrInfo::Spelling ReleaseHandleSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::release_handle"},
   {AttributeCommonInfo::AS_C2x, "clang::release_handle"},
 };
+static constexpr const char *ReleaseHandleArgNames[] = {
+"HandleType",};
 struct ParsedAttrInfoReleaseHandle final : public ParsedAttrInfo {
   ParsedAttrInfoReleaseHandle() {
     AttrKind = ParsedAttr::AT_ReleaseHandle;
@@ -10130,6 +10461,7 @@ struct ParsedAttrInfoReleaseHandle final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = ReleaseHandleSpellings;
+    ArgNames = ReleaseHandleArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<ParmVarDecl>(D)) {
@@ -10203,6 +10535,8 @@ const ParsedAttrInfoRenderScriptKernel ParsedAttrInfoRenderScriptKernel::Instanc
 static constexpr ParsedAttrInfo::Spelling ReqdWorkGroupSizeSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "reqd_work_group_size"},
 };
+static constexpr const char *ReqdWorkGroupSizeArgNames[] = {
+"XDim","YDim","ZDim",};
 struct ParsedAttrInfoReqdWorkGroupSize final : public ParsedAttrInfo {
   ParsedAttrInfoReqdWorkGroupSize() {
     AttrKind = ParsedAttr::AT_ReqdWorkGroupSize;
@@ -10215,6 +10549,7 @@ struct ParsedAttrInfoReqdWorkGroupSize final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = ReqdWorkGroupSizeSpellings;
+    ArgNames = ReqdWorkGroupSizeArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -10248,6 +10583,8 @@ static constexpr ParsedAttrInfo::Spelling RequiresCapabilitySpellings[] = {
   {AttributeCommonInfo::AS_GNU, "shared_locks_required"},
   {AttributeCommonInfo::AS_CXX11, "clang::shared_locks_required"},
 };
+static constexpr const char *RequiresCapabilityArgNames[] = {
+"Args...",};
 struct ParsedAttrInfoRequiresCapability final : public ParsedAttrInfo {
   ParsedAttrInfoRequiresCapability() {
     AttrKind = ParsedAttr::AT_RequiresCapability;
@@ -10260,6 +10597,7 @@ struct ParsedAttrInfoRequiresCapability final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = RequiresCapabilitySpellings;
+    ArgNames = RequiresCapabilityArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -10413,6 +10751,8 @@ static constexpr ParsedAttrInfo::Spelling ReturnTypestateSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "return_typestate"},
   {AttributeCommonInfo::AS_CXX11, "clang::return_typestate"},
 };
+static constexpr const char *ReturnTypestateArgNames[] = {
+"State",};
 struct ParsedAttrInfoReturnTypestate final : public ParsedAttrInfo {
   ParsedAttrInfoReturnTypestate() {
     AttrKind = ParsedAttr::AT_ReturnTypestate;
@@ -10425,6 +10765,7 @@ struct ParsedAttrInfoReturnTypestate final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = ReturnTypestateSpellings;
+    ArgNames = ReturnTypestateArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D) && !isa<ParmVarDecl>(D)) {
@@ -10644,6 +10985,8 @@ static constexpr ParsedAttrInfo::Spelling SectionSpellings[] = {
   {AttributeCommonInfo::AS_C2x, "gnu::section"},
   {AttributeCommonInfo::AS_Declspec, "allocate"},
 };
+static constexpr const char *SectionArgNames[] = {
+"Name",};
 struct ParsedAttrInfoSection final : public ParsedAttrInfo {
   ParsedAttrInfoSection() {
     AttrKind = ParsedAttr::AT_Section;
@@ -10656,6 +10999,7 @@ struct ParsedAttrInfoSection final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 1;
     Spellings = SectionSpellings;
+    ArgNames = SectionArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D) && !isGlobalVar(D) && !isa<ObjCMethodDecl>(D) && !isa<ObjCPropertyDecl>(D)) {
@@ -10734,6 +11078,8 @@ static constexpr ParsedAttrInfo::Spelling SentinelSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::sentinel"},
   {AttributeCommonInfo::AS_C2x, "gnu::sentinel"},
 };
+static constexpr const char *SentinelArgNames[] = {
+"Sentinel","NullPos",};
 struct ParsedAttrInfoSentinel final : public ParsedAttrInfo {
   ParsedAttrInfoSentinel() {
     AttrKind = ParsedAttr::AT_Sentinel;
@@ -10746,6 +11092,7 @@ struct ParsedAttrInfoSentinel final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 0;
     Spellings = SentinelSpellings;
+    ArgNames = SentinelArgNames;
   }
 static const ParsedAttrInfoSentinel Instance;
 };
@@ -10754,6 +11101,8 @@ static constexpr ParsedAttrInfo::Spelling SetTypestateSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "set_typestate"},
   {AttributeCommonInfo::AS_CXX11, "clang::set_typestate"},
 };
+static constexpr const char *SetTypestateArgNames[] = {
+"NewState",};
 struct ParsedAttrInfoSetTypestate final : public ParsedAttrInfo {
   ParsedAttrInfoSetTypestate() {
     AttrKind = ParsedAttr::AT_SetTypestate;
@@ -10766,6 +11115,7 @@ struct ParsedAttrInfoSetTypestate final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = SetTypestateSpellings;
+    ArgNames = SetTypestateArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<CXXMethodDecl>(D)) {
@@ -10792,6 +11142,8 @@ const ParsedAttrInfoSetTypestate ParsedAttrInfoSetTypestate::Instance;
 static constexpr ParsedAttrInfo::Spelling SharedTrylockFunctionSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "shared_trylock_function"},
 };
+static constexpr const char *SharedTrylockFunctionArgNames[] = {
+"SuccessValue","Args...",};
 struct ParsedAttrInfoSharedTrylockFunction final : public ParsedAttrInfo {
   ParsedAttrInfoSharedTrylockFunction() {
     AttrKind = ParsedAttr::AT_SharedTrylockFunction;
@@ -10804,6 +11156,7 @@ struct ParsedAttrInfoSharedTrylockFunction final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = SharedTrylockFunctionSpellings;
+    ArgNames = SharedTrylockFunctionArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -10984,6 +11337,8 @@ const ParsedAttrInfoStrictFP ParsedAttrInfoStrictFP::Instance;
 static constexpr ParsedAttrInfo::Spelling SuppressSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gsl::suppress"},
 };
+static constexpr const char *SuppressArgNames[] = {
+"DiagnosticIdentifiers...",};
 struct ParsedAttrInfoSuppress final : public ParsedAttrInfo {
   ParsedAttrInfoSuppress() {
     AttrKind = ParsedAttr::AT_Suppress;
@@ -10996,6 +11351,7 @@ struct ParsedAttrInfoSuppress final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = SuppressSpellings;
+    ArgNames = SuppressArgNames;
   }
 static const ParsedAttrInfoSuppress Instance;
 };
@@ -11005,6 +11361,8 @@ static constexpr ParsedAttrInfo::Spelling SwiftAsyncSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::swift_async"},
   {AttributeCommonInfo::AS_C2x, "clang::swift_async"},
 };
+static constexpr const char *SwiftAsyncArgNames[] = {
+"Kind","CompletionHandlerIndex",};
 struct ParsedAttrInfoSwiftAsync final : public ParsedAttrInfo {
   ParsedAttrInfoSwiftAsync() {
     AttrKind = ParsedAttr::AT_SwiftAsync;
@@ -11017,6 +11375,7 @@ struct ParsedAttrInfoSwiftAsync final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = SwiftAsyncSpellings;
+    ArgNames = SwiftAsyncArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D) && !isa<ObjCMethodDecl>(D)) {
@@ -11107,6 +11466,8 @@ static constexpr ParsedAttrInfo::Spelling SwiftAsyncErrorSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::swift_async_error"},
   {AttributeCommonInfo::AS_C2x, "clang::swift_async_error"},
 };
+static constexpr const char *SwiftAsyncErrorArgNames[] = {
+"Convention","HandlerParamIdx",};
 struct ParsedAttrInfoSwiftAsyncError final : public ParsedAttrInfo {
   ParsedAttrInfoSwiftAsyncError() {
     AttrKind = ParsedAttr::AT_SwiftAsyncError;
@@ -11119,6 +11480,7 @@ struct ParsedAttrInfoSwiftAsyncError final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = SwiftAsyncErrorSpellings;
+    ArgNames = SwiftAsyncErrorArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D) && !isa<ObjCMethodDecl>(D)) {
@@ -11146,6 +11508,8 @@ const ParsedAttrInfoSwiftAsyncError ParsedAttrInfoSwiftAsyncError::Instance;
 static constexpr ParsedAttrInfo::Spelling SwiftAsyncNameSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "swift_async_name"},
 };
+static constexpr const char *SwiftAsyncNameArgNames[] = {
+"Name",};
 struct ParsedAttrInfoSwiftAsyncName final : public ParsedAttrInfo {
   ParsedAttrInfoSwiftAsyncName() {
     AttrKind = ParsedAttr::AT_SwiftAsyncName;
@@ -11158,6 +11522,7 @@ struct ParsedAttrInfoSwiftAsyncName final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = SwiftAsyncNameSpellings;
+    ArgNames = SwiftAsyncNameArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<ObjCMethodDecl>(D) && !isa<FunctionDecl>(D)) {
@@ -11185,6 +11550,8 @@ const ParsedAttrInfoSwiftAsyncName ParsedAttrInfoSwiftAsyncName::Instance;
 static constexpr ParsedAttrInfo::Spelling SwiftAttrSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "swift_attr"},
 };
+static constexpr const char *SwiftAttrArgNames[] = {
+"Attribute",};
 struct ParsedAttrInfoSwiftAttr final : public ParsedAttrInfo {
   ParsedAttrInfoSwiftAttr() {
     AttrKind = ParsedAttr::AT_SwiftAttr;
@@ -11197,6 +11564,7 @@ struct ParsedAttrInfoSwiftAttr final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = SwiftAttrSpellings;
+    ArgNames = SwiftAttrArgNames;
   }
 static const ParsedAttrInfoSwiftAttr Instance;
 };
@@ -11204,6 +11572,8 @@ const ParsedAttrInfoSwiftAttr ParsedAttrInfoSwiftAttr::Instance;
 static constexpr ParsedAttrInfo::Spelling SwiftBridgeSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "swift_bridge"},
 };
+static constexpr const char *SwiftBridgeArgNames[] = {
+"SwiftType",};
 struct ParsedAttrInfoSwiftBridge final : public ParsedAttrInfo {
   ParsedAttrInfoSwiftBridge() {
     AttrKind = ParsedAttr::AT_SwiftBridge;
@@ -11216,6 +11586,7 @@ struct ParsedAttrInfoSwiftBridge final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = SwiftBridgeSpellings;
+    ArgNames = SwiftBridgeArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<TagDecl>(D) && !isa<TypedefNameDecl>(D) && !isa<ObjCInterfaceDecl>(D) && !isa<ObjCProtocolDecl>(D)) {
@@ -11342,6 +11713,8 @@ const ParsedAttrInfoSwiftContext ParsedAttrInfoSwiftContext::Instance;
 static constexpr ParsedAttrInfo::Spelling SwiftErrorSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "swift_error"},
 };
+static constexpr const char *SwiftErrorArgNames[] = {
+"Convention",};
 struct ParsedAttrInfoSwiftError final : public ParsedAttrInfo {
   ParsedAttrInfoSwiftError() {
     AttrKind = ParsedAttr::AT_SwiftError;
@@ -11354,6 +11727,7 @@ struct ParsedAttrInfoSwiftError final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = SwiftErrorSpellings;
+    ArgNames = SwiftErrorArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D) && !isa<ObjCMethodDecl>(D)) {
@@ -11461,6 +11835,8 @@ const ParsedAttrInfoSwiftIndirectResult ParsedAttrInfoSwiftIndirectResult::Insta
 static constexpr ParsedAttrInfo::Spelling SwiftNameSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "swift_name"},
 };
+static constexpr const char *SwiftNameArgNames[] = {
+"Name",};
 struct ParsedAttrInfoSwiftName final : public ParsedAttrInfo {
   ParsedAttrInfoSwiftName() {
     AttrKind = ParsedAttr::AT_SwiftName;
@@ -11473,6 +11849,7 @@ struct ParsedAttrInfoSwiftName final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = SwiftNameSpellings;
+    ArgNames = SwiftNameArgNames;
   }
 static const ParsedAttrInfoSwiftName Instance;
 };
@@ -11481,6 +11858,8 @@ static constexpr ParsedAttrInfo::Spelling SwiftNewTypeSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "swift_newtype"},
   {AttributeCommonInfo::AS_GNU, "swift_wrapper"},
 };
+static constexpr const char *SwiftNewTypeArgNames[] = {
+"NewtypeKind",};
 struct ParsedAttrInfoSwiftNewType final : public ParsedAttrInfo {
   ParsedAttrInfoSwiftNewType() {
     AttrKind = ParsedAttr::AT_SwiftNewType;
@@ -11493,6 +11872,7 @@ struct ParsedAttrInfoSwiftNewType final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = SwiftNewTypeSpellings;
+    ArgNames = SwiftNewTypeArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<TypedefNameDecl>(D)) {
@@ -11625,6 +12005,8 @@ static constexpr ParsedAttrInfo::Spelling TLSModelSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::tls_model"},
   {AttributeCommonInfo::AS_C2x, "gnu::tls_model"},
 };
+static constexpr const char *TLSModelArgNames[] = {
+"Model",};
 struct ParsedAttrInfoTLSModel final : public ParsedAttrInfo {
   ParsedAttrInfoTLSModel() {
     AttrKind = ParsedAttr::AT_TLSModel;
@@ -11637,6 +12019,7 @@ struct ParsedAttrInfoTLSModel final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 1;
     Spellings = TLSModelSpellings;
+    ArgNames = TLSModelArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isTLSVar(D)) {
@@ -11665,6 +12048,8 @@ static constexpr ParsedAttrInfo::Spelling TargetSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::target"},
   {AttributeCommonInfo::AS_C2x, "gnu::target"},
 };
+static constexpr const char *TargetArgNames[] = {
+"featuresStr",};
 struct ParsedAttrInfoTarget final : public ParsedAttrInfo {
   ParsedAttrInfoTarget() {
     AttrKind = ParsedAttr::AT_Target;
@@ -11677,6 +12062,7 @@ struct ParsedAttrInfoTarget final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 1;
     Spellings = TargetSpellings;
+    ArgNames = TargetArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -11704,6 +12090,8 @@ static constexpr ParsedAttrInfo::Spelling TestTypestateSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "test_typestate"},
   {AttributeCommonInfo::AS_CXX11, "clang::test_typestate"},
 };
+static constexpr const char *TestTypestateArgNames[] = {
+"TestState",};
 struct ParsedAttrInfoTestTypestate final : public ParsedAttrInfo {
   ParsedAttrInfoTestTypestate() {
     AttrKind = ParsedAttr::AT_TestTypestate;
@@ -11716,6 +12104,7 @@ struct ParsedAttrInfoTestTypestate final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = TestTypestateSpellings;
+    ArgNames = TestTypestateArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<CXXMethodDecl>(D)) {
@@ -11879,6 +12268,8 @@ static constexpr ParsedAttrInfo::Spelling TryAcquireCapabilitySpellings[] = {
   {AttributeCommonInfo::AS_GNU, "try_acquire_shared_capability"},
   {AttributeCommonInfo::AS_CXX11, "clang::try_acquire_shared_capability"},
 };
+static constexpr const char *TryAcquireCapabilityArgNames[] = {
+"SuccessValue","Args...",};
 struct ParsedAttrInfoTryAcquireCapability final : public ParsedAttrInfo {
   ParsedAttrInfoTryAcquireCapability() {
     AttrKind = ParsedAttr::AT_TryAcquireCapability;
@@ -11891,6 +12282,7 @@ struct ParsedAttrInfoTryAcquireCapability final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = TryAcquireCapabilitySpellings;
+    ArgNames = TryAcquireCapabilityArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -12011,6 +12403,8 @@ static constexpr ParsedAttrInfo::Spelling TypeTagForDatatypeSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::type_tag_for_datatype"},
   {AttributeCommonInfo::AS_C2x, "clang::type_tag_for_datatype"},
 };
+static constexpr const char *TypeTagForDatatypeArgNames[] = {
+"ArgumentKind","MatchingCType","LayoutCompatible","MustBeNull",};
 struct ParsedAttrInfoTypeTagForDatatype final : public ParsedAttrInfo {
   ParsedAttrInfoTypeTagForDatatype() {
     AttrKind = ParsedAttr::AT_TypeTagForDatatype;
@@ -12023,6 +12417,7 @@ struct ParsedAttrInfoTypeTagForDatatype final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = TypeTagForDatatypeSpellings;
+    ArgNames = TypeTagForDatatypeArgNames;
   }
 static const ParsedAttrInfoTypeTagForDatatype Instance;
 };
@@ -12032,6 +12427,8 @@ static constexpr ParsedAttrInfo::Spelling TypeVisibilitySpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::type_visibility"},
   {AttributeCommonInfo::AS_C2x, "clang::type_visibility"},
 };
+static constexpr const char *TypeVisibilityArgNames[] = {
+"Visibility",};
 struct ParsedAttrInfoTypeVisibility final : public ParsedAttrInfo {
   ParsedAttrInfoTypeVisibility() {
     AttrKind = ParsedAttr::AT_TypeVisibility;
@@ -12044,6 +12441,7 @@ struct ParsedAttrInfoTypeVisibility final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = TypeVisibilitySpellings;
+    ArgNames = TypeVisibilityArgNames;
   }
 static const ParsedAttrInfoTypeVisibility Instance;
 };
@@ -12072,6 +12470,8 @@ static constexpr ParsedAttrInfo::Spelling UnavailableSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::unavailable"},
   {AttributeCommonInfo::AS_C2x, "clang::unavailable"},
 };
+static constexpr const char *UnavailableArgNames[] = {
+"Message",};
 struct ParsedAttrInfoUnavailable final : public ParsedAttrInfo {
   ParsedAttrInfoUnavailable() {
     AttrKind = ParsedAttr::AT_Unavailable;
@@ -12084,6 +12484,7 @@ struct ParsedAttrInfoUnavailable final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = UnavailableSpellings;
+    ArgNames = UnavailableArgNames;
   }
 static const ParsedAttrInfoUnavailable Instance;
 };
@@ -12214,6 +12615,8 @@ static constexpr ParsedAttrInfo::Spelling UseHandleSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::use_handle"},
   {AttributeCommonInfo::AS_C2x, "clang::use_handle"},
 };
+static constexpr const char *UseHandleArgNames[] = {
+"HandleType",};
 struct ParsedAttrInfoUseHandle final : public ParsedAttrInfo {
   ParsedAttrInfoUseHandle() {
     AttrKind = ParsedAttr::AT_UseHandle;
@@ -12226,6 +12629,7 @@ struct ParsedAttrInfoUseHandle final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = UseHandleSpellings;
+    ArgNames = UseHandleArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<ParmVarDecl>(D)) {
@@ -12329,6 +12733,8 @@ static constexpr ParsedAttrInfo::Spelling UuidSpellings[] = {
   {AttributeCommonInfo::AS_Declspec, "uuid"},
   {AttributeCommonInfo::AS_Microsoft, "uuid"},
 };
+static constexpr const char *UuidArgNames[] = {
+"Guid",};
 struct ParsedAttrInfoUuid final : public ParsedAttrInfo {
   ParsedAttrInfoUuid() {
     AttrKind = ParsedAttr::AT_Uuid;
@@ -12341,6 +12747,7 @@ struct ParsedAttrInfoUuid final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 0;
     Spellings = UuidSpellings;
+    ArgNames = UuidArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<RecordDecl>(D) && !isa<EnumDecl>(D)) {
@@ -12406,6 +12813,8 @@ const ParsedAttrInfoVecReturn ParsedAttrInfoVecReturn::Instance;
 static constexpr ParsedAttrInfo::Spelling VecTypeHintSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "vec_type_hint"},
 };
+static constexpr const char *VecTypeHintArgNames[] = {
+"TypeHint",};
 struct ParsedAttrInfoVecTypeHint final : public ParsedAttrInfo {
   ParsedAttrInfoVecTypeHint() {
     AttrKind = ParsedAttr::AT_VecTypeHint;
@@ -12418,6 +12827,7 @@ struct ParsedAttrInfoVecTypeHint final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = VecTypeHintSpellings;
+    ArgNames = VecTypeHintArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -12469,6 +12879,8 @@ static constexpr ParsedAttrInfo::Spelling VectorSizeSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::vector_size"},
   {AttributeCommonInfo::AS_C2x, "gnu::vector_size"},
 };
+static constexpr const char *VectorSizeArgNames[] = {
+"NumBytes",};
 struct ParsedAttrInfoVectorSize final : public ParsedAttrInfo {
   ParsedAttrInfoVectorSize() {
     AttrKind = ParsedAttr::AT_VectorSize;
@@ -12481,6 +12893,7 @@ struct ParsedAttrInfoVectorSize final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 0;
     Spellings = VectorSizeSpellings;
+    ArgNames = VectorSizeArgNames;
   }
 static const ParsedAttrInfoVectorSize Instance;
 };
@@ -12490,6 +12903,8 @@ static constexpr ParsedAttrInfo::Spelling VisibilitySpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::visibility"},
   {AttributeCommonInfo::AS_C2x, "gnu::visibility"},
 };
+static constexpr const char *VisibilityArgNames[] = {
+"Visibility",};
 struct ParsedAttrInfoVisibility final : public ParsedAttrInfo {
   ParsedAttrInfoVisibility() {
     AttrKind = ParsedAttr::AT_Visibility;
@@ -12502,6 +12917,7 @@ struct ParsedAttrInfoVisibility final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 0;
     Spellings = VisibilitySpellings;
+    ArgNames = VisibilityArgNames;
   }
 static const ParsedAttrInfoVisibility Instance;
 };
@@ -12559,6 +12975,8 @@ static constexpr ParsedAttrInfo::Spelling WarnUnusedResultSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::warn_unused_result"},
   {AttributeCommonInfo::AS_C2x, "gnu::warn_unused_result"},
 };
+static constexpr const char *WarnUnusedResultArgNames[] = {
+"Message",};
 struct ParsedAttrInfoWarnUnusedResult final : public ParsedAttrInfo {
   ParsedAttrInfoWarnUnusedResult() {
     AttrKind = ParsedAttr::AT_WarnUnusedResult;
@@ -12571,6 +12989,7 @@ struct ParsedAttrInfoWarnUnusedResult final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 1;
     Spellings = WarnUnusedResultSpellings;
+    ArgNames = WarnUnusedResultArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<ObjCMethodDecl>(D) && !isa<EnumDecl>(D) && !isa<RecordDecl>(D) && !isFunctionLike(D)) {
@@ -12694,6 +13113,8 @@ static constexpr ParsedAttrInfo::Spelling WeakRefSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "gnu::weakref"},
   {AttributeCommonInfo::AS_C2x, "gnu::weakref"},
 };
+static constexpr const char *WeakRefArgNames[] = {
+"Aliasee",};
 struct ParsedAttrInfoWeakRef final : public ParsedAttrInfo {
   ParsedAttrInfoWeakRef() {
     AttrKind = ParsedAttr::AT_WeakRef;
@@ -12706,6 +13127,7 @@ struct ParsedAttrInfoWeakRef final : public ParsedAttrInfo {
     IsKnownToGCC = 1;
     IsSupportedByPragmaAttribute = 1;
     Spellings = WeakRefSpellings;
+    ArgNames = WeakRefArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<VarDecl>(D) && !isa<FunctionDecl>(D)) {
@@ -12735,6 +13157,8 @@ static constexpr ParsedAttrInfo::Spelling WebAssemblyExportNameSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::export_name"},
   {AttributeCommonInfo::AS_C2x, "clang::export_name"},
 };
+static constexpr const char *WebAssemblyExportNameArgNames[] = {
+"ExportName",};
 struct ParsedAttrInfoWebAssemblyExportName final : public ParsedAttrInfo {
   ParsedAttrInfoWebAssemblyExportName() {
     AttrKind = ParsedAttr::AT_WebAssemblyExportName;
@@ -12747,6 +13171,7 @@ struct ParsedAttrInfoWebAssemblyExportName final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = WebAssemblyExportNameSpellings;
+    ArgNames = WebAssemblyExportNameArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -12780,6 +13205,8 @@ static constexpr ParsedAttrInfo::Spelling WebAssemblyImportModuleSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::import_module"},
   {AttributeCommonInfo::AS_C2x, "clang::import_module"},
 };
+static constexpr const char *WebAssemblyImportModuleArgNames[] = {
+"ImportModule",};
 struct ParsedAttrInfoWebAssemblyImportModule final : public ParsedAttrInfo {
   ParsedAttrInfoWebAssemblyImportModule() {
     AttrKind = ParsedAttr::AT_WebAssemblyImportModule;
@@ -12792,6 +13219,7 @@ struct ParsedAttrInfoWebAssemblyImportModule final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = WebAssemblyImportModuleSpellings;
+    ArgNames = WebAssemblyImportModuleArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -12825,6 +13253,8 @@ static constexpr ParsedAttrInfo::Spelling WebAssemblyImportNameSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::import_name"},
   {AttributeCommonInfo::AS_C2x, "clang::import_name"},
 };
+static constexpr const char *WebAssemblyImportNameArgNames[] = {
+"ImportName",};
 struct ParsedAttrInfoWebAssemblyImportName final : public ParsedAttrInfo {
   ParsedAttrInfoWebAssemblyImportName() {
     AttrKind = ParsedAttr::AT_WebAssemblyImportName;
@@ -12837,6 +13267,7 @@ struct ParsedAttrInfoWebAssemblyImportName final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = WebAssemblyImportNameSpellings;
+    ArgNames = WebAssemblyImportNameArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -12868,6 +13299,8 @@ const ParsedAttrInfoWebAssemblyImportName ParsedAttrInfoWebAssemblyImportName::I
 static constexpr ParsedAttrInfo::Spelling WorkGroupSizeHintSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "work_group_size_hint"},
 };
+static constexpr const char *WorkGroupSizeHintArgNames[] = {
+"XDim","YDim","ZDim",};
 struct ParsedAttrInfoWorkGroupSizeHint final : public ParsedAttrInfo {
   ParsedAttrInfoWorkGroupSizeHint() {
     AttrKind = ParsedAttr::AT_WorkGroupSizeHint;
@@ -12880,6 +13313,7 @@ struct ParsedAttrInfoWorkGroupSizeHint final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = WorkGroupSizeHintSpellings;
+    ArgNames = WorkGroupSizeHintArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D)) {
@@ -13007,6 +13441,8 @@ static constexpr ParsedAttrInfo::Spelling XRayLogArgsSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "clang::xray_log_args"},
   {AttributeCommonInfo::AS_C2x, "clang::xray_log_args"},
 };
+static constexpr const char *XRayLogArgsArgNames[] = {
+"ArgumentCount",};
 struct ParsedAttrInfoXRayLogArgs final : public ParsedAttrInfo {
   ParsedAttrInfoXRayLogArgs() {
     AttrKind = ParsedAttr::AT_XRayLogArgs;
@@ -13019,6 +13455,7 @@ struct ParsedAttrInfoXRayLogArgs final : public ParsedAttrInfo {
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
     Spellings = XRayLogArgsSpellings;
+    ArgNames = XRayLogArgsArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
   if (!isa<FunctionDecl>(D) && !isa<ObjCMethodDecl>(D)) {
@@ -13129,6 +13566,7 @@ static const ParsedAttrInfo *AttrInfoMap[] = {
 &ParsedAttrInfoDeprecated::Instance,
 &ParsedAttrInfoDestructor::Instance,
 &ParsedAttrInfoDiagnoseIf::Instance,
+&ParsedAttrInfoDisableSanitizerInstrumentation::Instance,
 &ParsedAttrInfoDisableTailCalls::Instance,
 &ParsedAttrInfoEmptyBases::Instance,
 &ParsedAttrInfoEnableIf::Instance,

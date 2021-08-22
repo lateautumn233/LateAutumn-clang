@@ -13,7 +13,7 @@ namespace llvm {
 namespace Intrinsic {
 enum X86Intrinsics : unsigned {
 // Enum values for intrinsics
-    x86_3dnow_pavgusb = 9086,                         // llvm.x86.3dnow.pavgusb
+    x86_3dnow_pavgusb = 9104,                         // llvm.x86.3dnow.pavgusb
     x86_3dnow_pf2id,                           // llvm.x86.3dnow.pf2id
     x86_3dnow_pfacc,                           // llvm.x86.3dnow.pfacc
     x86_3dnow_pfadd,                           // llvm.x86.3dnow.pfadd
@@ -783,15 +783,48 @@ enum X86Intrinsics : unsigned {
     x86_avx512bf16_mask_cvtneps2bf16_128,      // llvm.x86.avx512bf16.mask.cvtneps2bf16.128
     x86_avx512fp16_add_ph_512,                 // llvm.x86.avx512fp16.add.ph.512
     x86_avx512fp16_div_ph_512,                 // llvm.x86.avx512fp16.div.ph.512
+    x86_avx512fp16_fpclass_ph_128,             // llvm.x86.avx512fp16.fpclass.ph.128
+    x86_avx512fp16_fpclass_ph_256,             // llvm.x86.avx512fp16.fpclass.ph.256
+    x86_avx512fp16_fpclass_ph_512,             // llvm.x86.avx512fp16.fpclass.ph.512
     x86_avx512fp16_mask_add_sh_round,          // llvm.x86.avx512fp16.mask.add.sh.round
     x86_avx512fp16_mask_cmp_ph_128,            // llvm.x86.avx512fp16.mask.cmp.ph.128
     x86_avx512fp16_mask_cmp_ph_256,            // llvm.x86.avx512fp16.mask.cmp.ph.256
     x86_avx512fp16_mask_cmp_ph_512,            // llvm.x86.avx512fp16.mask.cmp.ph.512
     x86_avx512fp16_mask_cmp_sh,                // llvm.x86.avx512fp16.mask.cmp.sh
     x86_avx512fp16_mask_div_sh_round,          // llvm.x86.avx512fp16.mask.div.sh.round
+    x86_avx512fp16_mask_fpclass_sh,            // llvm.x86.avx512fp16.mask.fpclass.sh
+    x86_avx512fp16_mask_getexp_ph_128,         // llvm.x86.avx512fp16.mask.getexp.ph.128
+    x86_avx512fp16_mask_getexp_ph_256,         // llvm.x86.avx512fp16.mask.getexp.ph.256
+    x86_avx512fp16_mask_getexp_ph_512,         // llvm.x86.avx512fp16.mask.getexp.ph.512
+    x86_avx512fp16_mask_getexp_sh,             // llvm.x86.avx512fp16.mask.getexp.sh
+    x86_avx512fp16_mask_getmant_ph_128,        // llvm.x86.avx512fp16.mask.getmant.ph.128
+    x86_avx512fp16_mask_getmant_ph_256,        // llvm.x86.avx512fp16.mask.getmant.ph.256
+    x86_avx512fp16_mask_getmant_ph_512,        // llvm.x86.avx512fp16.mask.getmant.ph.512
+    x86_avx512fp16_mask_getmant_sh,            // llvm.x86.avx512fp16.mask.getmant.sh
     x86_avx512fp16_mask_max_sh_round,          // llvm.x86.avx512fp16.mask.max.sh.round
     x86_avx512fp16_mask_min_sh_round,          // llvm.x86.avx512fp16.mask.min.sh.round
     x86_avx512fp16_mask_mul_sh_round,          // llvm.x86.avx512fp16.mask.mul.sh.round
+    x86_avx512fp16_mask_rcp_ph_128,            // llvm.x86.avx512fp16.mask.rcp.ph.128
+    x86_avx512fp16_mask_rcp_ph_256,            // llvm.x86.avx512fp16.mask.rcp.ph.256
+    x86_avx512fp16_mask_rcp_ph_512,            // llvm.x86.avx512fp16.mask.rcp.ph.512
+    x86_avx512fp16_mask_rcp_sh,                // llvm.x86.avx512fp16.mask.rcp.sh
+    x86_avx512fp16_mask_reduce_ph_128,         // llvm.x86.avx512fp16.mask.reduce.ph.128
+    x86_avx512fp16_mask_reduce_ph_256,         // llvm.x86.avx512fp16.mask.reduce.ph.256
+    x86_avx512fp16_mask_reduce_ph_512,         // llvm.x86.avx512fp16.mask.reduce.ph.512
+    x86_avx512fp16_mask_reduce_sh,             // llvm.x86.avx512fp16.mask.reduce.sh
+    x86_avx512fp16_mask_rndscale_ph_128,       // llvm.x86.avx512fp16.mask.rndscale.ph.128
+    x86_avx512fp16_mask_rndscale_ph_256,       // llvm.x86.avx512fp16.mask.rndscale.ph.256
+    x86_avx512fp16_mask_rndscale_ph_512,       // llvm.x86.avx512fp16.mask.rndscale.ph.512
+    x86_avx512fp16_mask_rndscale_sh,           // llvm.x86.avx512fp16.mask.rndscale.sh
+    x86_avx512fp16_mask_rsqrt_ph_128,          // llvm.x86.avx512fp16.mask.rsqrt.ph.128
+    x86_avx512fp16_mask_rsqrt_ph_256,          // llvm.x86.avx512fp16.mask.rsqrt.ph.256
+    x86_avx512fp16_mask_rsqrt_ph_512,          // llvm.x86.avx512fp16.mask.rsqrt.ph.512
+    x86_avx512fp16_mask_rsqrt_sh,              // llvm.x86.avx512fp16.mask.rsqrt.sh
+    x86_avx512fp16_mask_scalef_ph_128,         // llvm.x86.avx512fp16.mask.scalef.ph.128
+    x86_avx512fp16_mask_scalef_ph_256,         // llvm.x86.avx512fp16.mask.scalef.ph.256
+    x86_avx512fp16_mask_scalef_ph_512,         // llvm.x86.avx512fp16.mask.scalef.ph.512
+    x86_avx512fp16_mask_scalef_sh,             // llvm.x86.avx512fp16.mask.scalef.sh
+    x86_avx512fp16_mask_sqrt_sh,               // llvm.x86.avx512fp16.mask.sqrt.sh
     x86_avx512fp16_mask_sub_sh_round,          // llvm.x86.avx512fp16.mask.sub.sh.round
     x86_avx512fp16_mask_vcvtdq2ph_128,         // llvm.x86.avx512fp16.mask.vcvtdq2ph.128
     x86_avx512fp16_mask_vcvtpd2ph_128,         // llvm.x86.avx512fp16.mask.vcvtpd2ph.128
@@ -858,6 +891,7 @@ enum X86Intrinsics : unsigned {
     x86_avx512fp16_min_ph_256,                 // llvm.x86.avx512fp16.min.ph.256
     x86_avx512fp16_min_ph_512,                 // llvm.x86.avx512fp16.min.ph.512
     x86_avx512fp16_mul_ph_512,                 // llvm.x86.avx512fp16.mul.ph.512
+    x86_avx512fp16_sqrt_ph_512,                // llvm.x86.avx512fp16.sqrt.ph.512
     x86_avx512fp16_sub_ph_512,                 // llvm.x86.avx512fp16.sub.ph.512
     x86_avx512fp16_vcomi_sh,                   // llvm.x86.avx512fp16.vcomi.sh
     x86_avx512fp16_vcvtsh2si32,                // llvm.x86.avx512fp16.vcvtsh2si32

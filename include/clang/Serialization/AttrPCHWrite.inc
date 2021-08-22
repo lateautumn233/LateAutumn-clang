@@ -735,6 +735,13 @@ Record.push_back(SA->getDiagnosticType());
     Record.AddDeclRef(SA->getParent());
     break;
   }
+  case attr::DisableSanitizerInstrumentation: {
+    const auto *SA = cast<DisableSanitizerInstrumentationAttr>(A);
+    Record.push_back(SA->isInherited());
+    Record.push_back(A->isImplicit());
+    Record.push_back(A->isPackExpansion());
+    break;
+  }
   case attr::DisableTailCalls: {
     const auto *SA = cast<DisableTailCallsAttr>(A);
     Record.push_back(SA->isInherited());

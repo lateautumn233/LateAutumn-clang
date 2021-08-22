@@ -1928,6 +1928,10 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       return AttributeCommonInfo::AT_ConstInit;	 // "require_constant_initialization"
     }
     break;
+  case 33:	 // 1 string to match.
+    if (memcmp(Name.data()+0, "disable_sanitizer_instrumentation", 33) != 0)
+      break;
+    return AttributeCommonInfo::AT_DisableSanitizerInstrumentation;	 // "disable_sanitizer_instrumentation"
   case 34:	 // 1 string to match.
     if (memcmp(Name.data()+0, "objc_requires_property_definitions", 34) != 0)
       break;
@@ -3982,6 +3986,10 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
       return AttributeCommonInfo::AT_ConstInit;	 // "clang::require_constant_initialization"
     }
     break;
+  case 40:	 // 1 string to match.
+    if (memcmp(Name.data()+0, "clang::disable_sanitizer_instrumentation", 40) != 0)
+      break;
+    return AttributeCommonInfo::AT_DisableSanitizerInstrumentation;	 // "clang::disable_sanitizer_instrumentation"
   case 41:	 // 1 string to match.
     if (memcmp(Name.data()+0, "clang::objc_requires_property_definitions", 41) != 0)
       break;
@@ -5472,6 +5480,10 @@ static AttributeCommonInfo::Kind getAttrKind(StringRef Name, AttributeCommonInfo
     if (memcmp(Name.data()+0, "clang::os_returns_retained_on_non_zero", 38) != 0)
       break;
     return AttributeCommonInfo::AT_OSReturnsRetainedOnNonZero;	 // "clang::os_returns_retained_on_non_zero"
+  case 40:	 // 1 string to match.
+    if (memcmp(Name.data()+0, "clang::disable_sanitizer_instrumentation", 40) != 0)
+      break;
+    return AttributeCommonInfo::AT_DisableSanitizerInstrumentation;	 // "clang::disable_sanitizer_instrumentation"
   case 41:	 // 1 string to match.
     if (memcmp(Name.data()+0, "clang::objc_requires_property_definitions", 41) != 0)
       break;

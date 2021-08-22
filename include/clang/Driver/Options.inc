@@ -302,7 +302,7 @@ OPTION(prefix_1, &"-cl-opt-disable"[1], cl_opt_disable, Flag, opencl_Group, INVA
 OPTION(prefix_1, &"-cl-single-precision-constant"[1], cl_single_precision_constant, Flag, opencl_Group, INVALID, nullptr, CC1Option, 0,
        "OpenCL only. Treat double precision floating-point constant as single precision constant.", nullptr, nullptr)
 OPTION(prefix_1, &"-cl-std="[1], cl_std_EQ, Joined, opencl_Group, INVALID, nullptr, CC1Option, 0,
-       "OpenCL language standard to compile for.", nullptr, "cl,CL,cl1.0,CL1.0,cl1.1,CL1.1,cl1.2,CL1.2,cl2.0,CL2.0,cl3.0,CL3.0,clc++,CLC++,clc++1.0,CLC++1.0")
+       "OpenCL language standard to compile for.", nullptr, "cl,CL,cl1.0,CL1.0,cl1.1,CL1.1,cl1.2,CL1.2,cl2.0,CL2.0,cl3.0,CL3.0,clc++,CLC++,clc++1.0,CLC++1.0,clc++2021,CLC++2021")
 OPTION(prefix_1, &"-cl-strict-aliasing"[1], cl_strict_aliasing, Flag, opencl_Group, INVALID, nullptr, CC1Option, 0,
        "OpenCL only. This option is added for compatibility with OpenCL 1.0.", nullptr, nullptr)
 OPTION(prefix_1, &"-cl-uniform-work-group-size"[1], cl_uniform_work_group_size, Flag, opencl_Group, INVALID, nullptr, CC1Option, 0,
@@ -527,7 +527,7 @@ OPTION(prefix_3, &"--emit-static-lib"[2], emit_static_lib, Flag, INVALID, INVALI
        "Enable linker job to emit a static library.", nullptr, nullptr)
 OPTION(prefix_1, &"-enable-noundef-analysis"[1], enable_noundef_analysis, Flag, f_Group, INVALID, nullptr, CC1Option | NoDriverOption, 0,
        "Enable analyzing function argument and return types for mandatory definedness", nullptr, nullptr)
-OPTION(prefix_1, &"-enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang"[1], enable_trivial_var_init_zero, Flag, INVALID, INVALID, nullptr, CC1Option | CoreOption, 0,
+OPTION(prefix_1, &"-enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang"[1], enable_trivial_var_init_zero, Flag, INVALID, INVALID, nullptr, CC1Option | CoreOption | NoArgumentUnused, 0,
        "Trivial automatic variable initialization to zero is only here for benchmarks, it'll eventually be removed, and I'm OK with that because I'm only using it to benchmark", nullptr, nullptr)
 OPTION(prefix_3, &"--encoding="[2], _encoding_EQ, Joined, INVALID, fencoding_EQ, nullptr, 0, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_3, &"--encoding"[2], _encoding, Separate, INVALID, fencoding_EQ, nullptr, 0, 0, nullptr, nullptr, nullptr)
@@ -2634,7 +2634,6 @@ OPTION(prefix_2, &"/GA"[1], _SLASH_GA, Flag, cl_Group, ftlsmodel_EQ, "local-exec
        "Assume thread-local variables are defined in the executable", nullptr, nullptr)
 OPTION(prefix_3, &"--gcc-toolchain="[2], gcc_toolchain, Joined, INVALID, INVALID, nullptr, NoXarchOption, 0,
        "Search for GCC installation in the specified directory on targets which commonly use GCC. The directory usually contains 'lib{,32,64}/gcc{,-cross}/$triple' and 'include'. If specified, sysroot is skipped for GCC detection. Note: executables (e.g. ld) used by the compiler are not overridden by the selected GCC installation", nullptr, nullptr)
-OPTION(prefix_1, &"-gcc-toolchain"[1], gcc_toolchain_legacy_spelling, Separate, INVALID, gcc_toolchain, nullptr, 0, 0, nullptr, nullptr, nullptr)
 OPTION(prefix_1, &"-gcodeview-ghash"[1], gcodeview_ghash, Flag, INVALID, INVALID, nullptr, CC1Option | CoreOption, 0,
        "Emit type record hashes in a .debug$H section", nullptr, nullptr)
 OPTION(prefix_1, &"-gcodeview"[1], gcodeview, Flag, INVALID, INVALID, nullptr, CC1Option | CC1AsOption | CoreOption, 0,

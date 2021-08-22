@@ -1035,6 +1035,16 @@
     New->setPackExpansion(isPackExpansion);
     break;
   }
+  case attr::DisableSanitizerInstrumentation: {
+    bool isInherited = Record.readInt();
+    bool isImplicit = Record.readInt();
+    bool isPackExpansion = Record.readInt();
+    New = new (Context) DisableSanitizerInstrumentationAttr(Context, Info);
+    cast<InheritableAttr>(New)->setInherited(isInherited);
+    New->setImplicit(isImplicit);
+    New->setPackExpansion(isPackExpansion);
+    break;
+  }
   case attr::DisableTailCalls: {
     bool isInherited = Record.readInt();
     bool isImplicit = Record.readInt();

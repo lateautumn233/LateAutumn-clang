@@ -1487,16 +1487,12 @@ public:
 
   /// adds the attribute to the list of attributes.
   void addAttribute(unsigned i, Attribute::AttrKind Kind) {
-    AttributeList PAL = getAttributes();
-    PAL = PAL.addAttribute(getContext(), i, Kind);
-    setAttributes(PAL);
+    Attrs = Attrs.addAttribute(getContext(), i, Kind);
   }
 
   /// adds the attribute to the list of attributes.
   void addAttribute(unsigned i, Attribute Attr) {
-    AttributeList PAL = getAttributes();
-    PAL = PAL.addAttribute(getContext(), i, Attr);
-    setAttributes(PAL);
+    Attrs = Attrs.addAttribute(getContext(), i, Attr);
   }
 
   /// Adds the attribute to the function.
@@ -1522,97 +1518,70 @@ public:
   /// Adds the attribute to the indicated argument
   void addParamAttr(unsigned ArgNo, Attribute::AttrKind Kind) {
     assert(ArgNo < getNumArgOperands() && "Out of bounds");
-    AttributeList PAL = getAttributes();
-    PAL = PAL.addParamAttribute(getContext(), ArgNo, Kind);
-    setAttributes(PAL);
+    Attrs = Attrs.addParamAttribute(getContext(), ArgNo, Kind);
   }
 
   /// Adds the attribute to the indicated argument
   void addParamAttr(unsigned ArgNo, Attribute Attr) {
     assert(ArgNo < getNumArgOperands() && "Out of bounds");
-    AttributeList PAL = getAttributes();
-    PAL = PAL.addParamAttribute(getContext(), ArgNo, Attr);
-    setAttributes(PAL);
+    Attrs = Attrs.addParamAttribute(getContext(), ArgNo, Attr);
   }
 
   /// removes the attribute from the list of attributes.
   void removeAttribute(unsigned i, Attribute::AttrKind Kind) {
-    AttributeList PAL = getAttributes();
-    PAL = PAL.removeAttribute(getContext(), i, Kind);
-    setAttributes(PAL);
+    Attrs = Attrs.removeAttribute(getContext(), i, Kind);
   }
 
   /// removes the attribute from the list of attributes.
   void removeAttribute(unsigned i, StringRef Kind) {
-    AttributeList PAL = getAttributes();
-    PAL = PAL.removeAttribute(getContext(), i, Kind);
-    setAttributes(PAL);
+    Attrs = Attrs.removeAttribute(getContext(), i, Kind);
   }
 
   /// Removes the attributes from the function
-  void removeFnAttrs(const AttrBuilder &Attrs) {
-    AttributeList PAL = getAttributes();
-    PAL = PAL.removeFnAttributes(getContext(), Attrs);
-    setAttributes(PAL);
+  void removeFnAttrs(const AttrBuilder &AttrsToRemove) {
+    Attrs = Attrs.removeFnAttributes(getContext(), AttrsToRemove);
   }
 
   /// Removes the attribute from the function
   void removeFnAttr(Attribute::AttrKind Kind) {
-    AttributeList PAL = getAttributes();
-    PAL = PAL.removeFnAttribute(getContext(), Kind);
-    setAttributes(PAL);
+    Attrs = Attrs.removeFnAttribute(getContext(), Kind);
   }
 
   /// Removes the attribute from the return value
   void removeRetAttr(Attribute::AttrKind Kind) {
-    AttributeList PAL = getAttributes();
-    PAL = PAL.removeRetAttribute(getContext(), Kind);
-    setAttributes(PAL);
+    Attrs = Attrs.removeRetAttribute(getContext(), Kind);
   }
 
   /// Removes the attributes from the return value
-  void removeRetAttrs(const AttrBuilder &Attrs) {
-    AttributeList PAL = getAttributes();
-    PAL = PAL.removeRetAttributes(getContext(), Attrs);
-    setAttributes(PAL);
+  void removeRetAttrs(const AttrBuilder &AttrsToRemove) {
+    Attrs = Attrs.removeRetAttributes(getContext(), AttrsToRemove);
   }
 
   /// Removes the attribute from the given argument
   void removeParamAttr(unsigned ArgNo, Attribute::AttrKind Kind) {
     assert(ArgNo < getNumArgOperands() && "Out of bounds");
-    AttributeList PAL = getAttributes();
-    PAL = PAL.removeParamAttribute(getContext(), ArgNo, Kind);
-    setAttributes(PAL);
+    Attrs = Attrs.removeParamAttribute(getContext(), ArgNo, Kind);
   }
 
   /// Removes the attribute from the given argument
   void removeParamAttr(unsigned ArgNo, StringRef Kind) {
     assert(ArgNo < getNumArgOperands() && "Out of bounds");
-    AttributeList PAL = getAttributes();
-    PAL = PAL.removeParamAttribute(getContext(), ArgNo, Kind);
-    setAttributes(PAL);
+    Attrs = Attrs.removeParamAttribute(getContext(), ArgNo, Kind);
   }
 
   /// Removes the attributes from the given argument
-  void removeParamAttrs(unsigned ArgNo, const AttrBuilder &Attrs) {
-    AttributeList PAL = getAttributes();
-    PAL = PAL.removeParamAttributes(getContext(), ArgNo, Attrs);
-    setAttributes(PAL);
+  void removeParamAttrs(unsigned ArgNo, const AttrBuilder &AttrsToRemove) {
+    Attrs = Attrs.removeParamAttributes(getContext(), ArgNo, AttrsToRemove);
   }
 
   /// adds the dereferenceable attribute to the list of attributes.
-  void addDereferenceableAttr(unsigned i, uint64_t Bytes) {
-    AttributeList PAL = getAttributes();
-    PAL = PAL.addDereferenceableAttr(getContext(), i, Bytes);
-    setAttributes(PAL);
+  void addDereferenceableParamAttr(unsigned i, uint64_t Bytes) {
+    Attrs = Attrs.addDereferenceableParamAttr(getContext(), i, Bytes);
   }
 
-  /// adds the dereferenceable_or_null attribute to the list of
-  /// attributes.
-  void addDereferenceableOrNullAttr(unsigned i, uint64_t Bytes) {
-    AttributeList PAL = getAttributes();
-    PAL = PAL.addDereferenceableOrNullAttr(getContext(), i, Bytes);
-    setAttributes(PAL);
+  /// adds the dereferenceable attribute to the list of attributes.
+  void addDereferenceableRetAttr(uint64_t Bytes) {
+    Attrs = Attrs.addDereferenceableRetAttr(getContext(), Bytes);
   }
 
   /// Determine whether the return value has the given attribute.
@@ -1633,6 +1602,16 @@ public:
   /// Get the attribute of a given kind at a position.
   Attribute getAttribute(unsigned i, StringRef Kind) const {
     return getAttributes().getAttribute(i, Kind);
+  }
+
+  /// Get the attribute of a given kind for the function.
+  Attribute getFnAttr(StringRef Kind) const {
+    return getAttributes().getFnAttr(Kind);
+  }
+
+  /// Get the attribute of a given kind for the function.
+  Attribute getFnAttr(Attribute::AttrKind Kind) const {
+    return getAttributes().getFnAttr(Kind);
   }
 
   /// Get the attribute of a given kind from a given arg
@@ -1785,14 +1764,26 @@ public:
 
   /// Extract the number of dereferenceable bytes for a call or
   /// parameter (0=unknown).
-  uint64_t getDereferenceableBytes(unsigned i) const {
-    return Attrs.getDereferenceableBytes(i);
+  uint64_t getRetDereferenceableBytes() const {
+    return Attrs.getRetDereferenceableBytes();
   }
 
-  /// Extract the number of dereferenceable_or_null bytes for a call or
+  /// Extract the number of dereferenceable bytes for a call or
   /// parameter (0=unknown).
-  uint64_t getDereferenceableOrNullBytes(unsigned i) const {
-    return Attrs.getDereferenceableOrNullBytes(i);
+  uint64_t getParamDereferenceableBytes(unsigned i) const {
+    return Attrs.getParamDereferenceableBytes(i);
+  }
+
+  /// Extract the number of dereferenceable_or_null bytes for a call
+  /// (0=unknown).
+  uint64_t getRetDereferenceableOrNullBytes() const {
+    return Attrs.getRetDereferenceableOrNullBytes();
+  }
+
+  /// Extract the number of dereferenceable_or_null bytes for a
+  /// parameter (0=unknown).
+  uint64_t getParamDereferenceableOrNullBytes(unsigned i) const {
+    return Attrs.getParamDereferenceableOrNullBytes(i);
   }
 
   /// Return true if the return value is known to be not null.

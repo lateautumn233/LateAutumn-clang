@@ -716,6 +716,15 @@
         return 0;
     break;
   }
+  case AT_DisableSanitizerInstrumentation: {
+    if (Name == "disable_sanitizer_instrumentation" && getSyntax() == AttributeCommonInfo::AS_GNU && Scope == "")
+        return 0;
+    if (Name == "disable_sanitizer_instrumentation" && getSyntax() == AttributeCommonInfo::AS_CXX11 && Scope == "clang")
+        return 1;
+    if (Name == "disable_sanitizer_instrumentation" && getSyntax() == AttributeCommonInfo::AS_C2x && Scope == "clang")
+        return 2;
+    break;
+  }
   case AT_DisableTailCalls: {
     if (Name == "disable_tail_calls" && getSyntax() == AttributeCommonInfo::AS_GNU && Scope == "")
         return 0;

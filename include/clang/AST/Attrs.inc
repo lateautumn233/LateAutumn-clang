@@ -3419,6 +3419,35 @@ public:
   static bool classof(const Attr *A) { return A->getKind() == attr::DiagnoseIf; }
 };
 
+class DisableSanitizerInstrumentationAttr : public InheritableAttr {
+public:
+  enum Spelling {
+    GNU_disable_sanitizer_instrumentation = 0,
+    CXX11_clang_disable_sanitizer_instrumentation = 1,
+    C2x_clang_disable_sanitizer_instrumentation = 2,
+  SpellingNotCalculated = 15
+
+  };
+
+  // Factory methods
+  static DisableSanitizerInstrumentationAttr *CreateImplicit(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo = {SourceRange{}});
+  static DisableSanitizerInstrumentationAttr *Create(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo);
+  static DisableSanitizerInstrumentationAttr *CreateImplicit(ASTContext &Ctx, SourceRange Range, AttributeCommonInfo::Syntax Syntax);
+  static DisableSanitizerInstrumentationAttr *Create(ASTContext &Ctx, SourceRange Range, AttributeCommonInfo::Syntax Syntax);
+
+  // Constructors
+  DisableSanitizerInstrumentationAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
+             );
+
+  DisableSanitizerInstrumentationAttr *clone(ASTContext &C) const;
+  void printPretty(raw_ostream &OS,
+                   const PrintingPolicy &Policy) const;
+  const char *getSpelling() const;
+
+
+  static bool classof(const Attr *A) { return A->getKind() == attr::DisableSanitizerInstrumentation; }
+};
+
 class DisableTailCallsAttr : public InheritableAttr {
 public:
   enum Spelling {
