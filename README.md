@@ -1,6 +1,6 @@
-# Clang and Binutils for X86_64 platforms
+# Clang and Binutils for Amd64 platforms
 
-arm64设备上可用的clang和binutils
+amd64设备上可用的clang和binutils
 
 Update every day !
 
