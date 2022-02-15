@@ -163,26 +163,32 @@ case ARM::BI__builtin_arm_mve_vldrwq_gather_base_wb_z_s32:
 case ARM::BI__builtin_arm_mve_vldrwq_gather_base_wb_z_u32: {
   llvm::Type * Param0;
   llvm::Type * Param1;
+  llvm::Type * Param2;
   switch (BuiltinID) {
   case ARM::BI__builtin_arm_mve_vldrdq_gather_base_wb_z_s64:
-    Param0 = llvm::FixedVectorType::get(Int64Ty, 2);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param1 = llvm::FixedVectorType::get(Int64Ty, 2);
+    Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
     break;
   case ARM::BI__builtin_arm_mve_vldrdq_gather_base_wb_z_u64:
-    Param0 = llvm::FixedVectorType::get(Int64Ty, 2);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param1 = llvm::FixedVectorType::get(Int64Ty, 2);
+    Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
     break;
   case ARM::BI__builtin_arm_mve_vldrwq_gather_base_wb_z_f32:
-    Param0 = llvm::FixedVectorType::get(FloatTy, 4);
-    Param1 = llvm::FixedVectorType::get(Int32Ty, 4);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param1 = llvm::FixedVectorType::get(FloatTy, 4);
+    Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
     break;
   case ARM::BI__builtin_arm_mve_vldrwq_gather_base_wb_z_s32:
-    Param0 = llvm::FixedVectorType::get(Int32Ty, 4);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
     Param1 = llvm::FixedVectorType::get(Int32Ty, 4);
+    Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
     break;
   case ARM::BI__builtin_arm_mve_vldrwq_gather_base_wb_z_u32:
-    Param0 = llvm::FixedVectorType::get(Int32Ty, 4);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
     Param1 = llvm::FixedVectorType::get(Int32Ty, 4);
+    Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
     break;
   }
   Address Val0 = EmitPointerWithAlignment(E->getArg(0));
@@ -190,8 +196,8 @@ case ARM::BI__builtin_arm_mve_vldrwq_gather_base_wb_z_u32: {
   Value *Val2 = EmitScalarExpr(E->getArg(1));
   Value *Val3 = EmitScalarExpr(E->getArg(2));
   Value *Val4 = Builder.CreateIntCast(Val3, Int32Ty, false);
-  Value *Val5 = Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_pred_i2v, {llvm::FixedVectorType::get(Builder.getInt1Ty(), 4)}), {Val4});
-  Value *Val6 = Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_vldr_gather_base_wb_predicated, {Param0, Param1, llvm::FixedVectorType::get(Builder.getInt1Ty(), 4)}), {Val1, Val2, Val5});
+  Value *Val5 = Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_pred_i2v, {Param0}), {Val4});
+  Value *Val6 = Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_vldr_gather_base_wb_predicated, {Param1, Param2, Param0}), {Val1, Val2, Val5});
   Value *Val7 = Builder.CreateExtractValue(Val6, static_cast<unsigned>(1));
   Builder.CreateStore(Val7, Val0);
   return Builder.CreateExtractValue(Val6, static_cast<unsigned>(0));
@@ -203,26 +209,32 @@ case ARM::BI__builtin_arm_mve_vstrwq_scatter_base_wb_p_s32:
 case ARM::BI__builtin_arm_mve_vstrwq_scatter_base_wb_p_u32: {
   llvm::Type * Param0;
   llvm::Type * Param1;
+  llvm::Type * Param2;
   switch (BuiltinID) {
   case ARM::BI__builtin_arm_mve_vstrdq_scatter_base_wb_p_s64:
-    Param0 = llvm::FixedVectorType::get(Int64Ty, 2);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param1 = llvm::FixedVectorType::get(Int64Ty, 2);
+    Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
     break;
   case ARM::BI__builtin_arm_mve_vstrdq_scatter_base_wb_p_u64:
-    Param0 = llvm::FixedVectorType::get(Int64Ty, 2);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param1 = llvm::FixedVectorType::get(Int64Ty, 2);
+    Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
     break;
   case ARM::BI__builtin_arm_mve_vstrwq_scatter_base_wb_p_f32:
-    Param0 = llvm::FixedVectorType::get(Int32Ty, 4);
-    Param1 = llvm::FixedVectorType::get(FloatTy, 4);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param1 = llvm::FixedVectorType::get(Int32Ty, 4);
+    Param2 = llvm::FixedVectorType::get(FloatTy, 4);
     break;
   case ARM::BI__builtin_arm_mve_vstrwq_scatter_base_wb_p_s32:
-    Param0 = llvm::FixedVectorType::get(Int32Ty, 4);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
     Param1 = llvm::FixedVectorType::get(Int32Ty, 4);
+    Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
     break;
   case ARM::BI__builtin_arm_mve_vstrwq_scatter_base_wb_p_u32:
-    Param0 = llvm::FixedVectorType::get(Int32Ty, 4);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
     Param1 = llvm::FixedVectorType::get(Int32Ty, 4);
+    Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
     break;
   }
   Address Val0 = EmitPointerWithAlignment(E->getArg(0));
@@ -231,8 +243,8 @@ case ARM::BI__builtin_arm_mve_vstrwq_scatter_base_wb_p_u32: {
   Value *Val3 = EmitScalarExpr(E->getArg(2));
   Value *Val4 = EmitScalarExpr(E->getArg(3));
   Value *Val5 = Builder.CreateIntCast(Val4, Int32Ty, false);
-  Value *Val6 = Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_pred_i2v, {llvm::FixedVectorType::get(Builder.getInt1Ty(), 4)}), {Val5});
-  Value *Val7 = Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_vstr_scatter_base_wb_predicated, {Param0, Param1, llvm::FixedVectorType::get(Builder.getInt1Ty(), 4)}), {Val1, Val2, Val3, Val6});
+  Value *Val6 = Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_pred_i2v, {Param0}), {Val5});
+  Value *Val7 = Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_vstr_scatter_base_wb_predicated, {Param1, Param2, Param0}), {Val1, Val2, Val3, Val6});
   return Builder.CreateStore(Val7, Val0);
 }
 case ARM::BI__builtin_arm_mve_vld1q_f16:
@@ -581,7 +593,7 @@ case ARM::BI__builtin_arm_mve_vstrwq_scatter_shifted_offset_p_u32: {
   case ARM::BI__builtin_arm_mve_vstrdq_scatter_offset_p_s64:
     Param0 = 64;
     Param1 = 0;
-    Param2 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param2 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param3 = llvm::PointerType::getUnqual(Int64Ty);
     Param4 = llvm::FixedVectorType::get(Int64Ty, 2);
     Param5 = llvm::FixedVectorType::get(Int64Ty, 2);
@@ -589,7 +601,7 @@ case ARM::BI__builtin_arm_mve_vstrwq_scatter_shifted_offset_p_u32: {
   case ARM::BI__builtin_arm_mve_vstrdq_scatter_offset_p_u64:
     Param0 = 64;
     Param1 = 0;
-    Param2 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param2 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param3 = llvm::PointerType::getUnqual(Int64Ty);
     Param4 = llvm::FixedVectorType::get(Int64Ty, 2);
     Param5 = llvm::FixedVectorType::get(Int64Ty, 2);
@@ -597,7 +609,7 @@ case ARM::BI__builtin_arm_mve_vstrwq_scatter_shifted_offset_p_u32: {
   case ARM::BI__builtin_arm_mve_vstrdq_scatter_shifted_offset_p_s64:
     Param0 = 64;
     Param1 = 3;
-    Param2 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param2 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param3 = llvm::PointerType::getUnqual(Int64Ty);
     Param4 = llvm::FixedVectorType::get(Int64Ty, 2);
     Param5 = llvm::FixedVectorType::get(Int64Ty, 2);
@@ -605,7 +617,7 @@ case ARM::BI__builtin_arm_mve_vstrwq_scatter_shifted_offset_p_u32: {
   case ARM::BI__builtin_arm_mve_vstrdq_scatter_shifted_offset_p_u64:
     Param0 = 64;
     Param1 = 3;
-    Param2 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param2 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param3 = llvm::PointerType::getUnqual(Int64Ty);
     Param4 = llvm::FixedVectorType::get(Int64Ty, 2);
     Param5 = llvm::FixedVectorType::get(Int64Ty, 2);
@@ -1063,7 +1075,7 @@ case ARM::BI__builtin_arm_mve_vldrwq_gather_shifted_offset_z_u32: {
     Param0 = 64;
     Param1 = 0;
     Param2 = 0;
-    Param3 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param3 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param4 = llvm::FixedVectorType::get(Int64Ty, 2);
     Param5 = llvm::PointerType::getUnqual(Int64Ty);
     Param6 = llvm::FixedVectorType::get(Int64Ty, 2);
@@ -1072,7 +1084,7 @@ case ARM::BI__builtin_arm_mve_vldrwq_gather_shifted_offset_z_u32: {
     Param0 = 64;
     Param1 = 0;
     Param2 = 1;
-    Param3 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param3 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param4 = llvm::FixedVectorType::get(Int64Ty, 2);
     Param5 = llvm::PointerType::getUnqual(Int64Ty);
     Param6 = llvm::FixedVectorType::get(Int64Ty, 2);
@@ -1081,7 +1093,7 @@ case ARM::BI__builtin_arm_mve_vldrwq_gather_shifted_offset_z_u32: {
     Param0 = 64;
     Param1 = 3;
     Param2 = 0;
-    Param3 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param3 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param4 = llvm::FixedVectorType::get(Int64Ty, 2);
     Param5 = llvm::PointerType::getUnqual(Int64Ty);
     Param6 = llvm::FixedVectorType::get(Int64Ty, 2);
@@ -1090,7 +1102,7 @@ case ARM::BI__builtin_arm_mve_vldrwq_gather_shifted_offset_z_u32: {
     Param0 = 64;
     Param1 = 3;
     Param2 = 1;
-    Param3 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param3 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param4 = llvm::FixedVectorType::get(Int64Ty, 2);
     Param5 = llvm::PointerType::getUnqual(Int64Ty);
     Param6 = llvm::FixedVectorType::get(Int64Ty, 2);
@@ -1803,7 +1815,7 @@ case ARM::BI__builtin_arm_mve_vctp8q: {
     break;
   case ARM::BI__builtin_arm_mve_vctp64q:
     Param0 = Intrinsic::arm_mve_vctp64;
-    Param1 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param1 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     break;
   case ARM::BI__builtin_arm_mve_vctp8q:
     Param0 = Intrinsic::arm_mve_vctp8;
@@ -3441,6 +3453,48 @@ case ARM::BI__builtin_arm_mve_vminnmvq_p_f32: {
   Value *Val5 = Builder.CreateCall(CGM.getIntrinsic(Param1, {Param2, Param3, Param0}), {Val0, Val1, Val4});
   return (Val5);
 }
+case ARM::BI__builtin_arm_mve_vldrdq_gather_base_z_s64:
+case ARM::BI__builtin_arm_mve_vldrdq_gather_base_z_u64:
+case ARM::BI__builtin_arm_mve_vldrwq_gather_base_z_f32:
+case ARM::BI__builtin_arm_mve_vldrwq_gather_base_z_s32:
+case ARM::BI__builtin_arm_mve_vldrwq_gather_base_z_u32: {
+  llvm::Type * Param0;
+  llvm::Type * Param1;
+  llvm::Type * Param2;
+  switch (BuiltinID) {
+  case ARM::BI__builtin_arm_mve_vldrdq_gather_base_z_s64:
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
+    Param1 = llvm::FixedVectorType::get(Int64Ty, 2);
+    Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
+    break;
+  case ARM::BI__builtin_arm_mve_vldrdq_gather_base_z_u64:
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
+    Param1 = llvm::FixedVectorType::get(Int64Ty, 2);
+    Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
+    break;
+  case ARM::BI__builtin_arm_mve_vldrwq_gather_base_z_f32:
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param1 = llvm::FixedVectorType::get(FloatTy, 4);
+    Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
+    break;
+  case ARM::BI__builtin_arm_mve_vldrwq_gather_base_z_s32:
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param1 = llvm::FixedVectorType::get(Int32Ty, 4);
+    Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
+    break;
+  case ARM::BI__builtin_arm_mve_vldrwq_gather_base_z_u32:
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param1 = llvm::FixedVectorType::get(Int32Ty, 4);
+    Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
+    break;
+  }
+  Value *Val0 = EmitScalarExpr(E->getArg(0));
+  Value *Val1 = EmitScalarExpr(E->getArg(1));
+  Value *Val2 = EmitScalarExpr(E->getArg(2));
+  Value *Val3 = Builder.CreateIntCast(Val2, Int32Ty, false);
+  Value *Val4 = Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_pred_i2v, {Param0}), {Val3});
+  return Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_vldr_gather_base_predicated, {Param1, Param2, Param0}), {Val0, Val1, Val4});
+}
 case ARM::BI__builtin_arm_mve_vmaxaq_m_s16:
 case ARM::BI__builtin_arm_mve_vmaxaq_m_s32:
 case ARM::BI__builtin_arm_mve_vmaxaq_m_s8:
@@ -3531,42 +3585,6 @@ case ARM::BI__builtin_arm_mve_vminavq_p_s32: {
   Value *Val4 = Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_pred_i2v, {llvm::FixedVectorType::get(Builder.getInt1Ty(), 4)}), {Val3});
   Value *Val5 = Builder.CreateCall(CGM.getIntrinsic(Param0, {llvm::FixedVectorType::get(Int32Ty, 4), llvm::FixedVectorType::get(Builder.getInt1Ty(), 4)}), {Val0, Val1, Val4});
   return Builder.CreateIntCast(Val5, Int32Ty, false);
-}
-case ARM::BI__builtin_arm_mve_vldrdq_gather_base_z_s64:
-case ARM::BI__builtin_arm_mve_vldrdq_gather_base_z_u64:
-case ARM::BI__builtin_arm_mve_vldrwq_gather_base_z_f32:
-case ARM::BI__builtin_arm_mve_vldrwq_gather_base_z_s32:
-case ARM::BI__builtin_arm_mve_vldrwq_gather_base_z_u32: {
-  llvm::Type * Param0;
-  llvm::Type * Param1;
-  switch (BuiltinID) {
-  case ARM::BI__builtin_arm_mve_vldrdq_gather_base_z_s64:
-    Param0 = llvm::FixedVectorType::get(Int64Ty, 2);
-    Param1 = llvm::FixedVectorType::get(Int64Ty, 2);
-    break;
-  case ARM::BI__builtin_arm_mve_vldrdq_gather_base_z_u64:
-    Param0 = llvm::FixedVectorType::get(Int64Ty, 2);
-    Param1 = llvm::FixedVectorType::get(Int64Ty, 2);
-    break;
-  case ARM::BI__builtin_arm_mve_vldrwq_gather_base_z_f32:
-    Param0 = llvm::FixedVectorType::get(FloatTy, 4);
-    Param1 = llvm::FixedVectorType::get(Int32Ty, 4);
-    break;
-  case ARM::BI__builtin_arm_mve_vldrwq_gather_base_z_s32:
-    Param0 = llvm::FixedVectorType::get(Int32Ty, 4);
-    Param1 = llvm::FixedVectorType::get(Int32Ty, 4);
-    break;
-  case ARM::BI__builtin_arm_mve_vldrwq_gather_base_z_u32:
-    Param0 = llvm::FixedVectorType::get(Int32Ty, 4);
-    Param1 = llvm::FixedVectorType::get(Int32Ty, 4);
-    break;
-  }
-  Value *Val0 = EmitScalarExpr(E->getArg(0));
-  Value *Val1 = EmitScalarExpr(E->getArg(1));
-  Value *Val2 = EmitScalarExpr(E->getArg(2));
-  Value *Val3 = Builder.CreateIntCast(Val2, Int32Ty, false);
-  Value *Val4 = Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_pred_i2v, {llvm::FixedVectorType::get(Builder.getInt1Ty(), 4)}), {Val3});
-  return Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_vldr_gather_base_predicated, {Param0, Param1, llvm::FixedVectorType::get(Builder.getInt1Ty(), 4)}), {Val0, Val1, Val4});
 }
 case ARM::BI__builtin_arm_mve_vmlaq_m_n_s16:
 case ARM::BI__builtin_arm_mve_vmlaq_m_n_s8:
@@ -3778,6 +3796,49 @@ case ARM::BI__builtin_arm_mve_vidupq_m_n_u8: {
   Value *Val6 = Builder.CreateCall(CGM.getIntrinsic(Param1, {Param2, Param0}), {Val0, Val1, Val2, Val5});
   return Builder.CreateExtractValue(Val6, static_cast<unsigned>(0));
 }
+case ARM::BI__builtin_arm_mve_vstrdq_scatter_base_p_s64:
+case ARM::BI__builtin_arm_mve_vstrdq_scatter_base_p_u64:
+case ARM::BI__builtin_arm_mve_vstrwq_scatter_base_p_f32:
+case ARM::BI__builtin_arm_mve_vstrwq_scatter_base_p_s32:
+case ARM::BI__builtin_arm_mve_vstrwq_scatter_base_p_u32: {
+  llvm::Type * Param0;
+  llvm::Type * Param1;
+  llvm::Type * Param2;
+  switch (BuiltinID) {
+  case ARM::BI__builtin_arm_mve_vstrdq_scatter_base_p_s64:
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
+    Param1 = llvm::FixedVectorType::get(Int64Ty, 2);
+    Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
+    break;
+  case ARM::BI__builtin_arm_mve_vstrdq_scatter_base_p_u64:
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
+    Param1 = llvm::FixedVectorType::get(Int64Ty, 2);
+    Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
+    break;
+  case ARM::BI__builtin_arm_mve_vstrwq_scatter_base_p_f32:
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param1 = llvm::FixedVectorType::get(Int32Ty, 4);
+    Param2 = llvm::FixedVectorType::get(FloatTy, 4);
+    break;
+  case ARM::BI__builtin_arm_mve_vstrwq_scatter_base_p_s32:
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param1 = llvm::FixedVectorType::get(Int32Ty, 4);
+    Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
+    break;
+  case ARM::BI__builtin_arm_mve_vstrwq_scatter_base_p_u32:
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param1 = llvm::FixedVectorType::get(Int32Ty, 4);
+    Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
+    break;
+  }
+  Value *Val0 = EmitScalarExpr(E->getArg(0));
+  Value *Val1 = EmitScalarExpr(E->getArg(1));
+  Value *Val2 = EmitScalarExpr(E->getArg(2));
+  Value *Val3 = EmitScalarExpr(E->getArg(3));
+  Value *Val4 = Builder.CreateIntCast(Val3, Int32Ty, false);
+  Value *Val5 = Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_pred_i2v, {Param0}), {Val4});
+  return Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_vstr_scatter_base_predicated, {Param1, Param2, Param0}), {Val0, Val1, Val2, Val5});
+}
 case ARM::BI__builtin_arm_mve_vbrsrq_m_n_f16:
 case ARM::BI__builtin_arm_mve_vbrsrq_m_n_f32:
 case ARM::BI__builtin_arm_mve_vbrsrq_m_n_s16:
@@ -3958,43 +4019,6 @@ case ARM::BI__builtin_arm_mve_vsriq_m_n_u8: {
   Value *Val4 = Builder.CreateIntCast(Val3, Int32Ty, false);
   Value *Val5 = Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_pred_i2v, {Param0}), {Val4});
   return Builder.CreateCall(CGM.getIntrinsic(Param1, {Param2, Param0}), {Val0, Val1, Val2, Val5});
-}
-case ARM::BI__builtin_arm_mve_vstrdq_scatter_base_p_s64:
-case ARM::BI__builtin_arm_mve_vstrdq_scatter_base_p_u64:
-case ARM::BI__builtin_arm_mve_vstrwq_scatter_base_p_f32:
-case ARM::BI__builtin_arm_mve_vstrwq_scatter_base_p_s32:
-case ARM::BI__builtin_arm_mve_vstrwq_scatter_base_p_u32: {
-  llvm::Type * Param0;
-  llvm::Type * Param1;
-  switch (BuiltinID) {
-  case ARM::BI__builtin_arm_mve_vstrdq_scatter_base_p_s64:
-    Param0 = llvm::FixedVectorType::get(Int64Ty, 2);
-    Param1 = llvm::FixedVectorType::get(Int64Ty, 2);
-    break;
-  case ARM::BI__builtin_arm_mve_vstrdq_scatter_base_p_u64:
-    Param0 = llvm::FixedVectorType::get(Int64Ty, 2);
-    Param1 = llvm::FixedVectorType::get(Int64Ty, 2);
-    break;
-  case ARM::BI__builtin_arm_mve_vstrwq_scatter_base_p_f32:
-    Param0 = llvm::FixedVectorType::get(Int32Ty, 4);
-    Param1 = llvm::FixedVectorType::get(FloatTy, 4);
-    break;
-  case ARM::BI__builtin_arm_mve_vstrwq_scatter_base_p_s32:
-    Param0 = llvm::FixedVectorType::get(Int32Ty, 4);
-    Param1 = llvm::FixedVectorType::get(Int32Ty, 4);
-    break;
-  case ARM::BI__builtin_arm_mve_vstrwq_scatter_base_p_u32:
-    Param0 = llvm::FixedVectorType::get(Int32Ty, 4);
-    Param1 = llvm::FixedVectorType::get(Int32Ty, 4);
-    break;
-  }
-  Value *Val0 = EmitScalarExpr(E->getArg(0));
-  Value *Val1 = EmitScalarExpr(E->getArg(1));
-  Value *Val2 = EmitScalarExpr(E->getArg(2));
-  Value *Val3 = EmitScalarExpr(E->getArg(3));
-  Value *Val4 = Builder.CreateIntCast(Val3, Int32Ty, false);
-  Value *Val5 = Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_pred_i2v, {llvm::FixedVectorType::get(Builder.getInt1Ty(), 4)}), {Val4});
-  return Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_vstr_scatter_base_predicated, {Param0, Param1, llvm::FixedVectorType::get(Builder.getInt1Ty(), 4)}), {Val0, Val1, Val2, Val5});
 }
 case ARM::BI__builtin_arm_mve_vdwdupq_m_n_u16:
 case ARM::BI__builtin_arm_mve_vdwdupq_m_n_u32:
@@ -8925,7 +8949,7 @@ case ARM::BI__builtin_arm_mve_vctp8q_m: {
     Param1 = Intrinsic::arm_mve_vctp32;
     break;
   case ARM::BI__builtin_arm_mve_vctp64q_m:
-    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param1 = Intrinsic::arm_mve_vctp64;
     break;
   case ARM::BI__builtin_arm_mve_vctp8q_m:
@@ -9226,6 +9250,50 @@ case ARM::BI__builtin_arm_mve_vsubq_m_n_u8: {
   Value *Val6 = EmitScalarExpr(E->getArg(0));
   return Builder.CreateCall(CGM.getIntrinsic(Param1, {Param2, Param0}), {Val0, Val2, Val5, Val6});
 }
+case ARM::BI__builtin_arm_mve_vqdmullbq_m_n_s16:
+case ARM::BI__builtin_arm_mve_vqdmullbq_m_n_s32:
+case ARM::BI__builtin_arm_mve_vqdmulltq_m_n_s16:
+case ARM::BI__builtin_arm_mve_vqdmulltq_m_n_s32: {
+  uint32_t  Param0;
+  llvm::Type * Param1;
+  llvm::Type * Param2;
+  llvm::Type * Param3;
+  switch (BuiltinID) {
+  case ARM::BI__builtin_arm_mve_vqdmullbq_m_n_s16:
+    Param0 = 0;
+    Param1 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
+    Param3 = llvm::FixedVectorType::get(Int16Ty, 8);
+    break;
+  case ARM::BI__builtin_arm_mve_vqdmullbq_m_n_s32:
+    Param0 = 0;
+    Param1 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
+    Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
+    Param3 = llvm::FixedVectorType::get(Int32Ty, 4);
+    break;
+  case ARM::BI__builtin_arm_mve_vqdmulltq_m_n_s16:
+    Param0 = 1;
+    Param1 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
+    Param3 = llvm::FixedVectorType::get(Int16Ty, 8);
+    break;
+  case ARM::BI__builtin_arm_mve_vqdmulltq_m_n_s32:
+    Param0 = 1;
+    Param1 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
+    Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
+    Param3 = llvm::FixedVectorType::get(Int32Ty, 4);
+    break;
+  }
+  Value *Val0 = EmitScalarExpr(E->getArg(1));
+  Value *Val1 = EmitScalarExpr(E->getArg(2));
+  Value *Val2 = ARMMVEVectorSplat(Builder, Val1);
+  Value *Val3 = llvm::ConstantInt::get(Int32Ty, Param0);
+  Value *Val4 = EmitScalarExpr(E->getArg(3));
+  Value *Val5 = Builder.CreateIntCast(Val4, Int32Ty, false);
+  Value *Val6 = Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_pred_i2v, {Param1}), {Val5});
+  Value *Val7 = EmitScalarExpr(E->getArg(0));
+  return Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_vqdmull_predicated, {Param2, Param3, Param1}), {Val0, Val2, Val3, Val6, Val7});
+}
 case ARM::BI__builtin_arm_mve_vhaddq_m_n_s16:
 case ARM::BI__builtin_arm_mve_vhaddq_m_n_s32:
 case ARM::BI__builtin_arm_mve_vhaddq_m_n_s8:
@@ -9409,45 +9477,6 @@ case ARM::BI__builtin_arm_mve_vqsubq_m_n_u8: {
   Value *Val6 = Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_pred_i2v, {Param1}), {Val5});
   Value *Val7 = EmitScalarExpr(E->getArg(0));
   return Builder.CreateCall(CGM.getIntrinsic(Param2, {Param3, Param1}), {Val0, Val2, Val3, Val6, Val7});
-}
-case ARM::BI__builtin_arm_mve_vqdmullbq_m_n_s16:
-case ARM::BI__builtin_arm_mve_vqdmullbq_m_n_s32:
-case ARM::BI__builtin_arm_mve_vqdmulltq_m_n_s16:
-case ARM::BI__builtin_arm_mve_vqdmulltq_m_n_s32: {
-  uint32_t  Param0;
-  llvm::Type * Param1;
-  llvm::Type * Param2;
-  switch (BuiltinID) {
-  case ARM::BI__builtin_arm_mve_vqdmullbq_m_n_s16:
-    Param0 = 0;
-    Param1 = llvm::FixedVectorType::get(Int32Ty, 4);
-    Param2 = llvm::FixedVectorType::get(Int16Ty, 8);
-    break;
-  case ARM::BI__builtin_arm_mve_vqdmullbq_m_n_s32:
-    Param0 = 0;
-    Param1 = llvm::FixedVectorType::get(Int64Ty, 2);
-    Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
-    break;
-  case ARM::BI__builtin_arm_mve_vqdmulltq_m_n_s16:
-    Param0 = 1;
-    Param1 = llvm::FixedVectorType::get(Int32Ty, 4);
-    Param2 = llvm::FixedVectorType::get(Int16Ty, 8);
-    break;
-  case ARM::BI__builtin_arm_mve_vqdmulltq_m_n_s32:
-    Param0 = 1;
-    Param1 = llvm::FixedVectorType::get(Int64Ty, 2);
-    Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
-    break;
-  }
-  Value *Val0 = EmitScalarExpr(E->getArg(1));
-  Value *Val1 = EmitScalarExpr(E->getArg(2));
-  Value *Val2 = ARMMVEVectorSplat(Builder, Val1);
-  Value *Val3 = llvm::ConstantInt::get(Int32Ty, Param0);
-  Value *Val4 = EmitScalarExpr(E->getArg(3));
-  Value *Val5 = Builder.CreateIntCast(Val4, Int32Ty, false);
-  Value *Val6 = Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_pred_i2v, {llvm::FixedVectorType::get(Builder.getInt1Ty(), 4)}), {Val5});
-  Value *Val7 = EmitScalarExpr(E->getArg(0));
-  return Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_vqdmull_predicated, {Param1, Param2, llvm::FixedVectorType::get(Builder.getInt1Ty(), 4)}), {Val0, Val2, Val3, Val6, Val7});
 }
 case ARM::BI__builtin_arm_mve_vfmsq_m_f16:
 case ARM::BI__builtin_arm_mve_vfmsq_m_f32: {
@@ -10660,7 +10689,7 @@ case ARM::BI__builtin_arm_mve_vqdmulltq_m_s32: {
     break;
   case ARM::BI__builtin_arm_mve_vqdmullbq_m_s32:
     Param0 = 0;
-    Param1 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param1 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param2 = Intrinsic::arm_mve_vqdmull_predicated;
     Param3 = llvm::FixedVectorType::get(Int64Ty, 2);
     Param4 = llvm::FixedVectorType::get(Int32Ty, 4);
@@ -10674,7 +10703,7 @@ case ARM::BI__builtin_arm_mve_vqdmulltq_m_s32: {
     break;
   case ARM::BI__builtin_arm_mve_vqdmulltq_m_s32:
     Param0 = 1;
-    Param1 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param1 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param2 = Intrinsic::arm_mve_vqdmull_predicated;
     Param3 = llvm::FixedVectorType::get(Int64Ty, 2);
     Param4 = llvm::FixedVectorType::get(Int32Ty, 4);
@@ -10727,7 +10756,7 @@ case ARM::BI__builtin_arm_mve_vshlltq_m_n_u8: {
   case ARM::BI__builtin_arm_mve_vmullbq_int_m_s32:
     Param0 = 0;
     Param1 = 0;
-    Param2 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param2 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param3 = Intrinsic::arm_mve_mull_int_predicated;
     Param4 = llvm::FixedVectorType::get(Int64Ty, 2);
     Param5 = llvm::FixedVectorType::get(Int32Ty, 4);
@@ -10751,7 +10780,7 @@ case ARM::BI__builtin_arm_mve_vshlltq_m_n_u8: {
   case ARM::BI__builtin_arm_mve_vmullbq_int_m_u32:
     Param0 = 1;
     Param1 = 0;
-    Param2 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param2 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param3 = Intrinsic::arm_mve_mull_int_predicated;
     Param4 = llvm::FixedVectorType::get(Int64Ty, 2);
     Param5 = llvm::FixedVectorType::get(Int32Ty, 4);
@@ -10775,7 +10804,7 @@ case ARM::BI__builtin_arm_mve_vshlltq_m_n_u8: {
   case ARM::BI__builtin_arm_mve_vmulltq_int_m_s32:
     Param0 = 0;
     Param1 = 1;
-    Param2 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param2 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param3 = Intrinsic::arm_mve_mull_int_predicated;
     Param4 = llvm::FixedVectorType::get(Int64Ty, 2);
     Param5 = llvm::FixedVectorType::get(Int32Ty, 4);
@@ -10799,7 +10828,7 @@ case ARM::BI__builtin_arm_mve_vshlltq_m_n_u8: {
   case ARM::BI__builtin_arm_mve_vmulltq_int_m_u32:
     Param0 = 1;
     Param1 = 1;
-    Param2 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param2 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param3 = Intrinsic::arm_mve_mull_int_predicated;
     Param4 = llvm::FixedVectorType::get(Int64Ty, 2);
     Param5 = llvm::FixedVectorType::get(Int32Ty, 4);
@@ -17064,8 +17093,8 @@ case ARM::BI__builtin_arm_mve_vmulltq_int_x_u32: {
   Value *Val5 = llvm::ConstantInt::get(Int32Ty, Param1);
   Value *Val6 = EmitScalarExpr(E->getArg(2));
   Value *Val7 = Builder.CreateIntCast(Val6, Int32Ty, false);
-  Value *Val8 = Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_pred_i2v, {llvm::FixedVectorType::get(Builder.getInt1Ty(), 4)}), {Val7});
-  return Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_mull_int_predicated, {llvm::FixedVectorType::get(Int64Ty, 2), llvm::FixedVectorType::get(Int32Ty, 4), llvm::FixedVectorType::get(Builder.getInt1Ty(), 4)}), {Val2, Val3, Val4, Val5, Val8, Val1});
+  Value *Val8 = Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_pred_i2v, {llvm::FixedVectorType::get(Builder.getInt1Ty(), 2)}), {Val7});
+  return Builder.CreateCall(CGM.getIntrinsic(Intrinsic::arm_mve_mull_int_predicated, {llvm::FixedVectorType::get(Int64Ty, 2), llvm::FixedVectorType::get(Int32Ty, 4), llvm::FixedVectorType::get(Builder.getInt1Ty(), 2)}), {Val2, Val3, Val4, Val5, Val8, Val1});
 }
 case ARM::BI__builtin_arm_mve_vuninitializedq_polymorphic_s64:
 case ARM::BI__builtin_arm_mve_vuninitializedq_polymorphic_u64:

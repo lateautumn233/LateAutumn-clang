@@ -121,9 +121,13 @@
     OS << " \"" << SA->getReplacement() << "\"";
     OS << " " << SA->getPriority();
   }
-  void VisitBTFTagAttr(const BTFTagAttr *A) {
-    const auto *SA = cast<BTFTagAttr>(A); (void)SA;
-    OS << " \"" << SA->getBTFTag() << "\"";
+  void VisitBTFDeclTagAttr(const BTFDeclTagAttr *A) {
+    const auto *SA = cast<BTFDeclTagAttr>(A); (void)SA;
+    OS << " \"" << SA->getBTFDeclTag() << "\"";
+  }
+  void VisitBTFTypeTagAttr(const BTFTypeTagAttr *A) {
+    const auto *SA = cast<BTFTypeTagAttr>(A); (void)SA;
+    OS << " \"" << SA->getBTFTypeTag() << "\"";
   }
   void VisitBlocksAttr(const BlocksAttr *A) {
     const auto *SA = cast<BlocksAttr>(A); (void)SA;
@@ -160,6 +164,9 @@
     const auto *SA = cast<CPUSpecificAttr>(A); (void)SA;
     for (const auto &Val : SA->cpus())
       OS << " " << Val;
+  }
+  void VisitCXX11NoReturnAttr(const CXX11NoReturnAttr *A) {
+    OS << " " << A->getSpelling();
   }
   void VisitCallableWhenAttr(const CallableWhenAttr *A) {
     const auto *SA = cast<CallableWhenAttr>(A); (void)SA;
@@ -226,6 +233,13 @@
     const auto *SA = cast<DestructorAttr>(A); (void)SA;
     OS << " " << SA->getPriority();
   }
+  void VisitDiagnoseAsBuiltinAttr(const DiagnoseAsBuiltinAttr *A) {
+    const auto *SA = cast<DiagnoseAsBuiltinAttr>(A); (void)SA;
+    OS << " ";
+    dumpBareDeclRef(SA->getFunction());
+    for (const auto &Val : SA->argIndices())
+      OS << " " << Val;
+  }
   void VisitDiagnoseIfAttr(const DiagnoseIfAttr *A) {
     const auto *SA = cast<DiagnoseIfAttr>(A); (void)SA;
     OS << " \"" << SA->getMessage() << "\"";
@@ -263,6 +277,11 @@
       OS << " Open";
       break;
     }
+  }
+  void VisitErrorAttr(const ErrorAttr *A) {
+    const auto *SA = cast<ErrorAttr>(A); (void)SA;
+    OS << " " << A->getSpelling();
+    OS << " \"" << SA->getUserDiagnostic() << "\"";
   }
   void VisitExternalSourceSymbolAttr(const ExternalSourceSymbolAttr *A) {
     const auto *SA = cast<ExternalSourceSymbolAttr>(A); (void)SA;
@@ -533,11 +552,25 @@
       OS << " DT_Any";
       break;
     }
+    if (SA->getIndirect()) OS << " Indirect";
     OS << " " << SA->getLevel();
   }
   void VisitOMPDeclareVariantAttr(const OMPDeclareVariantAttr *A) {
     const auto *SA = cast<OMPDeclareVariantAttr>(A); (void)SA;
     OS << " " << SA->getTraitInfos();
+    for (OMPDeclareVariantAttr::appendArgs_iterator I = SA->appendArgs_begin(), E = SA->appendArgs_end(); I != E; ++I) {
+      switch(*I) {
+    case OMPDeclareVariantAttr::Target:
+      OS << " Target";
+      break;
+    case OMPDeclareVariantAttr::TargetSync:
+      OS << " TargetSync";
+      break;
+    case OMPDeclareVariantAttr::Target_TargetSync:
+      OS << " Target_TargetSync";
+      break;
+      }
+    }
   }
   void VisitObjCBridgeAttr(const ObjCBridgeAttr *A) {
     const auto *SA = cast<ObjCBridgeAttr>(A); (void)SA;
@@ -864,6 +897,11 @@
     const auto *SA = cast<TargetAttr>(A); (void)SA;
     OS << " \"" << SA->getFeaturesStr() << "\"";
   }
+  void VisitTargetClonesAttr(const TargetClonesAttr *A) {
+    const auto *SA = cast<TargetClonesAttr>(A); (void)SA;
+    for (const auto &Val : SA->featuresStrs())
+      OS << " " << Val;
+  }
   void VisitTestTypestateAttr(const TestTypestateAttr *A) {
     const auto *SA = cast<TestTypestateAttr>(A); (void)SA;
     switch(SA->getTestState()) {
@@ -989,4 +1027,36 @@
   void VisitXRayLogArgsAttr(const XRayLogArgsAttr *A) {
     const auto *SA = cast<XRayLogArgsAttr>(A); (void)SA;
     OS << " " << SA->getArgumentCount();
+  }
+  void VisitZeroCallUsedRegsAttr(const ZeroCallUsedRegsAttr *A) {
+    const auto *SA = cast<ZeroCallUsedRegsAttr>(A); (void)SA;
+    switch(SA->getZeroCallUsedRegs()) {
+    case ZeroCallUsedRegsAttr::Skip:
+      OS << " Skip";
+      break;
+    case ZeroCallUsedRegsAttr::UsedGPRArg:
+      OS << " UsedGPRArg";
+      break;
+    case ZeroCallUsedRegsAttr::UsedGPR:
+      OS << " UsedGPR";
+      break;
+    case ZeroCallUsedRegsAttr::UsedArg:
+      OS << " UsedArg";
+      break;
+    case ZeroCallUsedRegsAttr::Used:
+      OS << " Used";
+      break;
+    case ZeroCallUsedRegsAttr::AllGPRArg:
+      OS << " AllGPRArg";
+      break;
+    case ZeroCallUsedRegsAttr::AllGPR:
+      OS << " AllGPR";
+      break;
+    case ZeroCallUsedRegsAttr::AllArg:
+      OS << " AllArg";
+      break;
+    case ZeroCallUsedRegsAttr::All:
+      OS << " All";
+      break;
+    }
   }

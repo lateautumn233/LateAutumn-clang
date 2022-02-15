@@ -464,6 +464,20 @@ struct WriteDispatcher<UnaryTransformType::UTTKind> {
   }
 };
 template <>
+struct WriteDispatcher<UsingShadowDecl*> {
+  template <class BasicWriter, class... Args>
+  static void write(BasicWriter &W, Args &&... args) {
+    return W.writeUsingShadowDeclRef(std::forward<Args>(args)...);
+  }
+};
+template <>
+struct WriteDispatcher<const UsingShadowDecl*> {
+  template <class BasicWriter, class... Args>
+  static void write(BasicWriter &W, Args &&... args) {
+    return W.writeUsingShadowDeclRef(std::forward<Args>(args)...);
+  }
+};
+template <>
 struct WriteDispatcher<ValueDecl*> {
   template <class BasicWriter, class... Args>
   static void write(BasicWriter &W, Args &&... args) {
@@ -715,6 +729,18 @@ template <>
 struct PackOptionalValue<uint64_t> {
   static uint64_t pack(Optional<uint64_t> value) {
     return value ? *value + 1 : 0;
+  }
+};
+template <>
+struct PackOptionalValue<UsingShadowDecl*> {
+  static UsingShadowDecl* pack(Optional<UsingShadowDecl*> value) {
+    return value ? *value : nullptr;
+  }
+};
+template <>
+struct PackOptionalValue<const UsingShadowDecl*> {
+  static const UsingShadowDecl* pack(Optional<const UsingShadowDecl*> value) {
+    return value ? *value : nullptr;
   }
 };
 template <>
@@ -1245,6 +1271,9 @@ public:
   }
   void writeUnaryTypeTransformKind(UnaryTransformType::UTTKind value) {
     asImpl().writeEnum(value);
+  }
+  void writeUsingShadowDeclRef(const UsingShadowDecl* value) {
+    asImpl().writeDeclRef(value);
   }
   void writeValueDeclRef(const ValueDecl* value) {
     asImpl().writeDeclRef(value);

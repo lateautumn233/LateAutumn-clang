@@ -44,6 +44,8 @@
     const auto *SA = cast<AnnotateAttr>(A); (void)SA;
     for (AnnotateAttr::args_iterator I = SA->args_begin(), E = SA->args_end(); I != E; ++I)
       Visit(*I);
+    for (AnnotateAttr::delayedArgs_iterator I = SA->delayedArgs_begin(), E = SA->delayedArgs_end(); I != E; ++I)
+      Visit(*I);
   }
   void VisitAssertCapabilityAttr(const AssertCapabilityAttr *A) {
     const auto *SA = cast<AssertCapabilityAttr>(A); (void)SA;
@@ -104,6 +106,7 @@
   void VisitOMPAllocateDeclAttr(const OMPAllocateDeclAttr *A) {
     const auto *SA = cast<OMPAllocateDeclAttr>(A); (void)SA;
     Visit(SA->getAllocator());
+    Visit(SA->getAlignment());
   }
   void VisitOMPDeclareSimdDeclAttr(const OMPDeclareSimdDeclAttr *A) {
     const auto *SA = cast<OMPDeclareSimdDeclAttr>(A); (void)SA;
@@ -119,9 +122,17 @@
     for (OMPDeclareSimdDeclAttr::steps_iterator I = SA->steps_begin(), E = SA->steps_end(); I != E; ++I)
       Visit(*I);
   }
+  void VisitOMPDeclareTargetDeclAttr(const OMPDeclareTargetDeclAttr *A) {
+    const auto *SA = cast<OMPDeclareTargetDeclAttr>(A); (void)SA;
+    Visit(SA->getIndirectExpr());
+  }
   void VisitOMPDeclareVariantAttr(const OMPDeclareVariantAttr *A) {
     const auto *SA = cast<OMPDeclareVariantAttr>(A); (void)SA;
     Visit(SA->getVariantFuncRef());
+    for (OMPDeclareVariantAttr::adjustArgsNothing_iterator I = SA->adjustArgsNothing_begin(), E = SA->adjustArgsNothing_end(); I != E; ++I)
+      Visit(*I);
+    for (OMPDeclareVariantAttr::adjustArgsNeedDevicePtr_iterator I = SA->adjustArgsNeedDevicePtr_begin(), E = SA->adjustArgsNeedDevicePtr_end(); I != E; ++I)
+      Visit(*I);
   }
   void VisitOMPReferencedVarAttr(const OMPReferencedVarAttr *A) {
     const auto *SA = cast<OMPReferencedVarAttr>(A); (void)SA;

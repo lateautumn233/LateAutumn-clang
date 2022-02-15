@@ -13,7 +13,7 @@ namespace llvm {
 namespace Intrinsic {
 enum AARCH64Intrinsics : unsigned {
 // Enum values for intrinsics
-    aarch64_addg = 354,                              // llvm.aarch64.addg
+    aarch64_addg = 367,                              // llvm.aarch64.addg
     aarch64_clrex,                             // llvm.aarch64.clrex
     aarch64_cls,                               // llvm.aarch64.cls
     aarch64_cls64,                             // llvm.aarch64.cls64
@@ -77,6 +77,7 @@ enum AARCH64Intrinsics : unsigned {
     aarch64_ldg,                               // llvm.aarch64.ldg
     aarch64_ldxp,                              // llvm.aarch64.ldxp
     aarch64_ldxr,                              // llvm.aarch64.ldxr
+    aarch64_mops_memset_tag,                   // llvm.aarch64.mops.memset.tag
     aarch64_neon_abs,                          // llvm.aarch64.neon.abs
     aarch64_neon_addhn,                        // llvm.aarch64.neon.addhn
     aarch64_neon_addp,                         // llvm.aarch64.neon.addp
@@ -175,6 +176,8 @@ enum AARCH64Intrinsics : unsigned {
     aarch64_neon_sqdmull,                      // llvm.aarch64.neon.sqdmull
     aarch64_neon_sqdmulls_scalar,              // llvm.aarch64.neon.sqdmulls.scalar
     aarch64_neon_sqneg,                        // llvm.aarch64.neon.sqneg
+    aarch64_neon_sqrdmlah,                     // llvm.aarch64.neon.sqrdmlah
+    aarch64_neon_sqrdmlsh,                     // llvm.aarch64.neon.sqrdmlsh
     aarch64_neon_sqrdmulh,                     // llvm.aarch64.neon.sqrdmulh
     aarch64_neon_sqrdmulh_lane,                // llvm.aarch64.neon.sqrdmulh.lane
     aarch64_neon_sqrdmulh_laneq,               // llvm.aarch64.neon.sqrdmulh.laneq
@@ -483,8 +486,11 @@ enum AARCH64Intrinsics : unsigned {
     aarch64_sve_ld1ro,                         // llvm.aarch64.sve.ld1ro
     aarch64_sve_ld1rq,                         // llvm.aarch64.sve.ld1rq
     aarch64_sve_ld2,                           // llvm.aarch64.sve.ld2
+    aarch64_sve_ld2_sret,                      // llvm.aarch64.sve.ld2.sret
     aarch64_sve_ld3,                           // llvm.aarch64.sve.ld3
+    aarch64_sve_ld3_sret,                      // llvm.aarch64.sve.ld3.sret
     aarch64_sve_ld4,                           // llvm.aarch64.sve.ld4
+    aarch64_sve_ld4_sret,                      // llvm.aarch64.sve.ld4.sret
     aarch64_sve_ldff1,                         // llvm.aarch64.sve.ldff1
     aarch64_sve_ldff1_gather,                  // llvm.aarch64.sve.ldff1.gather
     aarch64_sve_ldff1_gather_index,            // llvm.aarch64.sve.ldff1.gather.index

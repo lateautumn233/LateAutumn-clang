@@ -13,7 +13,7 @@ namespace llvm {
 namespace Intrinsic {
 enum X86Intrinsics : unsigned {
 // Enum values for intrinsics
-    x86_3dnow_pavgusb = 9104,                         // llvm.x86.3dnow.pavgusb
+    x86_3dnow_pavgusb = 9343,                         // llvm.x86.3dnow.pavgusb
     x86_3dnow_pf2id,                           // llvm.x86.3dnow.pf2id
     x86_3dnow_pfacc,                           // llvm.x86.3dnow.pfacc
     x86_3dnow_pfadd,                           // llvm.x86.3dnow.pfadd
@@ -884,6 +884,30 @@ enum X86Intrinsics : unsigned {
     x86_avx512fp16_mask_vcvtudq2ph_128,        // llvm.x86.avx512fp16.mask.vcvtudq2ph.128
     x86_avx512fp16_mask_vcvtuqq2ph_128,        // llvm.x86.avx512fp16.mask.vcvtuqq2ph.128
     x86_avx512fp16_mask_vcvtuqq2ph_256,        // llvm.x86.avx512fp16.mask.vcvtuqq2ph.256
+    x86_avx512fp16_mask_vfcmadd_cph_128,       // llvm.x86.avx512fp16.mask.vfcmadd.cph.128
+    x86_avx512fp16_mask_vfcmadd_cph_256,       // llvm.x86.avx512fp16.mask.vfcmadd.cph.256
+    x86_avx512fp16_mask_vfcmadd_cph_512,       // llvm.x86.avx512fp16.mask.vfcmadd.cph.512
+    x86_avx512fp16_mask_vfcmadd_csh,           // llvm.x86.avx512fp16.mask.vfcmadd.csh
+    x86_avx512fp16_mask_vfcmul_cph_128,        // llvm.x86.avx512fp16.mask.vfcmul.cph.128
+    x86_avx512fp16_mask_vfcmul_cph_256,        // llvm.x86.avx512fp16.mask.vfcmul.cph.256
+    x86_avx512fp16_mask_vfcmul_cph_512,        // llvm.x86.avx512fp16.mask.vfcmul.cph.512
+    x86_avx512fp16_mask_vfcmul_csh,            // llvm.x86.avx512fp16.mask.vfcmul.csh
+    x86_avx512fp16_mask_vfmadd_cph_128,        // llvm.x86.avx512fp16.mask.vfmadd.cph.128
+    x86_avx512fp16_mask_vfmadd_cph_256,        // llvm.x86.avx512fp16.mask.vfmadd.cph.256
+    x86_avx512fp16_mask_vfmadd_cph_512,        // llvm.x86.avx512fp16.mask.vfmadd.cph.512
+    x86_avx512fp16_mask_vfmadd_csh,            // llvm.x86.avx512fp16.mask.vfmadd.csh
+    x86_avx512fp16_mask_vfmul_cph_128,         // llvm.x86.avx512fp16.mask.vfmul.cph.128
+    x86_avx512fp16_mask_vfmul_cph_256,         // llvm.x86.avx512fp16.mask.vfmul.cph.256
+    x86_avx512fp16_mask_vfmul_cph_512,         // llvm.x86.avx512fp16.mask.vfmul.cph.512
+    x86_avx512fp16_mask_vfmul_csh,             // llvm.x86.avx512fp16.mask.vfmul.csh
+    x86_avx512fp16_maskz_vfcmadd_cph_128,      // llvm.x86.avx512fp16.maskz.vfcmadd.cph.128
+    x86_avx512fp16_maskz_vfcmadd_cph_256,      // llvm.x86.avx512fp16.maskz.vfcmadd.cph.256
+    x86_avx512fp16_maskz_vfcmadd_cph_512,      // llvm.x86.avx512fp16.maskz.vfcmadd.cph.512
+    x86_avx512fp16_maskz_vfcmadd_csh,          // llvm.x86.avx512fp16.maskz.vfcmadd.csh
+    x86_avx512fp16_maskz_vfmadd_cph_128,       // llvm.x86.avx512fp16.maskz.vfmadd.cph.128
+    x86_avx512fp16_maskz_vfmadd_cph_256,       // llvm.x86.avx512fp16.maskz.vfmadd.cph.256
+    x86_avx512fp16_maskz_vfmadd_cph_512,       // llvm.x86.avx512fp16.maskz.vfmadd.cph.512
+    x86_avx512fp16_maskz_vfmadd_csh,           // llvm.x86.avx512fp16.maskz.vfmadd.csh
     x86_avx512fp16_max_ph_128,                 // llvm.x86.avx512fp16.max.ph.128
     x86_avx512fp16_max_ph_256,                 // llvm.x86.avx512fp16.max.ph.256
     x86_avx512fp16_max_ph_512,                 // llvm.x86.avx512fp16.max.ph.512
@@ -906,6 +930,11 @@ enum X86Intrinsics : unsigned {
     x86_avx512fp16_vcvttsh2usi64,              // llvm.x86.avx512fp16.vcvttsh2usi64
     x86_avx512fp16_vcvtusi2sh,                 // llvm.x86.avx512fp16.vcvtusi2sh
     x86_avx512fp16_vcvtusi642sh,               // llvm.x86.avx512fp16.vcvtusi642sh
+    x86_avx512fp16_vfmadd_f16,                 // llvm.x86.avx512fp16.vfmadd.f16
+    x86_avx512fp16_vfmadd_ph_512,              // llvm.x86.avx512fp16.vfmadd.ph.512
+    x86_avx512fp16_vfmaddsub_ph_128,           // llvm.x86.avx512fp16.vfmaddsub.ph.128
+    x86_avx512fp16_vfmaddsub_ph_256,           // llvm.x86.avx512fp16.vfmaddsub.ph.256
+    x86_avx512fp16_vfmaddsub_ph_512,           // llvm.x86.avx512fp16.vfmaddsub.ph.512
     x86_bmi_bextr_32,                          // llvm.x86.bmi.bextr.32
     x86_bmi_bextr_64,                          // llvm.x86.bmi.bextr.64
     x86_bmi_bzhi_32,                           // llvm.x86.bmi.bzhi.32

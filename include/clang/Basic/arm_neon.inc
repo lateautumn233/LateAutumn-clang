@@ -506,6 +506,14 @@ BUILTIN(__builtin_neon_vqnegd_s64, "WiWi", "n")
 BUILTIN(__builtin_neon_vqnegh_s16, "ss", "n")
 BUILTIN(__builtin_neon_vqnegq_v, "V16ScV16Sci", "n")
 BUILTIN(__builtin_neon_vqnegs_s32, "ii", "n")
+BUILTIN(__builtin_neon_vqrdmlah_v, "V8ScV8ScV8ScV8Sci", "n")
+BUILTIN(__builtin_neon_vqrdmlahh_s16, "ssss", "n")
+BUILTIN(__builtin_neon_vqrdmlahq_v, "V16ScV16ScV16ScV16Sci", "n")
+BUILTIN(__builtin_neon_vqrdmlahs_s32, "iiii", "n")
+BUILTIN(__builtin_neon_vqrdmlsh_v, "V8ScV8ScV8ScV8Sci", "n")
+BUILTIN(__builtin_neon_vqrdmlshh_s16, "ssss", "n")
+BUILTIN(__builtin_neon_vqrdmlshq_v, "V16ScV16ScV16ScV16Sci", "n")
+BUILTIN(__builtin_neon_vqrdmlshs_s32, "iiii", "n")
 BUILTIN(__builtin_neon_vqrdmulh_lane_v, "V8ScV8ScV8ScIii", "n")
 BUILTIN(__builtin_neon_vqrdmulh_laneq_v, "V8ScV8ScV16ScIii", "n")
 BUILTIN(__builtin_neon_vqrdmulh_v, "V8ScV8ScV8Sci", "n")
@@ -1040,6 +1048,10 @@ case NEON::BI__builtin_neon_vqmovn_v: mask = 0x70007ULL; break;
 case NEON::BI__builtin_neon_vqmovun_v: mask = 0x70000ULL; break;
 case NEON::BI__builtin_neon_vqneg_v: mask = 0xfULL; break;
 case NEON::BI__builtin_neon_vqnegq_v: mask = 0xf00000000ULL; break;
+case NEON::BI__builtin_neon_vqrdmlah_v: mask = 0x6ULL; break;
+case NEON::BI__builtin_neon_vqrdmlahq_v: mask = 0x600000000ULL; break;
+case NEON::BI__builtin_neon_vqrdmlsh_v: mask = 0x6ULL; break;
+case NEON::BI__builtin_neon_vqrdmlshq_v: mask = 0x600000000ULL; break;
 case NEON::BI__builtin_neon_vqrdmulh_lane_v: mask = 0x6ULL; break;
 case NEON::BI__builtin_neon_vqrdmulh_laneq_v: mask = 0x6ULL; break;
 case NEON::BI__builtin_neon_vqrdmulh_v: mask = 0x6ULL; break;

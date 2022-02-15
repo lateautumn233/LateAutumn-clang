@@ -13,7 +13,7 @@ namespace llvm {
 namespace Intrinsic {
 enum NVVMIntrinsics : unsigned {
 // Enum values for intrinsics
-    nvvm_add_rm_d = 4948,                             // llvm.nvvm.add.rm.d
+    nvvm_add_rm_d = 5115,                             // llvm.nvvm.add.rm.d
     nvvm_add_rm_f,                             // llvm.nvvm.add.rm.f
     nvvm_add_rm_ftz_f,                         // llvm.nvvm.add.rm.ftz.f
     nvvm_add_rn_d,                             // llvm.nvvm.add.rn.d
@@ -124,6 +124,10 @@ enum NVVMIntrinsics : unsigned {
     nvvm_ex2_approx_d,                         // llvm.nvvm.ex2.approx.d
     nvvm_ex2_approx_f,                         // llvm.nvvm.ex2.approx.f
     nvvm_ex2_approx_ftz_f,                     // llvm.nvvm.ex2.approx.ftz.f
+    nvvm_f2bf16_rn,                            // llvm.nvvm.f2bf16.rn
+    nvvm_f2bf16_rn_relu,                       // llvm.nvvm.f2bf16.rn.relu
+    nvvm_f2bf16_rz,                            // llvm.nvvm.f2bf16.rz
+    nvvm_f2bf16_rz_relu,                       // llvm.nvvm.f2bf16.rz.relu
     nvvm_f2h_rn,                               // llvm.nvvm.f2h.rn
     nvvm_f2h_rn_ftz,                           // llvm.nvvm.f2h.rn.ftz
     nvvm_f2i_rm,                               // llvm.nvvm.f2i.rm
@@ -142,6 +146,7 @@ enum NVVMIntrinsics : unsigned {
     nvvm_f2ll_rp_ftz,                          // llvm.nvvm.f2ll.rp.ftz
     nvvm_f2ll_rz,                              // llvm.nvvm.f2ll.rz
     nvvm_f2ll_rz_ftz,                          // llvm.nvvm.f2ll.rz.ftz
+    nvvm_f2tf32_rna,                           // llvm.nvvm.f2tf32.rna
     nvvm_f2ui_rm,                              // llvm.nvvm.f2ui.rm
     nvvm_f2ui_rm_ftz,                          // llvm.nvvm.f2ui.rm.ftz
     nvvm_f2ui_rn,                              // llvm.nvvm.f2ui.rn
@@ -161,6 +166,14 @@ enum NVVMIntrinsics : unsigned {
     nvvm_fabs_d,                               // llvm.nvvm.fabs.d
     nvvm_fabs_f,                               // llvm.nvvm.fabs.f
     nvvm_fabs_ftz_f,                           // llvm.nvvm.fabs.ftz.f
+    nvvm_ff2bf16x2_rn,                         // llvm.nvvm.ff2bf16x2.rn
+    nvvm_ff2bf16x2_rn_relu,                    // llvm.nvvm.ff2bf16x2.rn.relu
+    nvvm_ff2bf16x2_rz,                         // llvm.nvvm.ff2bf16x2.rz
+    nvvm_ff2bf16x2_rz_relu,                    // llvm.nvvm.ff2bf16x2.rz.relu
+    nvvm_ff2f16x2_rn,                          // llvm.nvvm.ff2f16x2.rn
+    nvvm_ff2f16x2_rn_relu,                     // llvm.nvvm.ff2f16x2.rn.relu
+    nvvm_ff2f16x2_rz,                          // llvm.nvvm.ff2f16x2.rz
+    nvvm_ff2f16x2_rz_relu,                     // llvm.nvvm.ff2f16x2.rz.relu
     nvvm_floor_d,                              // llvm.nvvm.floor.d
     nvvm_floor_f,                              // llvm.nvvm.floor.f
     nvvm_floor_ftz_f,                          // llvm.nvvm.floor.ftz.f

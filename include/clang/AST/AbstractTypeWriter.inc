@@ -31,6 +31,8 @@ public:
       return writeAtomicType(static_cast<const AtomicType *>(node));
     case Type::Attributed:
       return writeAttributedType(static_cast<const AttributedType *>(node));
+    case Type::BitInt:
+      return writeBitIntType(static_cast<const BitIntType *>(node));
     case Type::BlockPointer:
       return writeBlockPointerType(static_cast<const BlockPointerType *>(node));
     case Type::Builtin:
@@ -45,8 +47,8 @@ public:
       return writeDeducedTemplateSpecializationType(static_cast<const DeducedTemplateSpecializationType *>(node));
     case Type::DependentAddressSpace:
       return writeDependentAddressSpaceType(static_cast<const DependentAddressSpaceType *>(node));
-    case Type::DependentExtInt:
-      return writeDependentExtIntType(static_cast<const DependentExtIntType *>(node));
+    case Type::DependentBitInt:
+      return writeDependentBitIntType(static_cast<const DependentBitIntType *>(node));
     case Type::DependentName:
       return writeDependentNameType(static_cast<const DependentNameType *>(node));
     case Type::DependentSizedExtVector:
@@ -57,8 +59,6 @@ public:
       return writeDependentVectorType(static_cast<const DependentVectorType *>(node));
     case Type::Elaborated:
       return writeElaboratedType(static_cast<const ElaboratedType *>(node));
-    case Type::ExtInt:
-      return writeExtIntType(static_cast<const ExtIntType *>(node));
     case Type::FunctionNoProto:
       return writeFunctionNoProtoType(static_cast<const FunctionNoProtoType *>(node));
     case Type::FunctionProto:
@@ -115,6 +115,8 @@ public:
       return writeUnaryTransformType(static_cast<const UnaryTransformType *>(node));
     case Type::UnresolvedUsing:
       return writeUnresolvedUsingType(static_cast<const UnresolvedUsingType *>(node));
+    case Type::Using:
+      return writeUsingType(static_cast<const UsingType *>(node));
     case Type::Vector:
       return writeVectorType(static_cast<const VectorType *>(node));
     case Type::ExtVector:
@@ -201,6 +203,13 @@ public:
     W.find("attribute").writeAttrKind(attribute);
   }
 
+  void writeBitIntType(const BitIntType *node) {
+    bool isUnsigned = ( node->isUnsigned() );
+    W.find("isUnsigned").writeBool(isUnsigned);
+    uint32_t numBits = ( node->getNumBits() );
+    W.find("numBits").writeUInt32(numBits);
+  }
+
   void writeBlockPointerType(const BlockPointerType *node) {
     QualType pointeeType = ( node->getPointeeType() );
     W.find("pointeeType").writeQualType(pointeeType);
@@ -258,7 +267,7 @@ public:
     W.find("attributeLoc").writeSourceLocation(attributeLoc);
   }
 
-  void writeDependentExtIntType(const DependentExtIntType *node) {
+  void writeDependentBitIntType(const DependentBitIntType *node) {
     bool isUnsigned = ( node->isUnsigned() );
     W.find("isUnsigned").writeBool(isUnsigned);
     const Expr* numBitsExpr = ( node->getNumBitsExpr() );
@@ -321,13 +330,6 @@ public:
     llvm::Optional<const TagDecl*> ownedTag = ( makeOptionalFromPointer(
                     const_cast<const TagDecl *>(node->getOwnedTagDecl())) );
     W.find("ownedTag").writeOptional(ownedTag);
-  }
-
-  void writeExtIntType(const ExtIntType *node) {
-    bool isUnsigned = ( node->isUnsigned() );
-    W.find("isUnsigned").writeBool(isUnsigned);
-    uint32_t numBits = ( node->getNumBits() );
-    W.find("numBits").writeUInt32(numBits);
   }
 
   void writeFunctionNoProtoType(const FunctionNoProtoType *node) {
@@ -579,6 +581,13 @@ public:
   void writeUnresolvedUsingType(const UnresolvedUsingType *node) {
     const Decl* declaration = ( node->getDecl() );
     W.find("declaration").writeDeclRef(declaration);
+  }
+
+  void writeUsingType(const UsingType *node) {
+    const UsingShadowDecl* foundDeclaration = ( node->getFoundDecl() );
+    W.find("foundDeclaration").writeUsingShadowDeclRef(foundDeclaration);
+    QualType underlyingType = ( node->getUnderlyingType() );
+    W.find("underlyingType").writeQualType(underlyingType);
   }
 
   void writeVectorType(const VectorType *node) {

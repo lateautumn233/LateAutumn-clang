@@ -2372,6 +2372,33 @@ AnnotateAttr *AnnotateAttr::Create(ASTContext &Ctx, llvm::StringRef Annotation, 
   return Create(Ctx, Annotation, Args, ArgsSize, I);
 }
 
+AnnotateAttr *AnnotateAttr::CreateImplicitWithDelayedArgs(ASTContext &Ctx, Expr * *DelayedArgs, unsigned DelayedArgsSize, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) AnnotateAttr(Ctx, CommonInfo);
+  A->setImplicit(true);
+  if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
+    A->setAttributeSpellingListIndex(0);
+  A->setDelayedArgs(Ctx, DelayedArgs, DelayedArgsSize);
+  return A;
+}
+
+AnnotateAttr *AnnotateAttr::CreateWithDelayedArgs(ASTContext &Ctx, Expr * *DelayedArgs, unsigned DelayedArgsSize, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) AnnotateAttr(Ctx, CommonInfo);
+  if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
+    A->setAttributeSpellingListIndex(0);
+  A->setDelayedArgs(Ctx, DelayedArgs, DelayedArgsSize);
+  return A;
+}
+
+AnnotateAttr *AnnotateAttr::CreateImplicitWithDelayedArgs(ASTContext &Ctx, Expr * *DelayedArgs, unsigned DelayedArgsSize, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
+  return CreateImplicitWithDelayedArgs(Ctx, DelayedArgs, DelayedArgsSize, I);
+}
+
+AnnotateAttr *AnnotateAttr::CreateWithDelayedArgs(ASTContext &Ctx, Expr * *DelayedArgs, unsigned DelayedArgsSize, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
+  return CreateWithDelayedArgs(Ctx, DelayedArgs, DelayedArgsSize, I);
+}
+
 AnnotateAttr::AnnotateAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
               , llvm::StringRef Annotation
               , Expr * *Args, unsigned ArgsSize
@@ -2379,6 +2406,7 @@ AnnotateAttr::AnnotateAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInf
   : InheritableParamAttr(Ctx, CommonInfo, attr::Annotate, false, false)
               , annotationLength(Annotation.size()),annotation(new (Ctx, 1) char[annotationLength])
               , args_Size(ArgsSize), args_(new (Ctx, 16) Expr *[args_Size])
+              , delayedArgs_Size(0), delayedArgs_(nullptr)
   {
     if (!Annotation.empty())
       std::memcpy(annotation, Annotation.data(), annotationLength);
@@ -2391,9 +2419,19 @@ AnnotateAttr::AnnotateAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInf
   : InheritableParamAttr(Ctx, CommonInfo, attr::Annotate, false, false)
               , annotationLength(Annotation.size()),annotation(new (Ctx, 1) char[annotationLength])
               , args_Size(0), args_(nullptr)
+              , delayedArgs_Size(0), delayedArgs_(nullptr)
   {
     if (!Annotation.empty())
       std::memcpy(annotation, Annotation.data(), annotationLength);
+}
+
+AnnotateAttr::AnnotateAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
+             )
+  : InheritableParamAttr(Ctx, CommonInfo, attr::Annotate, false, false)
+              , annotationLength(0),annotation(nullptr)
+              , args_Size(0), args_(nullptr)
+              , delayedArgs_Size(0), delayedArgs_(nullptr)
+  {
 }
 
 
@@ -2405,6 +2443,7 @@ AnnotateAttr *AnnotateAttr::clone(ASTContext &C) const {
   A->Inherited = Inherited;
   A->IsPackExpansion = IsPackExpansion;
   A->setImplicit(Implicit);
+  A->setDelayedArgs(C, delayedArgs_, delayedArgs_Size);
   return A;
 }
 
@@ -4177,54 +4216,54 @@ const char *BPFPreserveAccessIndexAttr::getSpelling() const {
 }
 
 
-// BTFTagAttr implementation
+// BTFDeclTagAttr implementation
 
-BTFTagAttr *BTFTagAttr::CreateImplicit(ASTContext &Ctx, llvm::StringRef BTFTag, const AttributeCommonInfo &CommonInfo) {
-  auto *A = new (Ctx) BTFTagAttr(Ctx, CommonInfo, BTFTag);
+BTFDeclTagAttr *BTFDeclTagAttr::CreateImplicit(ASTContext &Ctx, llvm::StringRef BTFDeclTag, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) BTFDeclTagAttr(Ctx, CommonInfo, BTFDeclTag);
   A->setImplicit(true);
   if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
     A->setAttributeSpellingListIndex(0);
   return A;
 }
 
-BTFTagAttr *BTFTagAttr::Create(ASTContext &Ctx, llvm::StringRef BTFTag, const AttributeCommonInfo &CommonInfo) {
-  auto *A = new (Ctx) BTFTagAttr(Ctx, CommonInfo, BTFTag);
+BTFDeclTagAttr *BTFDeclTagAttr::Create(ASTContext &Ctx, llvm::StringRef BTFDeclTag, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) BTFDeclTagAttr(Ctx, CommonInfo, BTFDeclTag);
   if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
     A->setAttributeSpellingListIndex(0);
   return A;
 }
 
-BTFTagAttr *BTFTagAttr::CreateImplicit(ASTContext &Ctx, llvm::StringRef BTFTag, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+BTFDeclTagAttr *BTFDeclTagAttr::CreateImplicit(ASTContext &Ctx, llvm::StringRef BTFDeclTag, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
   AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
-  return CreateImplicit(Ctx, BTFTag, I);
+  return CreateImplicit(Ctx, BTFDeclTag, I);
 }
 
-BTFTagAttr *BTFTagAttr::Create(ASTContext &Ctx, llvm::StringRef BTFTag, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+BTFDeclTagAttr *BTFDeclTagAttr::Create(ASTContext &Ctx, llvm::StringRef BTFDeclTag, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
   AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
-  return Create(Ctx, BTFTag, I);
+  return Create(Ctx, BTFDeclTag, I);
 }
 
-BTFTagAttr::BTFTagAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
-              , llvm::StringRef BTFTag
+BTFDeclTagAttr::BTFDeclTagAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
+              , llvm::StringRef BTFDeclTag
              )
-  : InheritableAttr(Ctx, CommonInfo, attr::BTFTag, false, false)
-              , bTFTagLength(BTFTag.size()),bTFTag(new (Ctx, 1) char[bTFTagLength])
+  : InheritableAttr(Ctx, CommonInfo, attr::BTFDeclTag, false, false)
+              , bTFDeclTagLength(BTFDeclTag.size()),bTFDeclTag(new (Ctx, 1) char[bTFDeclTagLength])
   {
-    if (!BTFTag.empty())
-      std::memcpy(bTFTag, BTFTag.data(), bTFTagLength);
+    if (!BTFDeclTag.empty())
+      std::memcpy(bTFDeclTag, BTFDeclTag.data(), bTFDeclTagLength);
 }
 
 
 
-BTFTagAttr *BTFTagAttr::clone(ASTContext &C) const {
-  auto *A = new (C) BTFTagAttr(C, *this, getBTFTag());
+BTFDeclTagAttr *BTFDeclTagAttr::clone(ASTContext &C) const {
+  auto *A = new (C) BTFDeclTagAttr(C, *this, getBTFDeclTag());
   A->Inherited = Inherited;
   A->IsPackExpansion = IsPackExpansion;
   A->setImplicit(Implicit);
   return A;
 }
 
-void BTFTagAttr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
+void BTFDeclTagAttr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
   bool IsFirstArgument = true; (void)IsFirstArgument;
   unsigned TrailingOmittedArgs = 0; (void)TrailingOmittedArgs;
   switch (getAttributeSpellingListIndex()) {
@@ -4232,27 +4271,27 @@ void BTFTagAttr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) cons
     llvm_unreachable("Unknown attribute spelling!");
     break;
   case 0 : {
-    OS << " __attribute__((btf_tag";
+    OS << " __attribute__((btf_decl_tag";
     DelimitAttributeArgument(OS, IsFirstArgument);
-    OS << "\"" << getBTFTag() << "\"";
+    OS << "\"" << getBTFDeclTag() << "\"";
     if (!IsFirstArgument)
       OS << ")";
     OS << "))";
     break;
   }
   case 1 : {
-    OS << " [[clang::btf_tag";
+    OS << " [[clang::btf_decl_tag";
     DelimitAttributeArgument(OS, IsFirstArgument);
-    OS << "\"" << getBTFTag() << "\"";
+    OS << "\"" << getBTFDeclTag() << "\"";
     if (!IsFirstArgument)
       OS << ")";
     OS << "]]";
     break;
   }
   case 2 : {
-    OS << " [[clang::btf_tag";
+    OS << " [[clang::btf_decl_tag";
     DelimitAttributeArgument(OS, IsFirstArgument);
-    OS << "\"" << getBTFTag() << "\"";
+    OS << "\"" << getBTFDeclTag() << "\"";
     if (!IsFirstArgument)
       OS << ")";
     OS << "]]";
@@ -4261,17 +4300,116 @@ void BTFTagAttr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) cons
 }
 }
 
-const char *BTFTagAttr::getSpelling() const {
+const char *BTFDeclTagAttr::getSpelling() const {
   switch (getAttributeSpellingListIndex()) {
   default:
     llvm_unreachable("Unknown attribute spelling!");
     return "(No spelling)";
   case 0:
-    return "btf_tag";
+    return "btf_decl_tag";
   case 1:
-    return "btf_tag";
+    return "btf_decl_tag";
   case 2:
-    return "btf_tag";
+    return "btf_decl_tag";
+  }
+}
+
+
+// BTFTypeTagAttr implementation
+
+BTFTypeTagAttr *BTFTypeTagAttr::CreateImplicit(ASTContext &Ctx, llvm::StringRef BTFTypeTag, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) BTFTypeTagAttr(Ctx, CommonInfo, BTFTypeTag);
+  A->setImplicit(true);
+  if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
+    A->setAttributeSpellingListIndex(0);
+  return A;
+}
+
+BTFTypeTagAttr *BTFTypeTagAttr::Create(ASTContext &Ctx, llvm::StringRef BTFTypeTag, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) BTFTypeTagAttr(Ctx, CommonInfo, BTFTypeTag);
+  if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
+    A->setAttributeSpellingListIndex(0);
+  return A;
+}
+
+BTFTypeTagAttr *BTFTypeTagAttr::CreateImplicit(ASTContext &Ctx, llvm::StringRef BTFTypeTag, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
+  return CreateImplicit(Ctx, BTFTypeTag, I);
+}
+
+BTFTypeTagAttr *BTFTypeTagAttr::Create(ASTContext &Ctx, llvm::StringRef BTFTypeTag, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
+  return Create(Ctx, BTFTypeTag, I);
+}
+
+BTFTypeTagAttr::BTFTypeTagAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
+              , llvm::StringRef BTFTypeTag
+             )
+  : TypeAttr(Ctx, CommonInfo, attr::BTFTypeTag, false)
+              , bTFTypeTagLength(BTFTypeTag.size()),bTFTypeTag(new (Ctx, 1) char[bTFTypeTagLength])
+  {
+    if (!BTFTypeTag.empty())
+      std::memcpy(bTFTypeTag, BTFTypeTag.data(), bTFTypeTagLength);
+}
+
+
+
+BTFTypeTagAttr *BTFTypeTagAttr::clone(ASTContext &C) const {
+  auto *A = new (C) BTFTypeTagAttr(C, *this, getBTFTypeTag());
+  A->Inherited = Inherited;
+  A->IsPackExpansion = IsPackExpansion;
+  A->setImplicit(Implicit);
+  return A;
+}
+
+void BTFTypeTagAttr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
+  bool IsFirstArgument = true; (void)IsFirstArgument;
+  unsigned TrailingOmittedArgs = 0; (void)TrailingOmittedArgs;
+  switch (getAttributeSpellingListIndex()) {
+  default:
+    llvm_unreachable("Unknown attribute spelling!");
+    break;
+  case 0 : {
+    OS << " __attribute__((btf_type_tag";
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "\"" << getBTFTypeTag() << "\"";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "))";
+    break;
+  }
+  case 1 : {
+    OS << " [[clang::btf_type_tag";
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "\"" << getBTFTypeTag() << "\"";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "]]";
+    break;
+  }
+  case 2 : {
+    OS << " [[clang::btf_type_tag";
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "\"" << getBTFTypeTag() << "\"";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "]]";
+    break;
+  }
+}
+}
+
+const char *BTFTypeTagAttr::getSpelling() const {
+  switch (getAttributeSpellingListIndex()) {
+  default:
+    llvm_unreachable("Unknown attribute spelling!");
+    return "(No spelling)";
+  case 0:
+    return "btf_type_tag";
+  case 1:
+    return "btf_type_tag";
+  case 2:
+    return "btf_type_tag";
   }
 }
 
@@ -6232,18 +6370,16 @@ CXX11NoReturnAttr *CXX11NoReturnAttr::CreateImplicit(ASTContext &Ctx, const Attr
 
 CXX11NoReturnAttr *CXX11NoReturnAttr::Create(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo) {
   auto *A = new (Ctx) CXX11NoReturnAttr(Ctx, CommonInfo);
-  if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
-    A->setAttributeSpellingListIndex(0);
   return A;
 }
 
-CXX11NoReturnAttr *CXX11NoReturnAttr::CreateImplicit(ASTContext &Ctx, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
-  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
+CXX11NoReturnAttr *CXX11NoReturnAttr::CreateImplicit(ASTContext &Ctx, SourceRange Range, AttributeCommonInfo::Syntax Syntax, CXX11NoReturnAttr::Spelling S) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax, S);
   return CreateImplicit(Ctx, I);
 }
 
-CXX11NoReturnAttr *CXX11NoReturnAttr::Create(ASTContext &Ctx, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
-  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
+CXX11NoReturnAttr *CXX11NoReturnAttr::Create(ASTContext &Ctx, SourceRange Range, AttributeCommonInfo::Syntax Syntax, CXX11NoReturnAttr::Spelling S) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax, S);
   return Create(Ctx, I);
 }
 
@@ -6253,6 +6389,14 @@ CXX11NoReturnAttr::CXX11NoReturnAttr(ASTContext &Ctx, const AttributeCommonInfo 
   {
 }
 
+CXX11NoReturnAttr::Spelling CXX11NoReturnAttr::getSemanticSpelling() const {
+  switch (getAttributeSpellingListIndex()) {
+    default: llvm_unreachable("Unknown spelling list index");
+    case 0: return CXX11_noreturn;
+    case 1: return C2x_noreturn;
+    case 2: return C2x_Noreturn;
+  }
+}
 CXX11NoReturnAttr *CXX11NoReturnAttr::clone(ASTContext &C) const {
   auto *A = new (C) CXX11NoReturnAttr(C, *this);
   A->Inherited = Inherited;
@@ -6273,6 +6417,16 @@ void CXX11NoReturnAttr::printPretty(raw_ostream &OS, const PrintingPolicy &Polic
     OS << "]]";
     break;
   }
+  case 1 : {
+    OS << " [[noreturn";
+    OS << "]]";
+    break;
+  }
+  case 2 : {
+    OS << " [[_Noreturn";
+    OS << "]]";
+    break;
+  }
 }
 }
 
@@ -6283,6 +6437,10 @@ const char *CXX11NoReturnAttr::getSpelling() const {
     return "(No spelling)";
   case 0:
     return "noreturn";
+  case 1:
+    return "noreturn";
+  case 2:
+    return "_Noreturn";
   }
 }
 
@@ -8460,6 +8618,135 @@ const char *DestructorAttr::getSpelling() const {
 }
 
 
+// DiagnoseAsBuiltinAttr implementation
+
+DiagnoseAsBuiltinAttr *DiagnoseAsBuiltinAttr::CreateImplicit(ASTContext &Ctx, FunctionDecl * Function, unsigned *ArgIndices, unsigned ArgIndicesSize, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) DiagnoseAsBuiltinAttr(Ctx, CommonInfo, Function, ArgIndices, ArgIndicesSize);
+  A->setImplicit(true);
+  if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
+    A->setAttributeSpellingListIndex(0);
+  return A;
+}
+
+DiagnoseAsBuiltinAttr *DiagnoseAsBuiltinAttr::Create(ASTContext &Ctx, FunctionDecl * Function, unsigned *ArgIndices, unsigned ArgIndicesSize, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) DiagnoseAsBuiltinAttr(Ctx, CommonInfo, Function, ArgIndices, ArgIndicesSize);
+  if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
+    A->setAttributeSpellingListIndex(0);
+  return A;
+}
+
+DiagnoseAsBuiltinAttr *DiagnoseAsBuiltinAttr::CreateImplicit(ASTContext &Ctx, FunctionDecl * Function, unsigned *ArgIndices, unsigned ArgIndicesSize, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
+  return CreateImplicit(Ctx, Function, ArgIndices, ArgIndicesSize, I);
+}
+
+DiagnoseAsBuiltinAttr *DiagnoseAsBuiltinAttr::Create(ASTContext &Ctx, FunctionDecl * Function, unsigned *ArgIndices, unsigned ArgIndicesSize, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
+  return Create(Ctx, Function, ArgIndices, ArgIndicesSize, I);
+}
+
+DiagnoseAsBuiltinAttr::DiagnoseAsBuiltinAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
+              , FunctionDecl * Function
+              , unsigned *ArgIndices, unsigned ArgIndicesSize
+             )
+  : InheritableAttr(Ctx, CommonInfo, attr::DiagnoseAsBuiltin, false, false)
+              , function(Function)
+              , argIndices_Size(ArgIndicesSize), argIndices_(new (Ctx, 16) unsigned[argIndices_Size])
+  {
+  std::copy(ArgIndices, ArgIndices + argIndices_Size, argIndices_);
+}
+
+DiagnoseAsBuiltinAttr::DiagnoseAsBuiltinAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
+              , FunctionDecl * Function
+             )
+  : InheritableAttr(Ctx, CommonInfo, attr::DiagnoseAsBuiltin, false, false)
+              , function(Function)
+              , argIndices_Size(0), argIndices_(nullptr)
+  {
+}
+
+
+
+
+
+DiagnoseAsBuiltinAttr *DiagnoseAsBuiltinAttr::clone(ASTContext &C) const {
+  auto *A = new (C) DiagnoseAsBuiltinAttr(C, *this, function, argIndices_, argIndices_Size);
+  A->Inherited = Inherited;
+  A->IsPackExpansion = IsPackExpansion;
+  A->setImplicit(Implicit);
+  return A;
+}
+
+void DiagnoseAsBuiltinAttr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
+  bool IsFirstArgument = true; (void)IsFirstArgument;
+  unsigned TrailingOmittedArgs = 0; (void)TrailingOmittedArgs;
+  switch (getAttributeSpellingListIndex()) {
+  default:
+    llvm_unreachable("Unknown attribute spelling!");
+    break;
+  case 0 : {
+    OS << " __attribute__((diagnose_as_builtin";
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "" << getFunction()->getNameInfo().getAsString() << "";
+    OS << "";
+  for (const auto &Val : argIndices()) {
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << Val;
+  }
+  OS << "";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "))";
+    break;
+  }
+  case 1 : {
+    OS << " [[clang::diagnose_as_builtin";
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "" << getFunction()->getNameInfo().getAsString() << "";
+    OS << "";
+  for (const auto &Val : argIndices()) {
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << Val;
+  }
+  OS << "";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "]]";
+    break;
+  }
+  case 2 : {
+    OS << " [[clang::diagnose_as_builtin";
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "" << getFunction()->getNameInfo().getAsString() << "";
+    OS << "";
+  for (const auto &Val : argIndices()) {
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << Val;
+  }
+  OS << "";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "]]";
+    break;
+  }
+}
+}
+
+const char *DiagnoseAsBuiltinAttr::getSpelling() const {
+  switch (getAttributeSpellingListIndex()) {
+  default:
+    llvm_unreachable("Unknown attribute spelling!");
+    return "(No spelling)";
+  case 0:
+    return "diagnose_as_builtin";
+  case 1:
+    return "diagnose_as_builtin";
+  case 2:
+    return "diagnose_as_builtin";
+  }
+}
+
+
 // DiagnoseIfAttr implementation
 
 DiagnoseIfAttr *DiagnoseIfAttr::CreateImplicit(ASTContext &Ctx, Expr * Cond, llvm::StringRef Message, DiagnosticType DiagnosticType, bool ArgDependent, NamedDecl * Parent, const AttributeCommonInfo &CommonInfo) {
@@ -9239,6 +9526,147 @@ const char *EnumExtensibilityAttr::getSpelling() const {
     return "enum_extensibility";
   case 2:
     return "enum_extensibility";
+  }
+}
+
+
+// ErrorAttr implementation
+
+ErrorAttr *ErrorAttr::CreateImplicit(ASTContext &Ctx, llvm::StringRef UserDiagnostic, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) ErrorAttr(Ctx, CommonInfo, UserDiagnostic);
+  A->setImplicit(true);
+  if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
+    A->setAttributeSpellingListIndex(0);
+  return A;
+}
+
+ErrorAttr *ErrorAttr::Create(ASTContext &Ctx, llvm::StringRef UserDiagnostic, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) ErrorAttr(Ctx, CommonInfo, UserDiagnostic);
+  return A;
+}
+
+ErrorAttr *ErrorAttr::CreateImplicit(ASTContext &Ctx, llvm::StringRef UserDiagnostic, SourceRange Range, AttributeCommonInfo::Syntax Syntax, ErrorAttr::Spelling S) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax, S);
+  return CreateImplicit(Ctx, UserDiagnostic, I);
+}
+
+ErrorAttr *ErrorAttr::Create(ASTContext &Ctx, llvm::StringRef UserDiagnostic, SourceRange Range, AttributeCommonInfo::Syntax Syntax, ErrorAttr::Spelling S) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax, S);
+  return Create(Ctx, UserDiagnostic, I);
+}
+
+ErrorAttr::ErrorAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
+              , llvm::StringRef UserDiagnostic
+             )
+  : InheritableAttr(Ctx, CommonInfo, attr::Error, false, false)
+              , userDiagnosticLength(UserDiagnostic.size()),userDiagnostic(new (Ctx, 1) char[userDiagnosticLength])
+  {
+    if (!UserDiagnostic.empty())
+      std::memcpy(userDiagnostic, UserDiagnostic.data(), userDiagnosticLength);
+}
+
+ErrorAttr::Spelling ErrorAttr::getSemanticSpelling() const {
+  switch (getAttributeSpellingListIndex()) {
+    default: llvm_unreachable("Unknown spelling list index");
+    case 0: return GNU_error;
+    case 1: return CXX11_gnu_error;
+    case 2: return C2x_gnu_error;
+    case 3: return GNU_warning;
+    case 4: return CXX11_gnu_warning;
+    case 5: return C2x_gnu_warning;
+  }
+}
+
+
+ErrorAttr *ErrorAttr::clone(ASTContext &C) const {
+  auto *A = new (C) ErrorAttr(C, *this, getUserDiagnostic());
+  A->Inherited = Inherited;
+  A->IsPackExpansion = IsPackExpansion;
+  A->setImplicit(Implicit);
+  return A;
+}
+
+void ErrorAttr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
+  bool IsFirstArgument = true; (void)IsFirstArgument;
+  unsigned TrailingOmittedArgs = 0; (void)TrailingOmittedArgs;
+  switch (getAttributeSpellingListIndex()) {
+  default:
+    llvm_unreachable("Unknown attribute spelling!");
+    break;
+  case 0 : {
+    OS << " __attribute__((error";
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "\"" << getUserDiagnostic() << "\"";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "))";
+    break;
+  }
+  case 1 : {
+    OS << " [[gnu::error";
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "\"" << getUserDiagnostic() << "\"";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "]]";
+    break;
+  }
+  case 2 : {
+    OS << " [[gnu::error";
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "\"" << getUserDiagnostic() << "\"";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "]]";
+    break;
+  }
+  case 3 : {
+    OS << " __attribute__((warning";
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "\"" << getUserDiagnostic() << "\"";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "))";
+    break;
+  }
+  case 4 : {
+    OS << " [[gnu::warning";
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "\"" << getUserDiagnostic() << "\"";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "]]";
+    break;
+  }
+  case 5 : {
+    OS << " [[gnu::warning";
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "\"" << getUserDiagnostic() << "\"";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "]]";
+    break;
+  }
+}
+}
+
+const char *ErrorAttr::getSpelling() const {
+  switch (getAttributeSpellingListIndex()) {
+  default:
+    llvm_unreachable("Unknown attribute spelling!");
+    return "(No spelling)";
+  case 0:
+    return "error";
+  case 1:
+    return "error";
+  case 2:
+    return "error";
+  case 3:
+    return "warning";
+  case 4:
+    return "warning";
+  case 5:
+    return "warning";
   }
 }
 
@@ -15261,7 +15689,7 @@ NoMergeAttr *NoMergeAttr::Create(ASTContext &Ctx, SourceRange Range, AttributeCo
 
 NoMergeAttr::NoMergeAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
              )
-  : DeclOrStmtAttr(Ctx, CommonInfo, attr::NoMerge, false, true)
+  : DeclOrStmtAttr(Ctx, CommonInfo, attr::NoMerge, false, false)
   {
 }
 
@@ -16448,38 +16876,40 @@ const char *NotTailCalledAttr::getSpelling() const {
 
 // OMPAllocateDeclAttr implementation
 
-OMPAllocateDeclAttr *OMPAllocateDeclAttr::CreateImplicit(ASTContext &Ctx, AllocatorTypeTy AllocatorType, Expr * Allocator, const AttributeCommonInfo &CommonInfo) {
-  auto *A = new (Ctx) OMPAllocateDeclAttr(Ctx, CommonInfo, AllocatorType, Allocator);
+OMPAllocateDeclAttr *OMPAllocateDeclAttr::CreateImplicit(ASTContext &Ctx, AllocatorTypeTy AllocatorType, Expr * Allocator, Expr * Alignment, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) OMPAllocateDeclAttr(Ctx, CommonInfo, AllocatorType, Allocator, Alignment);
   A->setImplicit(true);
   if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
     A->setAttributeSpellingListIndex(0);
   return A;
 }
 
-OMPAllocateDeclAttr *OMPAllocateDeclAttr::Create(ASTContext &Ctx, AllocatorTypeTy AllocatorType, Expr * Allocator, const AttributeCommonInfo &CommonInfo) {
-  auto *A = new (Ctx) OMPAllocateDeclAttr(Ctx, CommonInfo, AllocatorType, Allocator);
+OMPAllocateDeclAttr *OMPAllocateDeclAttr::Create(ASTContext &Ctx, AllocatorTypeTy AllocatorType, Expr * Allocator, Expr * Alignment, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) OMPAllocateDeclAttr(Ctx, CommonInfo, AllocatorType, Allocator, Alignment);
   if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
     A->setAttributeSpellingListIndex(0);
   return A;
 }
 
-OMPAllocateDeclAttr *OMPAllocateDeclAttr::CreateImplicit(ASTContext &Ctx, AllocatorTypeTy AllocatorType, Expr * Allocator, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+OMPAllocateDeclAttr *OMPAllocateDeclAttr::CreateImplicit(ASTContext &Ctx, AllocatorTypeTy AllocatorType, Expr * Allocator, Expr * Alignment, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
   AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
-  return CreateImplicit(Ctx, AllocatorType, Allocator, I);
+  return CreateImplicit(Ctx, AllocatorType, Allocator, Alignment, I);
 }
 
-OMPAllocateDeclAttr *OMPAllocateDeclAttr::Create(ASTContext &Ctx, AllocatorTypeTy AllocatorType, Expr * Allocator, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+OMPAllocateDeclAttr *OMPAllocateDeclAttr::Create(ASTContext &Ctx, AllocatorTypeTy AllocatorType, Expr * Allocator, Expr * Alignment, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
   AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
-  return Create(Ctx, AllocatorType, Allocator, I);
+  return Create(Ctx, AllocatorType, Allocator, Alignment, I);
 }
 
 OMPAllocateDeclAttr::OMPAllocateDeclAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
               , AllocatorTypeTy AllocatorType
               , Expr * Allocator
+              , Expr * Alignment
              )
   : InheritableAttr(Ctx, CommonInfo, attr::OMPAllocateDecl, false, false)
               , allocatorType(AllocatorType)
               , allocator(Allocator)
+              , alignment(Alignment)
   {
 }
 
@@ -16522,8 +16952,10 @@ const char *OMPAllocateDeclAttr::ConvertAllocatorTypeTyToStr(AllocatorTypeTy Val
 }
 
 
+
+
 OMPAllocateDeclAttr *OMPAllocateDeclAttr::clone(ASTContext &C) const {
-  auto *A = new (C) OMPAllocateDeclAttr(C, *this, allocatorType, allocator);
+  auto *A = new (C) OMPAllocateDeclAttr(C, *this, allocatorType, allocator, alignment);
   A->Inherited = Inherited;
   A->IsPackExpansion = IsPackExpansion;
   A->setImplicit(Implicit);
@@ -16784,39 +17216,43 @@ const char *OMPDeclareSimdDeclAttr::getSpelling() const {
 
 // OMPDeclareTargetDeclAttr implementation
 
-OMPDeclareTargetDeclAttr *OMPDeclareTargetDeclAttr::CreateImplicit(ASTContext &Ctx, MapTypeTy MapType, DevTypeTy DevType, unsigned Level, const AttributeCommonInfo &CommonInfo) {
-  auto *A = new (Ctx) OMPDeclareTargetDeclAttr(Ctx, CommonInfo, MapType, DevType, Level);
+OMPDeclareTargetDeclAttr *OMPDeclareTargetDeclAttr::CreateImplicit(ASTContext &Ctx, MapTypeTy MapType, DevTypeTy DevType, Expr * IndirectExpr, bool Indirect, unsigned Level, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) OMPDeclareTargetDeclAttr(Ctx, CommonInfo, MapType, DevType, IndirectExpr, Indirect, Level);
   A->setImplicit(true);
   if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
     A->setAttributeSpellingListIndex(0);
   return A;
 }
 
-OMPDeclareTargetDeclAttr *OMPDeclareTargetDeclAttr::Create(ASTContext &Ctx, MapTypeTy MapType, DevTypeTy DevType, unsigned Level, const AttributeCommonInfo &CommonInfo) {
-  auto *A = new (Ctx) OMPDeclareTargetDeclAttr(Ctx, CommonInfo, MapType, DevType, Level);
+OMPDeclareTargetDeclAttr *OMPDeclareTargetDeclAttr::Create(ASTContext &Ctx, MapTypeTy MapType, DevTypeTy DevType, Expr * IndirectExpr, bool Indirect, unsigned Level, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) OMPDeclareTargetDeclAttr(Ctx, CommonInfo, MapType, DevType, IndirectExpr, Indirect, Level);
   if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
     A->setAttributeSpellingListIndex(0);
   return A;
 }
 
-OMPDeclareTargetDeclAttr *OMPDeclareTargetDeclAttr::CreateImplicit(ASTContext &Ctx, MapTypeTy MapType, DevTypeTy DevType, unsigned Level, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+OMPDeclareTargetDeclAttr *OMPDeclareTargetDeclAttr::CreateImplicit(ASTContext &Ctx, MapTypeTy MapType, DevTypeTy DevType, Expr * IndirectExpr, bool Indirect, unsigned Level, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
   AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
-  return CreateImplicit(Ctx, MapType, DevType, Level, I);
+  return CreateImplicit(Ctx, MapType, DevType, IndirectExpr, Indirect, Level, I);
 }
 
-OMPDeclareTargetDeclAttr *OMPDeclareTargetDeclAttr::Create(ASTContext &Ctx, MapTypeTy MapType, DevTypeTy DevType, unsigned Level, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+OMPDeclareTargetDeclAttr *OMPDeclareTargetDeclAttr::Create(ASTContext &Ctx, MapTypeTy MapType, DevTypeTy DevType, Expr * IndirectExpr, bool Indirect, unsigned Level, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
   AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
-  return Create(Ctx, MapType, DevType, Level, I);
+  return Create(Ctx, MapType, DevType, IndirectExpr, Indirect, Level, I);
 }
 
 OMPDeclareTargetDeclAttr::OMPDeclareTargetDeclAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
               , MapTypeTy MapType
               , DevTypeTy DevType
+              , Expr * IndirectExpr
+              , bool Indirect
               , unsigned Level
              )
   : InheritableAttr(Ctx, CommonInfo, attr::OMPDeclareTargetDecl, false, false)
               , mapType(MapType)
               , devType(DevType)
+              , indirectExpr(IndirectExpr)
+              , indirect(Indirect)
               , level(Level)
   {
 }
@@ -16867,8 +17303,12 @@ const char *OMPDeclareTargetDeclAttr::ConvertDevTypeTyToStr(DevTypeTy Val) {
 }
 
 
+
+
+
+
 OMPDeclareTargetDeclAttr *OMPDeclareTargetDeclAttr::clone(ASTContext &C) const {
-  auto *A = new (C) OMPDeclareTargetDeclAttr(C, *this, mapType, devType, level);
+  auto *A = new (C) OMPDeclareTargetDeclAttr(C, *this, mapType, devType, indirectExpr, indirect, level);
   A->Inherited = Inherited;
   A->IsPackExpansion = IsPackExpansion;
   A->setImplicit(Implicit);
@@ -16903,29 +17343,48 @@ const char *OMPDeclareTargetDeclAttr::getSpelling() const {
 
 // OMPDeclareVariantAttr implementation
 
-OMPDeclareVariantAttr *OMPDeclareVariantAttr::CreateImplicit(ASTContext &Ctx, Expr * VariantFuncRef, OMPTraitInfo * TraitInfos, const AttributeCommonInfo &CommonInfo) {
-  auto *A = new (Ctx) OMPDeclareVariantAttr(Ctx, CommonInfo, VariantFuncRef, TraitInfos);
+OMPDeclareVariantAttr *OMPDeclareVariantAttr::CreateImplicit(ASTContext &Ctx, Expr * VariantFuncRef, OMPTraitInfo * TraitInfos, Expr * *AdjustArgsNothing, unsigned AdjustArgsNothingSize, Expr * *AdjustArgsNeedDevicePtr, unsigned AdjustArgsNeedDevicePtrSize, InteropType *AppendArgs, unsigned AppendArgsSize, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) OMPDeclareVariantAttr(Ctx, CommonInfo, VariantFuncRef, TraitInfos, AdjustArgsNothing, AdjustArgsNothingSize, AdjustArgsNeedDevicePtr, AdjustArgsNeedDevicePtrSize, AppendArgs, AppendArgsSize);
   A->setImplicit(true);
   if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
     A->setAttributeSpellingListIndex(0);
   return A;
 }
 
-OMPDeclareVariantAttr *OMPDeclareVariantAttr::Create(ASTContext &Ctx, Expr * VariantFuncRef, OMPTraitInfo * TraitInfos, const AttributeCommonInfo &CommonInfo) {
-  auto *A = new (Ctx) OMPDeclareVariantAttr(Ctx, CommonInfo, VariantFuncRef, TraitInfos);
+OMPDeclareVariantAttr *OMPDeclareVariantAttr::Create(ASTContext &Ctx, Expr * VariantFuncRef, OMPTraitInfo * TraitInfos, Expr * *AdjustArgsNothing, unsigned AdjustArgsNothingSize, Expr * *AdjustArgsNeedDevicePtr, unsigned AdjustArgsNeedDevicePtrSize, InteropType *AppendArgs, unsigned AppendArgsSize, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) OMPDeclareVariantAttr(Ctx, CommonInfo, VariantFuncRef, TraitInfos, AdjustArgsNothing, AdjustArgsNothingSize, AdjustArgsNeedDevicePtr, AdjustArgsNeedDevicePtrSize, AppendArgs, AppendArgsSize);
   if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
     A->setAttributeSpellingListIndex(0);
   return A;
 }
 
-OMPDeclareVariantAttr *OMPDeclareVariantAttr::CreateImplicit(ASTContext &Ctx, Expr * VariantFuncRef, OMPTraitInfo * TraitInfos, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+OMPDeclareVariantAttr *OMPDeclareVariantAttr::CreateImplicit(ASTContext &Ctx, Expr * VariantFuncRef, OMPTraitInfo * TraitInfos, Expr * *AdjustArgsNothing, unsigned AdjustArgsNothingSize, Expr * *AdjustArgsNeedDevicePtr, unsigned AdjustArgsNeedDevicePtrSize, InteropType *AppendArgs, unsigned AppendArgsSize, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
   AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
-  return CreateImplicit(Ctx, VariantFuncRef, TraitInfos, I);
+  return CreateImplicit(Ctx, VariantFuncRef, TraitInfos, AdjustArgsNothing, AdjustArgsNothingSize, AdjustArgsNeedDevicePtr, AdjustArgsNeedDevicePtrSize, AppendArgs, AppendArgsSize, I);
 }
 
-OMPDeclareVariantAttr *OMPDeclareVariantAttr::Create(ASTContext &Ctx, Expr * VariantFuncRef, OMPTraitInfo * TraitInfos, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+OMPDeclareVariantAttr *OMPDeclareVariantAttr::Create(ASTContext &Ctx, Expr * VariantFuncRef, OMPTraitInfo * TraitInfos, Expr * *AdjustArgsNothing, unsigned AdjustArgsNothingSize, Expr * *AdjustArgsNeedDevicePtr, unsigned AdjustArgsNeedDevicePtrSize, InteropType *AppendArgs, unsigned AppendArgsSize, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
   AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
-  return Create(Ctx, VariantFuncRef, TraitInfos, I);
+  return Create(Ctx, VariantFuncRef, TraitInfos, AdjustArgsNothing, AdjustArgsNothingSize, AdjustArgsNeedDevicePtr, AdjustArgsNeedDevicePtrSize, AppendArgs, AppendArgsSize, I);
+}
+
+OMPDeclareVariantAttr::OMPDeclareVariantAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
+              , Expr * VariantFuncRef
+              , OMPTraitInfo * TraitInfos
+              , Expr * *AdjustArgsNothing, unsigned AdjustArgsNothingSize
+              , Expr * *AdjustArgsNeedDevicePtr, unsigned AdjustArgsNeedDevicePtrSize
+              , InteropType *AppendArgs, unsigned AppendArgsSize
+             )
+  : InheritableAttr(Ctx, CommonInfo, attr::OMPDeclareVariant, false, true)
+              , variantFuncRef(VariantFuncRef)
+              , traitInfos(TraitInfos)
+              , adjustArgsNothing_Size(AdjustArgsNothingSize), adjustArgsNothing_(new (Ctx, 16) Expr *[adjustArgsNothing_Size])
+              , adjustArgsNeedDevicePtr_Size(AdjustArgsNeedDevicePtrSize), adjustArgsNeedDevicePtr_(new (Ctx, 16) Expr *[adjustArgsNeedDevicePtr_Size])
+              , appendArgs_Size(AppendArgsSize), appendArgs_(new (Ctx, 16) InteropType[appendArgs_Size])
+  {
+  std::copy(AdjustArgsNothing, AdjustArgsNothing + adjustArgsNothing_Size, adjustArgsNothing_);
+  std::copy(AdjustArgsNeedDevicePtr, AdjustArgsNeedDevicePtr + adjustArgsNeedDevicePtr_Size, adjustArgsNeedDevicePtr_);
+  std::copy(AppendArgs, AppendArgs + appendArgs_Size, appendArgs_);
 }
 
 OMPDeclareVariantAttr::OMPDeclareVariantAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
@@ -16935,6 +17394,9 @@ OMPDeclareVariantAttr::OMPDeclareVariantAttr(ASTContext &Ctx, const AttributeCom
   : InheritableAttr(Ctx, CommonInfo, attr::OMPDeclareVariant, false, true)
               , variantFuncRef(VariantFuncRef)
               , traitInfos(TraitInfos)
+              , adjustArgsNothing_Size(0), adjustArgsNothing_(nullptr)
+              , adjustArgsNeedDevicePtr_Size(0), adjustArgsNeedDevicePtr_(nullptr)
+              , appendArgs_Size(0), appendArgs_(nullptr)
   {
 }
 
@@ -16942,8 +17404,35 @@ OMPDeclareVariantAttr::OMPDeclareVariantAttr(ASTContext &Ctx, const AttributeCom
 
 
 
+
+
+
+
+
+
+bool OMPDeclareVariantAttr::ConvertStrToInteropType(StringRef Val, InteropType &Out) {
+  Optional<InteropType> R = llvm::StringSwitch<Optional<InteropType>>(Val)
+    .Case("target", OMPDeclareVariantAttr::Target)
+    .Case("targetsync", OMPDeclareVariantAttr::TargetSync)
+    .Case("target,targetsync", OMPDeclareVariantAttr::Target_TargetSync)
+    .Default(Optional<InteropType>());
+  if (R) {
+    Out = *R;
+      return true;
+    }
+  return false;
+}
+
+const char *OMPDeclareVariantAttr::ConvertInteropTypeToStr(InteropType Val) {
+  switch(Val) {
+  case OMPDeclareVariantAttr::Target: return "target";
+  case OMPDeclareVariantAttr::TargetSync: return "targetsync";
+  case OMPDeclareVariantAttr::Target_TargetSync: return "target,targetsync";
+  }
+  llvm_unreachable("No enumerator with that value");
+}
 OMPDeclareVariantAttr *OMPDeclareVariantAttr::clone(ASTContext &C) const {
-  auto *A = new (C) OMPDeclareVariantAttr(C, *this, variantFuncRef, traitInfos);
+  auto *A = new (C) OMPDeclareVariantAttr(C, *this, variantFuncRef, traitInfos, adjustArgsNothing_, adjustArgsNothing_Size, adjustArgsNeedDevicePtr_, adjustArgsNeedDevicePtr_Size, appendArgs_, appendArgs_Size);
   A->Inherited = Inherited;
   A->IsPackExpansion = IsPackExpansion;
   A->setImplicit(Implicit);
@@ -24708,6 +25197,87 @@ const char *SYCLKernelAttr::getSpelling() const {
 }
 
 
+// SYCLSpecialClassAttr implementation
+
+SYCLSpecialClassAttr *SYCLSpecialClassAttr::CreateImplicit(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) SYCLSpecialClassAttr(Ctx, CommonInfo);
+  A->setImplicit(true);
+  if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
+    A->setAttributeSpellingListIndex(0);
+  return A;
+}
+
+SYCLSpecialClassAttr *SYCLSpecialClassAttr::Create(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) SYCLSpecialClassAttr(Ctx, CommonInfo);
+  if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
+    A->setAttributeSpellingListIndex(0);
+  return A;
+}
+
+SYCLSpecialClassAttr *SYCLSpecialClassAttr::CreateImplicit(ASTContext &Ctx, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
+  return CreateImplicit(Ctx, I);
+}
+
+SYCLSpecialClassAttr *SYCLSpecialClassAttr::Create(ASTContext &Ctx, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
+  return Create(Ctx, I);
+}
+
+SYCLSpecialClassAttr::SYCLSpecialClassAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
+             )
+  : InheritableAttr(Ctx, CommonInfo, attr::SYCLSpecialClass, false, false)
+  {
+}
+
+SYCLSpecialClassAttr *SYCLSpecialClassAttr::clone(ASTContext &C) const {
+  auto *A = new (C) SYCLSpecialClassAttr(C, *this);
+  A->Inherited = Inherited;
+  A->IsPackExpansion = IsPackExpansion;
+  A->setImplicit(Implicit);
+  return A;
+}
+
+void SYCLSpecialClassAttr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
+  bool IsFirstArgument = true; (void)IsFirstArgument;
+  unsigned TrailingOmittedArgs = 0; (void)TrailingOmittedArgs;
+  switch (getAttributeSpellingListIndex()) {
+  default:
+    llvm_unreachable("Unknown attribute spelling!");
+    break;
+  case 0 : {
+    OS << " __attribute__((sycl_special_class";
+    OS << "))";
+    break;
+  }
+  case 1 : {
+    OS << " [[clang::sycl_special_class";
+    OS << "]]";
+    break;
+  }
+  case 2 : {
+    OS << " [[clang::sycl_special_class";
+    OS << "]]";
+    break;
+  }
+}
+}
+
+const char *SYCLSpecialClassAttr::getSpelling() const {
+  switch (getAttributeSpellingListIndex()) {
+  default:
+    llvm_unreachable("Unknown attribute spelling!");
+    return "(No spelling)";
+  case 0:
+    return "sycl_special_class";
+  case 1:
+    return "sycl_special_class";
+  case 2:
+    return "sycl_special_class";
+  }
+}
+
+
 // ScopedLockableAttr implementation
 
 ScopedLockableAttr *ScopedLockableAttr::CreateImplicit(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo) {
@@ -27466,6 +28036,131 @@ const char *TargetAttr::getSpelling() const {
     return "target";
   case 2:
     return "target";
+  }
+}
+
+
+// TargetClonesAttr implementation
+
+TargetClonesAttr *TargetClonesAttr::CreateImplicit(ASTContext &Ctx, StringRef *FeaturesStrs, unsigned FeaturesStrsSize, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) TargetClonesAttr(Ctx, CommonInfo, FeaturesStrs, FeaturesStrsSize);
+  A->setImplicit(true);
+  if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
+    A->setAttributeSpellingListIndex(0);
+  return A;
+}
+
+TargetClonesAttr *TargetClonesAttr::Create(ASTContext &Ctx, StringRef *FeaturesStrs, unsigned FeaturesStrsSize, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) TargetClonesAttr(Ctx, CommonInfo, FeaturesStrs, FeaturesStrsSize);
+  if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
+    A->setAttributeSpellingListIndex(0);
+  return A;
+}
+
+TargetClonesAttr *TargetClonesAttr::CreateImplicit(ASTContext &Ctx, StringRef *FeaturesStrs, unsigned FeaturesStrsSize, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
+  return CreateImplicit(Ctx, FeaturesStrs, FeaturesStrsSize, I);
+}
+
+TargetClonesAttr *TargetClonesAttr::Create(ASTContext &Ctx, StringRef *FeaturesStrs, unsigned FeaturesStrsSize, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
+  return Create(Ctx, FeaturesStrs, FeaturesStrsSize, I);
+}
+
+TargetClonesAttr::TargetClonesAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
+              , StringRef *FeaturesStrs, unsigned FeaturesStrsSize
+             )
+  : InheritableAttr(Ctx, CommonInfo, attr::TargetClones, false, false)
+              , featuresStrs_Size(FeaturesStrsSize), featuresStrs_(new (Ctx, 16) StringRef[featuresStrs_Size])
+  {
+  for (size_t I = 0, E = featuresStrs_Size; I != E;
+       ++I) {
+    StringRef Ref = FeaturesStrs[I];
+    if (!Ref.empty()) {
+      char *Mem = new (Ctx, 1) char[Ref.size()];
+      std::memcpy(Mem, Ref.data(), Ref.size());
+      featuresStrs_[I] = StringRef(Mem, Ref.size());
+    }
+  }
+}
+
+TargetClonesAttr::TargetClonesAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
+             )
+  : InheritableAttr(Ctx, CommonInfo, attr::TargetClones, false, false)
+              , featuresStrs_Size(0), featuresStrs_(nullptr)
+  {
+}
+
+
+
+TargetClonesAttr *TargetClonesAttr::clone(ASTContext &C) const {
+  auto *A = new (C) TargetClonesAttr(C, *this, featuresStrs_, featuresStrs_Size);
+  A->Inherited = Inherited;
+  A->IsPackExpansion = IsPackExpansion;
+  A->setImplicit(Implicit);
+  return A;
+}
+
+void TargetClonesAttr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
+  bool IsFirstArgument = true; (void)IsFirstArgument;
+  unsigned TrailingOmittedArgs = 0; (void)TrailingOmittedArgs;
+  switch (getAttributeSpellingListIndex()) {
+  default:
+    llvm_unreachable("Unknown attribute spelling!");
+    break;
+  case 0 : {
+    OS << " __attribute__((target_clones";
+    OS << "";
+  for (const auto &Val : featuresStrs()) {
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "\"" << Val << "\"";
+  }
+  OS << "";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "))";
+    break;
+  }
+  case 1 : {
+    OS << " [[gnu::target_clones";
+    OS << "";
+  for (const auto &Val : featuresStrs()) {
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "\"" << Val << "\"";
+  }
+  OS << "";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "]]";
+    break;
+  }
+  case 2 : {
+    OS << " [[gnu::target_clones";
+    OS << "";
+  for (const auto &Val : featuresStrs()) {
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "\"" << Val << "\"";
+  }
+  OS << "";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "]]";
+    break;
+  }
+}
+}
+
+const char *TargetClonesAttr::getSpelling() const {
+  switch (getAttributeSpellingListIndex()) {
+  default:
+    llvm_unreachable("Unknown attribute spelling!");
+    return "(No spelling)";
+  case 0:
+    return "target_clones";
+  case 1:
+    return "target_clones";
+  case 2:
+    return "target_clones";
   }
 }
 
@@ -30938,6 +31633,136 @@ const char *XRayLogArgsAttr::getSpelling() const {
   }
 }
 
+
+// ZeroCallUsedRegsAttr implementation
+
+ZeroCallUsedRegsAttr *ZeroCallUsedRegsAttr::CreateImplicit(ASTContext &Ctx, ZeroCallUsedRegsKind ZeroCallUsedRegs, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) ZeroCallUsedRegsAttr(Ctx, CommonInfo, ZeroCallUsedRegs);
+  A->setImplicit(true);
+  if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
+    A->setAttributeSpellingListIndex(0);
+  return A;
+}
+
+ZeroCallUsedRegsAttr *ZeroCallUsedRegsAttr::Create(ASTContext &Ctx, ZeroCallUsedRegsKind ZeroCallUsedRegs, const AttributeCommonInfo &CommonInfo) {
+  auto *A = new (Ctx) ZeroCallUsedRegsAttr(Ctx, CommonInfo, ZeroCallUsedRegs);
+  if (!A->isAttributeSpellingListCalculated() && !A->getAttrName())
+    A->setAttributeSpellingListIndex(0);
+  return A;
+}
+
+ZeroCallUsedRegsAttr *ZeroCallUsedRegsAttr::CreateImplicit(ASTContext &Ctx, ZeroCallUsedRegsKind ZeroCallUsedRegs, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
+  return CreateImplicit(Ctx, ZeroCallUsedRegs, I);
+}
+
+ZeroCallUsedRegsAttr *ZeroCallUsedRegsAttr::Create(ASTContext &Ctx, ZeroCallUsedRegsKind ZeroCallUsedRegs, SourceRange Range, AttributeCommonInfo::Syntax Syntax) {
+  AttributeCommonInfo I(Range, NoSemaHandlerAttribute, Syntax);
+  return Create(Ctx, ZeroCallUsedRegs, I);
+}
+
+ZeroCallUsedRegsAttr::ZeroCallUsedRegsAttr(ASTContext &Ctx, const AttributeCommonInfo &CommonInfo
+              , ZeroCallUsedRegsKind ZeroCallUsedRegs
+             )
+  : InheritableAttr(Ctx, CommonInfo, attr::ZeroCallUsedRegs, false, false)
+              , zeroCallUsedRegs(ZeroCallUsedRegs)
+  {
+}
+
+
+
+bool ZeroCallUsedRegsAttr::ConvertStrToZeroCallUsedRegsKind(StringRef Val, ZeroCallUsedRegsKind &Out) {
+  Optional<ZeroCallUsedRegsKind> R = llvm::StringSwitch<Optional<ZeroCallUsedRegsKind>>(Val)
+    .Case("skip", ZeroCallUsedRegsAttr::Skip)
+    .Case("used-gpr-arg", ZeroCallUsedRegsAttr::UsedGPRArg)
+    .Case("used-gpr", ZeroCallUsedRegsAttr::UsedGPR)
+    .Case("used-arg", ZeroCallUsedRegsAttr::UsedArg)
+    .Case("used", ZeroCallUsedRegsAttr::Used)
+    .Case("all-gpr-arg", ZeroCallUsedRegsAttr::AllGPRArg)
+    .Case("all-gpr", ZeroCallUsedRegsAttr::AllGPR)
+    .Case("all-arg", ZeroCallUsedRegsAttr::AllArg)
+    .Case("all", ZeroCallUsedRegsAttr::All)
+    .Default(Optional<ZeroCallUsedRegsKind>());
+  if (R) {
+    Out = *R;
+      return true;
+    }
+  return false;
+}
+
+const char *ZeroCallUsedRegsAttr::ConvertZeroCallUsedRegsKindToStr(ZeroCallUsedRegsKind Val) {
+  switch(Val) {
+  case ZeroCallUsedRegsAttr::Skip: return "skip";
+  case ZeroCallUsedRegsAttr::UsedGPRArg: return "used-gpr-arg";
+  case ZeroCallUsedRegsAttr::UsedGPR: return "used-gpr";
+  case ZeroCallUsedRegsAttr::UsedArg: return "used-arg";
+  case ZeroCallUsedRegsAttr::Used: return "used";
+  case ZeroCallUsedRegsAttr::AllGPRArg: return "all-gpr-arg";
+  case ZeroCallUsedRegsAttr::AllGPR: return "all-gpr";
+  case ZeroCallUsedRegsAttr::AllArg: return "all-arg";
+  case ZeroCallUsedRegsAttr::All: return "all";
+  }
+  llvm_unreachable("No enumerator with that value");
+}
+ZeroCallUsedRegsAttr *ZeroCallUsedRegsAttr::clone(ASTContext &C) const {
+  auto *A = new (C) ZeroCallUsedRegsAttr(C, *this, zeroCallUsedRegs);
+  A->Inherited = Inherited;
+  A->IsPackExpansion = IsPackExpansion;
+  A->setImplicit(Implicit);
+  return A;
+}
+
+void ZeroCallUsedRegsAttr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
+  bool IsFirstArgument = true; (void)IsFirstArgument;
+  unsigned TrailingOmittedArgs = 0; (void)TrailingOmittedArgs;
+  switch (getAttributeSpellingListIndex()) {
+  default:
+    llvm_unreachable("Unknown attribute spelling!");
+    break;
+  case 0 : {
+    OS << " __attribute__((zero_call_used_regs";
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "\"" << ZeroCallUsedRegsAttr::ConvertZeroCallUsedRegsKindToStr(getZeroCallUsedRegs()) << "\"";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "))";
+    break;
+  }
+  case 1 : {
+    OS << " [[gnu::zero_call_used_regs";
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "\"" << ZeroCallUsedRegsAttr::ConvertZeroCallUsedRegsKindToStr(getZeroCallUsedRegs()) << "\"";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "]]";
+    break;
+  }
+  case 2 : {
+    OS << " [[gnu::zero_call_used_regs";
+    DelimitAttributeArgument(OS, IsFirstArgument);
+    OS << "\"" << ZeroCallUsedRegsAttr::ConvertZeroCallUsedRegsKindToStr(getZeroCallUsedRegs()) << "\"";
+    if (!IsFirstArgument)
+      OS << ")";
+    OS << "]]";
+    break;
+  }
+}
+}
+
+const char *ZeroCallUsedRegsAttr::getSpelling() const {
+  switch (getAttributeSpellingListIndex()) {
+  default:
+    llvm_unreachable("Unknown attribute spelling!");
+    return "(No spelling)";
+  case 0:
+    return "zero_call_used_regs";
+  case 1:
+    return "zero_call_used_regs";
+  case 2:
+    return "zero_call_used_regs";
+  }
+}
+
 const char *Attr::getSpelling() const {
   switch (getKind()) {
   case attr::AArch64VectorPcs:
@@ -31022,8 +31847,10 @@ const char *Attr::getSpelling() const {
     return cast<AvailabilityAttr>(this)->getSpelling();
   case attr::BPFPreserveAccessIndex:
     return cast<BPFPreserveAccessIndexAttr>(this)->getSpelling();
-  case attr::BTFTag:
-    return cast<BTFTagAttr>(this)->getSpelling();
+  case attr::BTFDeclTag:
+    return cast<BTFDeclTagAttr>(this)->getSpelling();
+  case attr::BTFTypeTag:
+    return cast<BTFTypeTagAttr>(this)->getSpelling();
   case attr::Blocks:
     return cast<BlocksAttr>(this)->getSpelling();
   case attr::Builtin:
@@ -31122,6 +31949,8 @@ const char *Attr::getSpelling() const {
     return cast<DeprecatedAttr>(this)->getSpelling();
   case attr::Destructor:
     return cast<DestructorAttr>(this)->getSpelling();
+  case attr::DiagnoseAsBuiltin:
+    return cast<DiagnoseAsBuiltinAttr>(this)->getSpelling();
   case attr::DiagnoseIf:
     return cast<DiagnoseIfAttr>(this)->getSpelling();
   case attr::DisableSanitizerInstrumentation:
@@ -31138,6 +31967,8 @@ const char *Attr::getSpelling() const {
     return cast<EnforceTCBLeafAttr>(this)->getSpelling();
   case attr::EnumExtensibility:
     return cast<EnumExtensibilityAttr>(this)->getSpelling();
+  case attr::Error:
+    return cast<ErrorAttr>(this)->getSpelling();
   case attr::ExcludeFromExplicitInstantiation:
     return cast<ExcludeFromExplicitInstantiationAttr>(this)->getSpelling();
   case attr::ExclusiveTrylockFunction:
@@ -31490,6 +32321,8 @@ const char *Attr::getSpelling() const {
     return cast<SPtrAttr>(this)->getSpelling();
   case attr::SYCLKernel:
     return cast<SYCLKernelAttr>(this)->getSpelling();
+  case attr::SYCLSpecialClass:
+    return cast<SYCLSpecialClassAttr>(this)->getSpelling();
   case attr::ScopedLockable:
     return cast<ScopedLockableAttr>(this)->getSpelling();
   case attr::Section:
@@ -31552,6 +32385,8 @@ const char *Attr::getSpelling() const {
     return cast<TLSModelAttr>(this)->getSpelling();
   case attr::Target:
     return cast<TargetAttr>(this)->getSpelling();
+  case attr::TargetClones:
+    return cast<TargetClonesAttr>(this)->getSpelling();
   case attr::TestTypestate:
     return cast<TestTypestateAttr>(this)->getSpelling();
   case attr::ThisCall:
@@ -31626,6 +32461,8 @@ const char *Attr::getSpelling() const {
     return cast<XRayInstrumentAttr>(this)->getSpelling();
   case attr::XRayLogArgs:
     return cast<XRayLogArgsAttr>(this)->getSpelling();
+  case attr::ZeroCallUsedRegs:
+    return cast<ZeroCallUsedRegsAttr>(this)->getSpelling();
   }
   llvm_unreachable("Unexpected attribute kind!");
 }
@@ -31714,8 +32551,10 @@ Attr *Attr::clone(ASTContext &C) const {
     return cast<AvailabilityAttr>(this)->clone(C);
   case attr::BPFPreserveAccessIndex:
     return cast<BPFPreserveAccessIndexAttr>(this)->clone(C);
-  case attr::BTFTag:
-    return cast<BTFTagAttr>(this)->clone(C);
+  case attr::BTFDeclTag:
+    return cast<BTFDeclTagAttr>(this)->clone(C);
+  case attr::BTFTypeTag:
+    return cast<BTFTypeTagAttr>(this)->clone(C);
   case attr::Blocks:
     return cast<BlocksAttr>(this)->clone(C);
   case attr::Builtin:
@@ -31814,6 +32653,8 @@ Attr *Attr::clone(ASTContext &C) const {
     return cast<DeprecatedAttr>(this)->clone(C);
   case attr::Destructor:
     return cast<DestructorAttr>(this)->clone(C);
+  case attr::DiagnoseAsBuiltin:
+    return cast<DiagnoseAsBuiltinAttr>(this)->clone(C);
   case attr::DiagnoseIf:
     return cast<DiagnoseIfAttr>(this)->clone(C);
   case attr::DisableSanitizerInstrumentation:
@@ -31830,6 +32671,8 @@ Attr *Attr::clone(ASTContext &C) const {
     return cast<EnforceTCBLeafAttr>(this)->clone(C);
   case attr::EnumExtensibility:
     return cast<EnumExtensibilityAttr>(this)->clone(C);
+  case attr::Error:
+    return cast<ErrorAttr>(this)->clone(C);
   case attr::ExcludeFromExplicitInstantiation:
     return cast<ExcludeFromExplicitInstantiationAttr>(this)->clone(C);
   case attr::ExclusiveTrylockFunction:
@@ -32182,6 +33025,8 @@ Attr *Attr::clone(ASTContext &C) const {
     return cast<SPtrAttr>(this)->clone(C);
   case attr::SYCLKernel:
     return cast<SYCLKernelAttr>(this)->clone(C);
+  case attr::SYCLSpecialClass:
+    return cast<SYCLSpecialClassAttr>(this)->clone(C);
   case attr::ScopedLockable:
     return cast<ScopedLockableAttr>(this)->clone(C);
   case attr::Section:
@@ -32244,6 +33089,8 @@ Attr *Attr::clone(ASTContext &C) const {
     return cast<TLSModelAttr>(this)->clone(C);
   case attr::Target:
     return cast<TargetAttr>(this)->clone(C);
+  case attr::TargetClones:
+    return cast<TargetClonesAttr>(this)->clone(C);
   case attr::TestTypestate:
     return cast<TestTypestateAttr>(this)->clone(C);
   case attr::ThisCall:
@@ -32318,6 +33165,8 @@ Attr *Attr::clone(ASTContext &C) const {
     return cast<XRayInstrumentAttr>(this)->clone(C);
   case attr::XRayLogArgs:
     return cast<XRayLogArgsAttr>(this)->clone(C);
+  case attr::ZeroCallUsedRegs:
+    return cast<ZeroCallUsedRegsAttr>(this)->clone(C);
   }
   llvm_unreachable("Unexpected attribute kind!");
 }
@@ -32406,8 +33255,10 @@ void Attr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
     return cast<AvailabilityAttr>(this)->printPretty(OS, Policy);
   case attr::BPFPreserveAccessIndex:
     return cast<BPFPreserveAccessIndexAttr>(this)->printPretty(OS, Policy);
-  case attr::BTFTag:
-    return cast<BTFTagAttr>(this)->printPretty(OS, Policy);
+  case attr::BTFDeclTag:
+    return cast<BTFDeclTagAttr>(this)->printPretty(OS, Policy);
+  case attr::BTFTypeTag:
+    return cast<BTFTypeTagAttr>(this)->printPretty(OS, Policy);
   case attr::Blocks:
     return cast<BlocksAttr>(this)->printPretty(OS, Policy);
   case attr::Builtin:
@@ -32506,6 +33357,8 @@ void Attr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
     return cast<DeprecatedAttr>(this)->printPretty(OS, Policy);
   case attr::Destructor:
     return cast<DestructorAttr>(this)->printPretty(OS, Policy);
+  case attr::DiagnoseAsBuiltin:
+    return cast<DiagnoseAsBuiltinAttr>(this)->printPretty(OS, Policy);
   case attr::DiagnoseIf:
     return cast<DiagnoseIfAttr>(this)->printPretty(OS, Policy);
   case attr::DisableSanitizerInstrumentation:
@@ -32522,6 +33375,8 @@ void Attr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
     return cast<EnforceTCBLeafAttr>(this)->printPretty(OS, Policy);
   case attr::EnumExtensibility:
     return cast<EnumExtensibilityAttr>(this)->printPretty(OS, Policy);
+  case attr::Error:
+    return cast<ErrorAttr>(this)->printPretty(OS, Policy);
   case attr::ExcludeFromExplicitInstantiation:
     return cast<ExcludeFromExplicitInstantiationAttr>(this)->printPretty(OS, Policy);
   case attr::ExclusiveTrylockFunction:
@@ -32874,6 +33729,8 @@ void Attr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
     return cast<SPtrAttr>(this)->printPretty(OS, Policy);
   case attr::SYCLKernel:
     return cast<SYCLKernelAttr>(this)->printPretty(OS, Policy);
+  case attr::SYCLSpecialClass:
+    return cast<SYCLSpecialClassAttr>(this)->printPretty(OS, Policy);
   case attr::ScopedLockable:
     return cast<ScopedLockableAttr>(this)->printPretty(OS, Policy);
   case attr::Section:
@@ -32936,6 +33793,8 @@ void Attr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
     return cast<TLSModelAttr>(this)->printPretty(OS, Policy);
   case attr::Target:
     return cast<TargetAttr>(this)->printPretty(OS, Policy);
+  case attr::TargetClones:
+    return cast<TargetClonesAttr>(this)->printPretty(OS, Policy);
   case attr::TestTypestate:
     return cast<TestTypestateAttr>(this)->printPretty(OS, Policy);
   case attr::ThisCall:
@@ -33010,6 +33869,8 @@ void Attr::printPretty(raw_ostream &OS, const PrintingPolicy &Policy) const {
     return cast<XRayInstrumentAttr>(this)->printPretty(OS, Policy);
   case attr::XRayLogArgs:
     return cast<XRayLogArgsAttr>(this)->printPretty(OS, Policy);
+  case attr::ZeroCallUsedRegs:
+    return cast<ZeroCallUsedRegsAttr>(this)->printPretty(OS, Policy);
   }
   llvm_unreachable("Unexpected attribute kind!");
 }

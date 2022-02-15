@@ -31,6 +31,8 @@ public:
       return readAtomicType();
     case Type::Attributed:
       return readAttributedType();
+    case Type::BitInt:
+      return readBitIntType();
     case Type::BlockPointer:
       return readBlockPointerType();
     case Type::Builtin:
@@ -45,8 +47,8 @@ public:
       return readDeducedTemplateSpecializationType();
     case Type::DependentAddressSpace:
       return readDependentAddressSpaceType();
-    case Type::DependentExtInt:
-      return readDependentExtIntType();
+    case Type::DependentBitInt:
+      return readDependentBitIntType();
     case Type::DependentName:
       return readDependentNameType();
     case Type::DependentSizedExtVector:
@@ -57,8 +59,6 @@ public:
       return readDependentVectorType();
     case Type::Elaborated:
       return readElaboratedType();
-    case Type::ExtInt:
-      return readExtIntType();
     case Type::FunctionNoProto:
       return readFunctionNoProtoType();
     case Type::FunctionProto:
@@ -115,6 +115,8 @@ public:
       return readUnaryTransformType();
     case Type::UnresolvedUsing:
       return readUnresolvedUsingType();
+    case Type::Using:
+      return readUsingType();
     case Type::Vector:
       return readVectorType();
     case Type::ExtVector:
@@ -208,6 +210,15 @@ public:
     attr::Kind attribute = R.find("attribute").readAttrKind();
     
     return ctx.getAttributedType(attribute, modifiedType, equivalentType);
+  
+  }
+
+  QualType readBitIntType() {
+    auto &ctx = R.getASTContext();
+    bool isUnsigned = R.find("isUnsigned").readBool();
+    uint32_t numBits = R.find("numBits").readUInt32();
+    
+    return ctx.getBitIntType(isUnsigned, numBits);
   
   }
 
@@ -305,12 +316,12 @@ public:
   
   }
 
-  QualType readDependentExtIntType() {
+  QualType readDependentBitIntType() {
     auto &ctx = R.getASTContext();
     bool isUnsigned = R.find("isUnsigned").readBool();
     Expr* numBitsExpr = R.find("numBitsExpr").readExprRef();
     
-    return ctx.getDependentExtIntType(isUnsigned, numBitsExpr);
+    return ctx.getDependentBitIntType(isUnsigned, numBitsExpr);
   
   }
 
@@ -372,15 +383,6 @@ public:
     
     return ctx.getElaboratedType(keyword, qualifier, namedType,
                                  makePointerFromOptional(ownedTag));
-  
-  }
-
-  QualType readExtIntType() {
-    auto &ctx = R.getASTContext();
-    bool isUnsigned = R.find("isUnsigned").readBool();
-    uint32_t numBits = R.find("numBits").readUInt32();
-    
-    return ctx.getExtIntType(isUnsigned, numBits);
   
   }
 
@@ -728,7 +730,16 @@ public:
     auto &ctx = R.getASTContext();
     Decl* declaration = R.find("declaration").readDeclRef();
     
-    return ctx.getTypeDeclType(cast<UnresolvedUsingTypenameDecl>(declaration));
+    return ctx.getUnresolvedUsingType(cast<UnresolvedUsingTypenameDecl>(declaration));
+  
+  }
+
+  QualType readUsingType() {
+    auto &ctx = R.getASTContext();
+    UsingShadowDecl* foundDeclaration = R.find("foundDeclaration").readUsingShadowDeclRef();
+    QualType underlyingType = R.find("underlyingType").readQualType();
+    
+    return ctx.getUsingType(foundDeclaration, underlyingType);
   
   }
 

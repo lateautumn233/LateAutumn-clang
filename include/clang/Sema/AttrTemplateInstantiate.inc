@@ -254,8 +254,12 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
       const auto *A = cast<BPFPreserveAccessIndexAttr>(At);
       return A->clone(C);
     }
-    case attr::BTFTag: {
-      const auto *A = cast<BTFTagAttr>(At);
+    case attr::BTFDeclTag: {
+      const auto *A = cast<BTFDeclTagAttr>(At);
+      return A->clone(C);
+    }
+    case attr::BTFTypeTag: {
+      const auto *A = cast<BTFTypeTagAttr>(At);
       return A->clone(C);
     }
     case attr::Blocks: {
@@ -454,6 +458,10 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
       const auto *A = cast<DestructorAttr>(At);
       return A->clone(C);
     }
+    case attr::DiagnoseAsBuiltin: {
+      const auto *A = cast<DiagnoseAsBuiltinAttr>(At);
+      return A->clone(C);
+    }
     case attr::DiagnoseIf: {
       const auto *A = cast<DiagnoseIfAttr>(At);
       Expr * tempInstCond;
@@ -500,6 +508,10 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
     }
     case attr::EnumExtensibility: {
       const auto *A = cast<EnumExtensibilityAttr>(At);
+      return A->clone(C);
+    }
+    case attr::Error: {
+      const auto *A = cast<ErrorAttr>(At);
       return A->clone(C);
     }
     case attr::ExcludeFromExplicitInstantiation: {
@@ -1294,6 +1306,10 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
       const auto *A = cast<SYCLKernelAttr>(At);
       return A->clone(C);
     }
+    case attr::SYCLSpecialClass: {
+      const auto *A = cast<SYCLSpecialClassAttr>(At);
+      return A->clone(C);
+    }
     case attr::ScopedLockable: {
       const auto *A = cast<ScopedLockableAttr>(At);
       return A->clone(C);
@@ -1437,6 +1453,10 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
     }
     case attr::Target: {
       const auto *A = cast<TargetAttr>(At);
+      return A->clone(C);
+    }
+    case attr::TargetClones: {
+      const auto *A = cast<TargetClonesAttr>(At);
       return A->clone(C);
     }
     case attr::TestTypestate: {
@@ -1606,6 +1626,10 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
       const auto *A = cast<XRayLogArgsAttr>(At);
       return A->clone(C);
     }
+    case attr::ZeroCallUsedRegs: {
+      const auto *A = cast<ZeroCallUsedRegsAttr>(At);
+      return A->clone(C);
+    }
   } // end switch
   llvm_unreachable("Unknown attribute!");
   return nullptr;
@@ -1739,7 +1763,10 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
     case attr::BPFPreserveAccessIndex: {
       return nullptr;
     }
-    case attr::BTFTag: {
+    case attr::BTFDeclTag: {
+      return nullptr;
+    }
+    case attr::BTFTypeTag: {
       return nullptr;
     }
     case attr::Blocks: {
@@ -1892,6 +1919,9 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
     case attr::Destructor: {
       return nullptr;
     }
+    case attr::DiagnoseAsBuiltin: {
+      return nullptr;
+    }
     case attr::DiagnoseIf: {
       return nullptr;
     }
@@ -1914,6 +1944,9 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
       return nullptr;
     }
     case attr::EnumExtensibility: {
+      return nullptr;
+    }
+    case attr::Error: {
       return nullptr;
     }
     case attr::ExcludeFromExplicitInstantiation: {
@@ -2450,6 +2483,9 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
     case attr::SYCLKernel: {
       return nullptr;
     }
+    case attr::SYCLSpecialClass: {
+      return nullptr;
+    }
     case attr::ScopedLockable: {
       return nullptr;
     }
@@ -2541,6 +2577,9 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
       return nullptr;
     }
     case attr::Target: {
+      return nullptr;
+    }
+    case attr::TargetClones: {
       return nullptr;
     }
     case attr::TestTypestate: {
@@ -2652,6 +2691,9 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
       return nullptr;
     }
     case attr::XRayLogArgs: {
+      return nullptr;
+    }
+    case attr::ZeroCallUsedRegs: {
       return nullptr;
     }
   } // end switch

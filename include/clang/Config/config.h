@@ -6,7 +6,10 @@
 #define CLANG_CONFIG_H
 
 /* Bug report URL. */
-#define BUG_REPORT_URL "https://bugs.llvm.org/"
+#define BUG_REPORT_URL "https://github.com/llvm/llvm-project/issues/"
+
+/* Default to -fPIE and -pie on Linux. */
+#define CLANG_DEFAULT_PIE_ON_LINUX 0
 
 /* Default linker to use. */
 #define CLANG_DEFAULT_LINKER "lld"
@@ -58,13 +61,13 @@
 #define GCC_INSTALL_PREFIX ""
 
 /* Define if we have libxml2 */
-/* #undef CLANG_HAVE_LIBXML */
+#define CLANG_HAVE_LIBXML 1
 
 /* Define if we have sys/resource.h (rlimits) */
 #define CLANG_HAVE_RLIMITS 1
 
 /* The LLVM product name and version */
-#define BACKEND_PACKAGE_STRING "LLVM 14.0.0git"
+#define BACKEND_PACKAGE_STRING "LLVM 15.0.0git"
 
 /* Linker version detected at compile time. */
 /* #undef HOST_LINK_VERSION */
@@ -74,6 +77,9 @@
 
 /* enable x86 relax relocations by default */
 #define ENABLE_X86_RELAX_RELOCATIONS 1
+
+/* Enable IEEE binary128 as default long double format on PowerPC Linux. */
+#define PPC_LINUX_DEFAULT_IEEELONGDOUBLE 0
 
 /* Enable each functionality of modules */
 #define CLANG_ENABLE_ARCMT 0

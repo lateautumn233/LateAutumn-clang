@@ -172,8 +172,12 @@
   bool VisitBPFPreserveAccessIndexAttr(BPFPreserveAccessIndexAttr *A) {
     return true; 
   }
-  bool TraverseBTFTagAttr(BTFTagAttr *A);
-  bool VisitBTFTagAttr(BTFTagAttr *A) {
+  bool TraverseBTFDeclTagAttr(BTFDeclTagAttr *A);
+  bool VisitBTFDeclTagAttr(BTFDeclTagAttr *A) {
+    return true; 
+  }
+  bool TraverseBTFTypeTagAttr(BTFTypeTagAttr *A);
+  bool VisitBTFTypeTagAttr(BTFTypeTagAttr *A) {
     return true; 
   }
   bool TraverseBlocksAttr(BlocksAttr *A);
@@ -372,6 +376,10 @@
   bool VisitDestructorAttr(DestructorAttr *A) {
     return true; 
   }
+  bool TraverseDiagnoseAsBuiltinAttr(DiagnoseAsBuiltinAttr *A);
+  bool VisitDiagnoseAsBuiltinAttr(DiagnoseAsBuiltinAttr *A) {
+    return true; 
+  }
   bool TraverseDiagnoseIfAttr(DiagnoseIfAttr *A);
   bool VisitDiagnoseIfAttr(DiagnoseIfAttr *A) {
     return true; 
@@ -402,6 +410,10 @@
   }
   bool TraverseEnumExtensibilityAttr(EnumExtensibilityAttr *A);
   bool VisitEnumExtensibilityAttr(EnumExtensibilityAttr *A) {
+    return true; 
+  }
+  bool TraverseErrorAttr(ErrorAttr *A);
+  bool VisitErrorAttr(ErrorAttr *A) {
     return true; 
   }
   bool TraverseExcludeFromExplicitInstantiationAttr(ExcludeFromExplicitInstantiationAttr *A);
@@ -1108,6 +1120,10 @@
   bool VisitSYCLKernelAttr(SYCLKernelAttr *A) {
     return true; 
   }
+  bool TraverseSYCLSpecialClassAttr(SYCLSpecialClassAttr *A);
+  bool VisitSYCLSpecialClassAttr(SYCLSpecialClassAttr *A) {
+    return true; 
+  }
   bool TraverseScopedLockableAttr(ScopedLockableAttr *A);
   bool VisitScopedLockableAttr(ScopedLockableAttr *A) {
     return true; 
@@ -1230,6 +1246,10 @@
   }
   bool TraverseTargetAttr(TargetAttr *A);
   bool VisitTargetAttr(TargetAttr *A) {
+    return true; 
+  }
+  bool TraverseTargetClonesAttr(TargetClonesAttr *A);
+  bool VisitTargetClonesAttr(TargetClonesAttr *A) {
     return true; 
   }
   bool TraverseTestTypestateAttr(TestTypestateAttr *A);
@@ -1378,6 +1398,10 @@
   }
   bool TraverseXRayLogArgsAttr(XRayLogArgsAttr *A);
   bool VisitXRayLogArgsAttr(XRayLogArgsAttr *A) {
+    return true; 
+  }
+  bool TraverseZeroCallUsedRegsAttr(ZeroCallUsedRegsAttr *A);
+  bool VisitZeroCallUsedRegsAttr(ZeroCallUsedRegsAttr *A) {
     return true; 
   }
 
@@ -1654,6 +1678,14 @@ bool VISITORCLASS<Derived>::TraverseAnnotateAttr(AnnotateAttr *A) {
         return false;
     }
   }
+  {
+    Expr * *I = A->delayedArgs_begin();
+    Expr * *E = A->delayedArgs_end();
+    for (; I != E; ++I) {
+      if (!getDerived().TraverseStmt(*I))
+        return false;
+    }
+  }
   return true;
 }
 
@@ -1830,10 +1862,19 @@ bool VISITORCLASS<Derived>::TraverseBPFPreserveAccessIndexAttr(BPFPreserveAccess
 }
 
 template <typename Derived>
-bool VISITORCLASS<Derived>::TraverseBTFTagAttr(BTFTagAttr *A) {
+bool VISITORCLASS<Derived>::TraverseBTFDeclTagAttr(BTFDeclTagAttr *A) {
   if (!getDerived().VisitAttr(A))
     return false;
-  if (!getDerived().VisitBTFTagAttr(A))
+  if (!getDerived().VisitBTFDeclTagAttr(A))
+    return false;
+  return true;
+}
+
+template <typename Derived>
+bool VISITORCLASS<Derived>::TraverseBTFTypeTagAttr(BTFTypeTagAttr *A) {
+  if (!getDerived().VisitAttr(A))
+    return false;
+  if (!getDerived().VisitBTFTypeTagAttr(A))
     return false;
   return true;
 }
@@ -2284,6 +2325,15 @@ bool VISITORCLASS<Derived>::TraverseDestructorAttr(DestructorAttr *A) {
 }
 
 template <typename Derived>
+bool VISITORCLASS<Derived>::TraverseDiagnoseAsBuiltinAttr(DiagnoseAsBuiltinAttr *A) {
+  if (!getDerived().VisitAttr(A))
+    return false;
+  if (!getDerived().VisitDiagnoseAsBuiltinAttr(A))
+    return false;
+  return true;
+}
+
+template <typename Derived>
 bool VISITORCLASS<Derived>::TraverseDiagnoseIfAttr(DiagnoseIfAttr *A) {
   if (!getDerived().VisitAttr(A))
     return false;
@@ -2355,6 +2405,15 @@ bool VISITORCLASS<Derived>::TraverseEnumExtensibilityAttr(EnumExtensibilityAttr 
   if (!getDerived().VisitAttr(A))
     return false;
   if (!getDerived().VisitEnumExtensibilityAttr(A))
+    return false;
+  return true;
+}
+
+template <typename Derived>
+bool VISITORCLASS<Derived>::TraverseErrorAttr(ErrorAttr *A) {
+  if (!getDerived().VisitAttr(A))
+    return false;
+  if (!getDerived().VisitErrorAttr(A))
     return false;
   return true;
 }
@@ -3141,6 +3200,8 @@ bool VISITORCLASS<Derived>::TraverseOMPAllocateDeclAttr(OMPAllocateDeclAttr *A) 
     return false;
   if (!getDerived().TraverseStmt(A->getAllocator()))
     return false;
+  if (!getDerived().TraverseStmt(A->getAlignment()))
+    return false;
   return true;
 }
 
@@ -3219,6 +3280,8 @@ bool VISITORCLASS<Derived>::TraverseOMPDeclareTargetDeclAttr(OMPDeclareTargetDec
     return false;
   if (!getDerived().VisitOMPDeclareTargetDeclAttr(A))
     return false;
+  if (!getDerived().TraverseStmt(A->getIndirectExpr()))
+    return false;
   return true;
 }
 
@@ -3230,6 +3293,22 @@ bool VISITORCLASS<Derived>::TraverseOMPDeclareVariantAttr(OMPDeclareVariantAttr 
     return false;
   if (!getDerived().TraverseStmt(A->getVariantFuncRef()))
     return false;
+  {
+    Expr * *I = A->adjustArgsNothing_begin();
+    Expr * *E = A->adjustArgsNothing_end();
+    for (; I != E; ++I) {
+      if (!getDerived().TraverseStmt(*I))
+        return false;
+    }
+  }
+  {
+    Expr * *I = A->adjustArgsNeedDevicePtr_begin();
+    Expr * *E = A->adjustArgsNeedDevicePtr_end();
+    for (; I != E; ++I) {
+      if (!getDerived().TraverseStmt(*I))
+        return false;
+    }
+  }
   return true;
 }
 
@@ -4046,6 +4125,15 @@ bool VISITORCLASS<Derived>::TraverseSYCLKernelAttr(SYCLKernelAttr *A) {
 }
 
 template <typename Derived>
+bool VISITORCLASS<Derived>::TraverseSYCLSpecialClassAttr(SYCLSpecialClassAttr *A) {
+  if (!getDerived().VisitAttr(A))
+    return false;
+  if (!getDerived().VisitSYCLSpecialClassAttr(A))
+    return false;
+  return true;
+}
+
+template <typename Derived>
 bool VISITORCLASS<Derived>::TraverseScopedLockableAttr(ScopedLockableAttr *A) {
   if (!getDerived().VisitAttr(A))
     return false;
@@ -4330,6 +4418,15 @@ bool VISITORCLASS<Derived>::TraverseTargetAttr(TargetAttr *A) {
   if (!getDerived().VisitAttr(A))
     return false;
   if (!getDerived().VisitTargetAttr(A))
+    return false;
+  return true;
+}
+
+template <typename Derived>
+bool VISITORCLASS<Derived>::TraverseTargetClonesAttr(TargetClonesAttr *A) {
+  if (!getDerived().VisitAttr(A))
+    return false;
+  if (!getDerived().VisitTargetClonesAttr(A))
     return false;
   return true;
 }
@@ -4684,6 +4781,15 @@ bool VISITORCLASS<Derived>::TraverseXRayLogArgsAttr(XRayLogArgsAttr *A) {
 }
 
 template <typename Derived>
+bool VISITORCLASS<Derived>::TraverseZeroCallUsedRegsAttr(ZeroCallUsedRegsAttr *A) {
+  if (!getDerived().VisitAttr(A))
+    return false;
+  if (!getDerived().VisitZeroCallUsedRegsAttr(A))
+    return false;
+  return true;
+}
+
+template <typename Derived>
 bool VISITORCLASS<Derived>::TraverseAttr(Attr *A) {
   if (!A)
     return true;
@@ -4771,8 +4877,10 @@ bool VISITORCLASS<Derived>::TraverseAttr(Attr *A) {
       return getDerived().TraverseAvailabilityAttr(cast<AvailabilityAttr>(A));
     case attr::BPFPreserveAccessIndex:
       return getDerived().TraverseBPFPreserveAccessIndexAttr(cast<BPFPreserveAccessIndexAttr>(A));
-    case attr::BTFTag:
-      return getDerived().TraverseBTFTagAttr(cast<BTFTagAttr>(A));
+    case attr::BTFDeclTag:
+      return getDerived().TraverseBTFDeclTagAttr(cast<BTFDeclTagAttr>(A));
+    case attr::BTFTypeTag:
+      return getDerived().TraverseBTFTypeTagAttr(cast<BTFTypeTagAttr>(A));
     case attr::Blocks:
       return getDerived().TraverseBlocksAttr(cast<BlocksAttr>(A));
     case attr::Builtin:
@@ -4871,6 +4979,8 @@ bool VISITORCLASS<Derived>::TraverseAttr(Attr *A) {
       return getDerived().TraverseDeprecatedAttr(cast<DeprecatedAttr>(A));
     case attr::Destructor:
       return getDerived().TraverseDestructorAttr(cast<DestructorAttr>(A));
+    case attr::DiagnoseAsBuiltin:
+      return getDerived().TraverseDiagnoseAsBuiltinAttr(cast<DiagnoseAsBuiltinAttr>(A));
     case attr::DiagnoseIf:
       return getDerived().TraverseDiagnoseIfAttr(cast<DiagnoseIfAttr>(A));
     case attr::DisableSanitizerInstrumentation:
@@ -4887,6 +4997,8 @@ bool VISITORCLASS<Derived>::TraverseAttr(Attr *A) {
       return getDerived().TraverseEnforceTCBLeafAttr(cast<EnforceTCBLeafAttr>(A));
     case attr::EnumExtensibility:
       return getDerived().TraverseEnumExtensibilityAttr(cast<EnumExtensibilityAttr>(A));
+    case attr::Error:
+      return getDerived().TraverseErrorAttr(cast<ErrorAttr>(A));
     case attr::ExcludeFromExplicitInstantiation:
       return getDerived().TraverseExcludeFromExplicitInstantiationAttr(cast<ExcludeFromExplicitInstantiationAttr>(A));
     case attr::ExclusiveTrylockFunction:
@@ -5239,6 +5351,8 @@ bool VISITORCLASS<Derived>::TraverseAttr(Attr *A) {
       return getDerived().TraverseSPtrAttr(cast<SPtrAttr>(A));
     case attr::SYCLKernel:
       return getDerived().TraverseSYCLKernelAttr(cast<SYCLKernelAttr>(A));
+    case attr::SYCLSpecialClass:
+      return getDerived().TraverseSYCLSpecialClassAttr(cast<SYCLSpecialClassAttr>(A));
     case attr::ScopedLockable:
       return getDerived().TraverseScopedLockableAttr(cast<ScopedLockableAttr>(A));
     case attr::Section:
@@ -5301,6 +5415,8 @@ bool VISITORCLASS<Derived>::TraverseAttr(Attr *A) {
       return getDerived().TraverseTLSModelAttr(cast<TLSModelAttr>(A));
     case attr::Target:
       return getDerived().TraverseTargetAttr(cast<TargetAttr>(A));
+    case attr::TargetClones:
+      return getDerived().TraverseTargetClonesAttr(cast<TargetClonesAttr>(A));
     case attr::TestTypestate:
       return getDerived().TraverseTestTypestateAttr(cast<TestTypestateAttr>(A));
     case attr::ThisCall:
@@ -5375,6 +5491,8 @@ bool VISITORCLASS<Derived>::TraverseAttr(Attr *A) {
       return getDerived().TraverseXRayInstrumentAttr(cast<XRayInstrumentAttr>(A));
     case attr::XRayLogArgs:
       return getDerived().TraverseXRayLogArgsAttr(cast<XRayLogArgsAttr>(A));
+    case attr::ZeroCallUsedRegs:
+      return getDerived().TraverseZeroCallUsedRegsAttr(cast<ZeroCallUsedRegsAttr>(A));
   }
   llvm_unreachable("bad attribute kind");
 }

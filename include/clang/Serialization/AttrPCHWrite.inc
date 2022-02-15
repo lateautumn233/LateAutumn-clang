@@ -207,6 +207,9 @@ Record.push_back(SA->getInterrupt());
     Record.push_back(SA->isInherited());
     Record.push_back(A->isImplicit());
     Record.push_back(A->isPackExpansion());
+    Record.push_back(SA->delayedArgs_size());
+    for (auto &Val : SA->delayedArgs())
+      Record.AddStmt(Val);
     Record.AddString(SA->getAnnotation());
     Record.push_back(SA->args_size());
     for (auto &Val : SA->args())
@@ -351,12 +354,19 @@ Record.push_back(SA->getInterrupt());
     Record.push_back(A->isPackExpansion());
     break;
   }
-  case attr::BTFTag: {
-    const auto *SA = cast<BTFTagAttr>(A);
+  case attr::BTFDeclTag: {
+    const auto *SA = cast<BTFDeclTagAttr>(A);
     Record.push_back(SA->isInherited());
     Record.push_back(A->isImplicit());
     Record.push_back(A->isPackExpansion());
-    Record.AddString(SA->getBTFTag());
+    Record.AddString(SA->getBTFDeclTag());
+    break;
+  }
+  case attr::BTFTypeTag: {
+    const auto *SA = cast<BTFTypeTagAttr>(A);
+    Record.push_back(A->isImplicit());
+    Record.push_back(A->isPackExpansion());
+    Record.AddString(SA->getBTFTypeTag());
     break;
   }
   case attr::Blocks: {
@@ -723,6 +733,17 @@ Record.push_back(SA->getDefaultState());
     Record.push_back(SA->getPriority());
     break;
   }
+  case attr::DiagnoseAsBuiltin: {
+    const auto *SA = cast<DiagnoseAsBuiltinAttr>(A);
+    Record.push_back(SA->isInherited());
+    Record.push_back(A->isImplicit());
+    Record.push_back(A->isPackExpansion());
+    Record.AddDeclRef(SA->getFunction());
+    Record.push_back(SA->argIndices_size());
+    for (auto &Val : SA->argIndices())
+      Record.push_back(Val);
+    break;
+  }
   case attr::DiagnoseIf: {
     const auto *SA = cast<DiagnoseIfAttr>(A);
     Record.push_back(SA->isInherited());
@@ -787,6 +808,14 @@ Record.push_back(SA->getDiagnosticType());
     Record.push_back(A->isImplicit());
     Record.push_back(A->isPackExpansion());
 Record.push_back(SA->getExtensibility());
+    break;
+  }
+  case attr::Error: {
+    const auto *SA = cast<ErrorAttr>(A);
+    Record.push_back(SA->isInherited());
+    Record.push_back(A->isImplicit());
+    Record.push_back(A->isPackExpansion());
+    Record.AddString(SA->getUserDiagnostic());
     break;
   }
   case attr::ExcludeFromExplicitInstantiation: {
@@ -1402,6 +1431,7 @@ Record.push_back(SA->getInterrupt());
     Record.push_back(A->isPackExpansion());
 Record.push_back(SA->getAllocatorType());
     Record.AddStmt(SA->getAllocator());
+    Record.AddStmt(SA->getAlignment());
     break;
   }
   case attr::OMPCaptureKind: {
@@ -1451,6 +1481,8 @@ Record.push_back(SA->getBranchState());
     Record.push_back(A->isPackExpansion());
 Record.push_back(SA->getMapType());
 Record.push_back(SA->getDevType());
+    Record.AddStmt(SA->getIndirectExpr());
+    Record.push_back(SA->getIndirect());
     Record.push_back(SA->getLevel());
     break;
   }
@@ -1461,6 +1493,15 @@ Record.push_back(SA->getDevType());
     Record.push_back(A->isPackExpansion());
     Record.AddStmt(SA->getVariantFuncRef());
     Record.writeOMPTraitInfo(SA->getTraitInfos());
+    Record.push_back(SA->adjustArgsNothing_size());
+    for (auto &Val : SA->adjustArgsNothing())
+      Record.AddStmt(Val);
+    Record.push_back(SA->adjustArgsNeedDevicePtr_size());
+    for (auto &Val : SA->adjustArgsNeedDevicePtr())
+      Record.AddStmt(Val);
+    Record.push_back(SA->appendArgs_size());
+    for (OMPDeclareVariantAttr::appendArgs_iterator i = SA->appendArgs_begin(), e = SA->appendArgs_end(); i != e; ++i)
+      Record.push_back((*i));
     break;
   }
   case attr::OMPReferencedVar: {
@@ -2064,6 +2105,13 @@ Record.push_back(SA->getState());
     Record.push_back(A->isPackExpansion());
     break;
   }
+  case attr::SYCLSpecialClass: {
+    const auto *SA = cast<SYCLSpecialClassAttr>(A);
+    Record.push_back(SA->isInherited());
+    Record.push_back(A->isImplicit());
+    Record.push_back(A->isPackExpansion());
+    break;
+  }
   case attr::ScopedLockable: {
     const auto *SA = cast<ScopedLockableAttr>(A);
     Record.push_back(SA->isInherited());
@@ -2299,6 +2347,16 @@ Record.push_back(SA->getNewtypeKind());
     Record.push_back(A->isImplicit());
     Record.push_back(A->isPackExpansion());
     Record.AddString(SA->getFeaturesStr());
+    break;
+  }
+  case attr::TargetClones: {
+    const auto *SA = cast<TargetClonesAttr>(A);
+    Record.push_back(SA->isInherited());
+    Record.push_back(A->isImplicit());
+    Record.push_back(A->isPackExpansion());
+    Record.push_back(SA->featuresStrs_size());
+    for (auto &Val : SA->featuresStrs())
+      Record.AddString(Val);
     break;
   }
   case attr::TestTypestate: {
@@ -2570,6 +2628,14 @@ Record.push_back(SA->getVisibility());
     Record.push_back(A->isImplicit());
     Record.push_back(A->isPackExpansion());
     Record.push_back(SA->getArgumentCount());
+    break;
+  }
+  case attr::ZeroCallUsedRegs: {
+    const auto *SA = cast<ZeroCallUsedRegsAttr>(A);
+    Record.push_back(SA->isInherited());
+    Record.push_back(A->isImplicit());
+    Record.push_back(A->isPackExpansion());
+Record.push_back(SA->getZeroCallUsedRegs());
     break;
   }
   }

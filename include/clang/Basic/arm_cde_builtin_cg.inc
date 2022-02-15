@@ -96,7 +96,7 @@ case ARM::BI__builtin_arm_cde_vcx1qa_m_u8: {
     Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
     break;
   case ARM::BI__builtin_arm_cde_vcx1q_m_s64:
-    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param1 = Intrinsic::arm_cde_vcx1q_predicated;
     Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
     break;
@@ -116,7 +116,7 @@ case ARM::BI__builtin_arm_cde_vcx1qa_m_u8: {
     Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
     break;
   case ARM::BI__builtin_arm_cde_vcx1q_m_u64:
-    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param1 = Intrinsic::arm_cde_vcx1q_predicated;
     Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
     break;
@@ -146,7 +146,7 @@ case ARM::BI__builtin_arm_cde_vcx1qa_m_u8: {
     Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
     break;
   case ARM::BI__builtin_arm_cde_vcx1qa_m_s64:
-    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param1 = Intrinsic::arm_cde_vcx1qa_predicated;
     Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
     break;
@@ -166,7 +166,7 @@ case ARM::BI__builtin_arm_cde_vcx1qa_m_u8: {
     Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
     break;
   case ARM::BI__builtin_arm_cde_vcx1qa_m_u64:
-    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param1 = Intrinsic::arm_cde_vcx1qa_predicated;
     Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
     break;
@@ -229,7 +229,7 @@ case ARM::BI__builtin_arm_cde_vcx2qa_m_impl_u8: {
     Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
     break;
   case ARM::BI__builtin_arm_cde_vcx2q_m_impl_s64:
-    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param1 = Intrinsic::arm_cde_vcx2q_predicated;
     Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
     break;
@@ -249,7 +249,7 @@ case ARM::BI__builtin_arm_cde_vcx2qa_m_impl_u8: {
     Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
     break;
   case ARM::BI__builtin_arm_cde_vcx2q_m_impl_u64:
-    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param1 = Intrinsic::arm_cde_vcx2q_predicated;
     Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
     break;
@@ -279,7 +279,7 @@ case ARM::BI__builtin_arm_cde_vcx2qa_m_impl_u8: {
     Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
     break;
   case ARM::BI__builtin_arm_cde_vcx2qa_m_impl_s64:
-    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param1 = Intrinsic::arm_cde_vcx2qa_predicated;
     Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
     break;
@@ -299,7 +299,7 @@ case ARM::BI__builtin_arm_cde_vcx2qa_m_impl_u8: {
     Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
     break;
   case ARM::BI__builtin_arm_cde_vcx2qa_m_impl_u64:
-    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param1 = Intrinsic::arm_cde_vcx2qa_predicated;
     Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
     break;
@@ -363,7 +363,7 @@ case ARM::BI__builtin_arm_cde_vcx3qa_m_impl_u8: {
     Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
     break;
   case ARM::BI__builtin_arm_cde_vcx3q_m_impl_s64:
-    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param1 = Intrinsic::arm_cde_vcx3q_predicated;
     Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
     break;
@@ -383,7 +383,7 @@ case ARM::BI__builtin_arm_cde_vcx3qa_m_impl_u8: {
     Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
     break;
   case ARM::BI__builtin_arm_cde_vcx3q_m_impl_u64:
-    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param1 = Intrinsic::arm_cde_vcx3q_predicated;
     Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
     break;
@@ -413,7 +413,7 @@ case ARM::BI__builtin_arm_cde_vcx3qa_m_impl_u8: {
     Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
     break;
   case ARM::BI__builtin_arm_cde_vcx3qa_m_impl_s64:
-    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param1 = Intrinsic::arm_cde_vcx3qa_predicated;
     Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
     break;
@@ -433,7 +433,7 @@ case ARM::BI__builtin_arm_cde_vcx3qa_m_impl_u8: {
     Param2 = llvm::FixedVectorType::get(Int32Ty, 4);
     break;
   case ARM::BI__builtin_arm_cde_vcx3qa_m_impl_u64:
-    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 4);
+    Param0 = llvm::FixedVectorType::get(Builder.getInt1Ty(), 2);
     Param1 = Intrinsic::arm_cde_vcx3qa_predicated;
     Param2 = llvm::FixedVectorType::get(Int64Ty, 2);
     break;

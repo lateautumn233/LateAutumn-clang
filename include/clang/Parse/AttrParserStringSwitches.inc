@@ -81,6 +81,7 @@
 .Case("type_tag_for_datatype", true)
 .Case("type_visibility", true)
 .Case("visibility", true)
+.Case("zero_call_used_regs", true)
 #endif // CLANG_ATTR_IDENTIFIER_ARG_LIST
 
 #if defined(CLANG_ATTR_VARIADIC_IDENTIFIER_ARG_LIST)
@@ -92,6 +93,10 @@
 #if defined(CLANG_ATTR_THIS_ISA_IDENTIFIER_ARG_LIST)
 .Case("callback", true)
 #endif // CLANG_ATTR_THIS_ISA_IDENTIFIER_ARG_LIST
+
+#if defined(CLANG_ATTR_ACCEPTS_EXPR_PACK)
+.Case("annotate", true)
+#endif // CLANG_ATTR_ACCEPTS_EXPR_PACK
 
 #if defined(CLANG_ATTR_TYPE_ARG_LIST)
 .Case("iboutletcollection", true)

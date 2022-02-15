@@ -123,7 +123,9 @@ struct ParsedAttrInfoAArch64VectorPcs final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AArch64VectorPcs;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -131,6 +133,10 @@ struct ParsedAttrInfoAArch64VectorPcs final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = AArch64VectorPcsSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoAArch64VectorPcs Instance;
 };
 const ParsedAttrInfoAArch64VectorPcs ParsedAttrInfoAArch64VectorPcs::Instance;
@@ -145,7 +151,9 @@ struct ParsedAttrInfoAMDGPUFlatWorkGroupSize final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AMDGPUFlatWorkGroupSize;
     NumArgs = 2;
     OptArgs = 0;
+    NumArgMembers = 2;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -173,6 +181,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || (N == 1) || false;
+}
+
 static const ParsedAttrInfoAMDGPUFlatWorkGroupSize Instance;
 };
 const ParsedAttrInfoAMDGPUFlatWorkGroupSize ParsedAttrInfoAMDGPUFlatWorkGroupSize::Instance;
@@ -187,7 +199,9 @@ struct ParsedAttrInfoAMDGPUNumSGPR final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AMDGPUNumSGPR;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -215,6 +229,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoAMDGPUNumSGPR Instance;
 };
 const ParsedAttrInfoAMDGPUNumSGPR ParsedAttrInfoAMDGPUNumSGPR::Instance;
@@ -229,7 +247,9 @@ struct ParsedAttrInfoAMDGPUNumVGPR final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AMDGPUNumVGPR;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -257,6 +277,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoAMDGPUNumVGPR Instance;
 };
 const ParsedAttrInfoAMDGPUNumVGPR ParsedAttrInfoAMDGPUNumVGPR::Instance;
@@ -271,7 +295,9 @@ struct ParsedAttrInfoAMDGPUWavesPerEU final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AMDGPUWavesPerEU;
     NumArgs = 1;
     OptArgs = 1;
+    NumArgMembers = 2;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -299,6 +325,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || (N == 1) || false;
+}
+
 static const ParsedAttrInfoAMDGPUWavesPerEU Instance;
 };
 const ParsedAttrInfoAMDGPUWavesPerEU ParsedAttrInfoAMDGPUWavesPerEU::Instance;
@@ -314,7 +344,9 @@ struct ParsedAttrInfoInterrupt final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Interrupt;
     NumArgs = 0;
     OptArgs = 1;
+    NumArgMembers = 1;
     HasCustomParsing = 1;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -326,6 +358,10 @@ struct ParsedAttrInfoInterrupt final : public ParsedAttrInfo {
 bool existsInTarget(const TargetInfo &Target) const override {
   const llvm::Triple &T = Target.getTriple(); (void)T;
   return true && (T.getArch() == llvm::Triple::arm || T.getArch() == llvm::Triple::thumb || T.getArch() == llvm::Triple::armeb || T.getArch() == llvm::Triple::thumbeb || T.getArch() == llvm::Triple::avr || T.getArch() == llvm::Triple::x86 || T.getArch() == llvm::Triple::x86_64 || T.getArch() == llvm::Triple::m68k || T.getArch() == llvm::Triple::msp430 || T.getArch() == llvm::Triple::mips || T.getArch() == llvm::Triple::mipsel || T.getArch() == llvm::Triple::riscv32 || T.getArch() == llvm::Triple::riscv64);
+}
+
+bool isParamExpr(size_t N) const override {
+  return false;
 }
 
 static const ParsedAttrInfoInterrupt Instance;
@@ -341,7 +377,9 @@ struct ParsedAttrInfoAVRSignal final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AVRSignal;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -373,6 +411,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoAVRSignal Instance;
 };
 const ParsedAttrInfoAVRSignal ParsedAttrInfoAVRSignal::Instance;
@@ -387,7 +429,9 @@ struct ParsedAttrInfoAbiTag final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AbiTag;
     NumArgs = 0;
     OptArgs = 15;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -418,6 +462,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_namespace, /*IsSupported=*/LangOpts.CPlusPlus));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoAbiTag Instance;
 };
 const ParsedAttrInfoAbiTag ParsedAttrInfoAbiTag::Instance;
@@ -436,7 +484,9 @@ struct ParsedAttrInfoAcquireCapability final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AcquireCapability;
     NumArgs = 0;
     OptArgs = 15;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -484,6 +534,10 @@ unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override 
   }
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || false;
+}
+
 static const ParsedAttrInfoAcquireCapability Instance;
 };
 const ParsedAttrInfoAcquireCapability ParsedAttrInfoAcquireCapability::Instance;
@@ -499,7 +553,9 @@ struct ParsedAttrInfoAcquireHandle final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AcquireHandle;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -529,6 +585,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoAcquireHandle Instance;
 };
 const ParsedAttrInfoAcquireHandle ParsedAttrInfoAcquireHandle::Instance;
@@ -542,7 +602,9 @@ struct ParsedAttrInfoAcquiredAfter final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AcquiredAfter;
     NumArgs = 0;
     OptArgs = 15;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -566,6 +628,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || false;
+}
+
 static const ParsedAttrInfoAcquiredAfter Instance;
 };
 const ParsedAttrInfoAcquiredAfter ParsedAttrInfoAcquiredAfter::Instance;
@@ -579,7 +645,9 @@ struct ParsedAttrInfoAcquiredBefore final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AcquiredBefore;
     NumArgs = 0;
     OptArgs = 15;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -603,6 +671,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || false;
+}
+
 static const ParsedAttrInfoAcquiredBefore Instance;
 };
 const ParsedAttrInfoAcquiredBefore ParsedAttrInfoAcquiredBefore::Instance;
@@ -618,7 +690,9 @@ struct ParsedAttrInfoAddressSpace final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AddressSpace;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -627,6 +701,10 @@ struct ParsedAttrInfoAddressSpace final : public ParsedAttrInfo {
     Spellings = AddressSpaceSpellings;
     ArgNames = AddressSpaceArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoAddressSpace Instance;
 };
 const ParsedAttrInfoAddressSpace ParsedAttrInfoAddressSpace::Instance;
@@ -642,7 +720,9 @@ struct ParsedAttrInfoAlias final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Alias;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -671,6 +751,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_global, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoAlias Instance;
 };
 const ParsedAttrInfoAlias ParsedAttrInfoAlias::Instance;
@@ -684,7 +768,9 @@ struct ParsedAttrInfoAlignValue final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AlignValue;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -713,6 +799,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_type_alias, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || false;
+}
+
 static const ParsedAttrInfoAlignValue Instance;
 };
 const ParsedAttrInfoAlignValue ParsedAttrInfoAlignValue::Instance;
@@ -731,7 +821,9 @@ struct ParsedAttrInfoAligned final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Aligned;
     NumArgs = 0;
     OptArgs = 1;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -764,6 +856,10 @@ unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override 
   }
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoAligned Instance;
 };
 const ParsedAttrInfoAligned ParsedAttrInfoAligned::Instance;
@@ -779,7 +875,9 @@ struct ParsedAttrInfoAllocAlign final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AllocAlign;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -803,6 +901,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoAllocAlign Instance;
 };
 const ParsedAttrInfoAllocAlign ParsedAttrInfoAllocAlign::Instance;
@@ -818,7 +920,9 @@ struct ParsedAttrInfoAllocSize final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AllocSize;
     NumArgs = 1;
     OptArgs = 1;
+    NumArgMembers = 2;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -842,6 +946,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoAllocSize Instance;
 };
 const ParsedAttrInfoAllocSize ParsedAttrInfoAllocSize::Instance;
@@ -854,7 +962,9 @@ struct ParsedAttrInfoAlwaysDestroy final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AlwaysDestroy;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -892,6 +1002,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoAlwaysDestroy Instance;
 };
 const ParsedAttrInfoAlwaysDestroy ParsedAttrInfoAlwaysDestroy::Instance;
@@ -906,7 +1020,9 @@ struct ParsedAttrInfoAlwaysInline final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AlwaysInline;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -964,6 +1080,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoAlwaysInline Instance;
 };
 const ParsedAttrInfoAlwaysInline ParsedAttrInfoAlwaysInline::Instance;
@@ -975,7 +1095,9 @@ struct ParsedAttrInfoAnalyzerNoReturn final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AnalyzerNoReturn;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -983,6 +1105,10 @@ struct ParsedAttrInfoAnalyzerNoReturn final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = AnalyzerNoReturnSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoAnalyzerNoReturn Instance;
 };
 const ParsedAttrInfoAnalyzerNoReturn ParsedAttrInfoAnalyzerNoReturn::Instance;
@@ -998,7 +1124,9 @@ struct ParsedAttrInfoAnnotate final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Annotate;
     NumArgs = 1;
     OptArgs = 15;
+    NumArgMembers = 2;
     HasCustomParsing = 0;
+    AcceptsExprPack = 1;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -1007,6 +1135,10 @@ struct ParsedAttrInfoAnnotate final : public ParsedAttrInfo {
     Spellings = AnnotateSpellings;
     ArgNames = AnnotateArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return (N == 1) || false;
+}
+
 static const ParsedAttrInfoAnnotate Instance;
 };
 const ParsedAttrInfoAnnotate ParsedAttrInfoAnnotate::Instance;
@@ -1020,7 +1152,9 @@ struct ParsedAttrInfoAnyX86NoCallerSavedRegisters final : public ParsedAttrInfo 
     AttrKind = ParsedAttr::AT_AnyX86NoCallerSavedRegisters;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -1038,6 +1172,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoAnyX86NoCallerSavedRegisters Instance;
 };
 const ParsedAttrInfoAnyX86NoCallerSavedRegisters ParsedAttrInfoAnyX86NoCallerSavedRegisters::Instance;
@@ -1051,7 +1189,9 @@ struct ParsedAttrInfoAnyX86NoCfCheck final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AnyX86NoCfCheck;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 1;
     IsStmt = 0;
@@ -1083,6 +1223,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_hasType_functionType, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoAnyX86NoCfCheck Instance;
 };
 const ParsedAttrInfoAnyX86NoCfCheck ParsedAttrInfoAnyX86NoCfCheck::Instance;
@@ -1096,7 +1240,9 @@ struct ParsedAttrInfoArcWeakrefUnavailable final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ArcWeakrefUnavailable;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -1128,6 +1274,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoArcWeakrefUnavailable Instance;
 };
 const ParsedAttrInfoArcWeakrefUnavailable ParsedAttrInfoArcWeakrefUnavailable::Instance;
@@ -1146,7 +1296,9 @@ struct ParsedAttrInfoArgumentWithTypeTag final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ArgumentWithTypeTag;
     NumArgs = 3;
     OptArgs = 0;
+    NumArgMembers = 3;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -1194,6 +1346,10 @@ unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override 
   }
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoArgumentWithTypeTag Instance;
 };
 const ParsedAttrInfoArgumentWithTypeTag ParsedAttrInfoArgumentWithTypeTag::Instance;
@@ -1209,7 +1365,9 @@ struct ParsedAttrInfoArmBuiltinAlias final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ArmBuiltinAlias;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -1242,6 +1400,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoArmBuiltinAlias Instance;
 };
 const ParsedAttrInfoArmBuiltinAlias ParsedAttrInfoArmBuiltinAlias::Instance;
@@ -1255,7 +1417,9 @@ struct ParsedAttrInfoArmMveStrictPolymorphism final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ArmMveStrictPolymorphism;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 1;
     IsStmt = 0;
@@ -1266,6 +1430,10 @@ struct ParsedAttrInfoArmMveStrictPolymorphism final : public ParsedAttrInfo {
 bool existsInTarget(const TargetInfo &Target) const override {
   const llvm::Triple &T = Target.getTriple(); (void)T;
   return true && (T.getArch() == llvm::Triple::arm || T.getArch() == llvm::Triple::thumb || T.getArch() == llvm::Triple::armeb || T.getArch() == llvm::Triple::thumbeb);
+}
+
+bool isParamExpr(size_t N) const override {
+  return false;
 }
 
 static const ParsedAttrInfoArmMveStrictPolymorphism Instance;
@@ -1281,7 +1449,9 @@ struct ParsedAttrInfoArmSveVectorBits final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ArmSveVectorBits;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -1305,6 +1475,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoArmSveVectorBits Instance;
 };
 const ParsedAttrInfoArmSveVectorBits ParsedAttrInfoArmSveVectorBits::Instance;
@@ -1318,7 +1492,9 @@ struct ParsedAttrInfoArtificial final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Artificial;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -1346,6 +1522,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoArtificial Instance;
 };
 const ParsedAttrInfoArtificial ParsedAttrInfoArtificial::Instance;
@@ -1362,7 +1542,9 @@ struct ParsedAttrInfoAssertCapability final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AssertCapability;
     NumArgs = 0;
     OptArgs = 15;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -1406,6 +1588,10 @@ unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override 
   }
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || false;
+}
+
 static const ParsedAttrInfoAssertCapability Instance;
 };
 const ParsedAttrInfoAssertCapability ParsedAttrInfoAssertCapability::Instance;
@@ -1419,7 +1605,9 @@ struct ParsedAttrInfoAssertExclusiveLock final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AssertExclusiveLock;
     NumArgs = 0;
     OptArgs = 15;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -1443,6 +1631,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || false;
+}
+
 static const ParsedAttrInfoAssertExclusiveLock Instance;
 };
 const ParsedAttrInfoAssertExclusiveLock ParsedAttrInfoAssertExclusiveLock::Instance;
@@ -1456,7 +1648,9 @@ struct ParsedAttrInfoAssertSharedLock final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AssertSharedLock;
     NumArgs = 0;
     OptArgs = 15;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -1480,6 +1674,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || false;
+}
+
 static const ParsedAttrInfoAssertSharedLock Instance;
 };
 const ParsedAttrInfoAssertSharedLock ParsedAttrInfoAssertSharedLock::Instance;
@@ -1495,7 +1693,9 @@ struct ParsedAttrInfoAssumeAligned final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_AssumeAligned;
     NumArgs = 1;
     OptArgs = 1;
+    NumArgMembers = 2;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -1524,6 +1724,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || (N == 1) || false;
+}
+
 static const ParsedAttrInfoAssumeAligned Instance;
 };
 const ParsedAttrInfoAssumeAligned ParsedAttrInfoAssumeAligned::Instance;
@@ -1539,7 +1743,9 @@ struct ParsedAttrInfoAssumption final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Assumption;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -1568,6 +1774,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_method, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoAssumption Instance;
 };
 const ParsedAttrInfoAssumption ParsedAttrInfoAssumption::Instance;
@@ -1583,7 +1793,9 @@ struct ParsedAttrInfoAvailability final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Availability;
     NumArgs = 9;
     OptArgs = 0;
+    NumArgMembers = 9;
     HasCustomParsing = 1;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -1625,6 +1837,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoAvailability Instance;
 };
 const ParsedAttrInfoAvailability ParsedAttrInfoAvailability::Instance;
@@ -1638,7 +1854,9 @@ struct ParsedAttrInfoBPFPreserveAccessIndex final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_BPFPreserveAccessIndex;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -1674,34 +1892,40 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_record, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoBPFPreserveAccessIndex Instance;
 };
 const ParsedAttrInfoBPFPreserveAccessIndex ParsedAttrInfoBPFPreserveAccessIndex::Instance;
-static constexpr ParsedAttrInfo::Spelling BTFTagSpellings[] = {
-  {AttributeCommonInfo::AS_GNU, "btf_tag"},
-  {AttributeCommonInfo::AS_CXX11, "clang::btf_tag"},
-  {AttributeCommonInfo::AS_C2x, "clang::btf_tag"},
+static constexpr ParsedAttrInfo::Spelling BTFDeclTagSpellings[] = {
+  {AttributeCommonInfo::AS_GNU, "btf_decl_tag"},
+  {AttributeCommonInfo::AS_CXX11, "clang::btf_decl_tag"},
+  {AttributeCommonInfo::AS_C2x, "clang::btf_decl_tag"},
 };
-static constexpr const char *BTFTagArgNames[] = {
-"BTFTag",};
-struct ParsedAttrInfoBTFTag final : public ParsedAttrInfo {
-  ParsedAttrInfoBTFTag() {
-    AttrKind = ParsedAttr::AT_BTFTag;
+static constexpr const char *BTFDeclTagArgNames[] = {
+"BTFDeclTag",};
+struct ParsedAttrInfoBTFDeclTag final : public ParsedAttrInfo {
+  ParsedAttrInfoBTFDeclTag() {
+    AttrKind = ParsedAttr::AT_BTFDeclTag;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
     IsKnownToGCC = 0;
     IsSupportedByPragmaAttribute = 1;
-    Spellings = BTFTagSpellings;
-    ArgNames = BTFTagArgNames;
+    Spellings = BTFDeclTagSpellings;
+    ArgNames = BTFDeclTagArgNames;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
-  if (!isa<VarDecl>(D) && !isa<FunctionDecl>(D) && !isa<RecordDecl>(D) && !isa<FieldDecl>(D)) {
+  if (!isa<VarDecl>(D) && !isa<FunctionDecl>(D) && !isa<RecordDecl>(D) && !isa<FieldDecl>(D) && !isa<TypedefNameDecl>(D)) {
     S.Diag(Attr.getLoc(), diag::err_attribute_wrong_decl_type_str)
-      << Attr << "variables, functions, structs, unions, classes, and non-static data members";
+      << Attr << "variables, functions, structs, unions, classes, non-static data members, and typedefs";
     return false;
   }
   return true;
@@ -1722,11 +1946,50 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_record, /*IsSupported=*/true));
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_field, /*IsSupported=*/true));
+  MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_type_alias, /*IsSupported=*/true));
 }
 
-static const ParsedAttrInfoBTFTag Instance;
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
+static const ParsedAttrInfoBTFDeclTag Instance;
 };
-const ParsedAttrInfoBTFTag ParsedAttrInfoBTFTag::Instance;
+const ParsedAttrInfoBTFDeclTag ParsedAttrInfoBTFDeclTag::Instance;
+static constexpr ParsedAttrInfo::Spelling BTFTypeTagSpellings[] = {
+  {AttributeCommonInfo::AS_GNU, "btf_type_tag"},
+  {AttributeCommonInfo::AS_CXX11, "clang::btf_type_tag"},
+  {AttributeCommonInfo::AS_C2x, "clang::btf_type_tag"},
+};
+static constexpr const char *BTFTypeTagArgNames[] = {
+"BTFTypeTag",};
+struct ParsedAttrInfoBTFTypeTag final : public ParsedAttrInfo {
+  ParsedAttrInfoBTFTypeTag() {
+    AttrKind = ParsedAttr::AT_BTFTypeTag;
+    NumArgs = 1;
+    OptArgs = 0;
+    NumArgMembers = 1;
+    HasCustomParsing = 0;
+    AcceptsExprPack = 0;
+    IsTargetSpecific = 0;
+    IsType = 1;
+    IsStmt = 0;
+    IsKnownToGCC = 0;
+    IsSupportedByPragmaAttribute = 0;
+    Spellings = BTFTypeTagSpellings;
+    ArgNames = BTFTypeTagArgNames;
+  }
+bool acceptsLangOpts(const LangOptions &LangOpts) const override {
+  return (!LangOpts.CPlusPlus);
+}
+
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
+static const ParsedAttrInfoBTFTypeTag Instance;
+};
+const ParsedAttrInfoBTFTypeTag ParsedAttrInfoBTFTypeTag::Instance;
 static constexpr ParsedAttrInfo::Spelling BlocksSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "blocks"},
   {AttributeCommonInfo::AS_CXX11, "clang::blocks"},
@@ -1739,7 +2002,9 @@ struct ParsedAttrInfoBlocks final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Blocks;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -1748,6 +2013,10 @@ struct ParsedAttrInfoBlocks final : public ParsedAttrInfo {
     Spellings = BlocksSpellings;
     ArgNames = BlocksArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoBlocks Instance;
 };
 const ParsedAttrInfoBlocks ParsedAttrInfoBlocks::Instance;
@@ -1763,7 +2032,9 @@ struct ParsedAttrInfoBuiltinAlias final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_BuiltinAlias;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -1809,6 +2080,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoBuiltinAlias Instance;
 };
 const ParsedAttrInfoBuiltinAlias ParsedAttrInfoBuiltinAlias::Instance;
@@ -1824,7 +2099,9 @@ struct ParsedAttrInfoCDecl final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CDecl;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -1832,6 +2109,10 @@ struct ParsedAttrInfoCDecl final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = CDeclSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCDecl Instance;
 };
 const ParsedAttrInfoCDecl ParsedAttrInfoCDecl::Instance;
@@ -1845,7 +2126,9 @@ struct ParsedAttrInfoCFAuditedTransfer final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CFAuditedTransfer;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -1888,6 +2171,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCFAuditedTransfer Instance;
 };
 const ParsedAttrInfoCFAuditedTransfer ParsedAttrInfoCFAuditedTransfer::Instance;
@@ -1901,7 +2188,9 @@ struct ParsedAttrInfoCFConsumed final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CFConsumed;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -1928,6 +2217,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCFConsumed Instance;
 };
 const ParsedAttrInfoCFConsumed ParsedAttrInfoCFConsumed::Instance;
@@ -1941,7 +2234,9 @@ struct ParsedAttrInfoCFGuard final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CFGuard;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -1965,6 +2260,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCFGuard Instance;
 };
 const ParsedAttrInfoCFGuard ParsedAttrInfoCFGuard::Instance;
@@ -1978,7 +2277,9 @@ struct ParsedAttrInfoCFICanonicalJumpTable final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CFICanonicalJumpTable;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2010,6 +2311,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCFICanonicalJumpTable Instance;
 };
 const ParsedAttrInfoCFICanonicalJumpTable ParsedAttrInfoCFICanonicalJumpTable::Instance;
@@ -2023,7 +2328,9 @@ struct ParsedAttrInfoCFReturnsNotRetained final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CFReturnsNotRetained;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2031,6 +2338,10 @@ struct ParsedAttrInfoCFReturnsNotRetained final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = CFReturnsNotRetainedSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCFReturnsNotRetained Instance;
 };
 const ParsedAttrInfoCFReturnsNotRetained ParsedAttrInfoCFReturnsNotRetained::Instance;
@@ -2044,7 +2355,9 @@ struct ParsedAttrInfoCFReturnsRetained final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CFReturnsRetained;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2052,6 +2365,10 @@ struct ParsedAttrInfoCFReturnsRetained final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = CFReturnsRetainedSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCFReturnsRetained Instance;
 };
 const ParsedAttrInfoCFReturnsRetained ParsedAttrInfoCFReturnsRetained::Instance;
@@ -2065,7 +2382,9 @@ struct ParsedAttrInfoCFUnknownTransfer final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CFUnknownTransfer;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2108,6 +2427,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCFUnknownTransfer Instance;
 };
 const ParsedAttrInfoCFUnknownTransfer ParsedAttrInfoCFUnknownTransfer::Instance;
@@ -2124,7 +2447,9 @@ struct ParsedAttrInfoCPUDispatch final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CPUDispatch;
     NumArgs = 0;
     OptArgs = 15;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2148,8 +2473,33 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+  using ParsedAttrInfo::diagMutualExclusion;
+
+  bool diagMutualExclusion(Sema &S, const ParsedAttr &AL, const Decl *D) const override {
+    if (const auto *A = D->getAttr<TargetClonesAttr>()) {
+      S.Diag(AL.getLoc(), diag::err_attributes_are_not_compatible) << AL << A;
+      S.Diag(A->getLocation(), diag::note_conflicting_attribute);      
+return false;
+    }
+    if (const auto *A = D->getAttr<TargetAttr>()) {
+      S.Diag(AL.getLoc(), diag::err_attributes_are_not_compatible) << AL << A;
+      S.Diag(A->getLocation(), diag::note_conflicting_attribute);      
+return false;
+    }
+    if (const auto *A = D->getAttr<CPUSpecificAttr>()) {
+      S.Diag(AL.getLoc(), diag::err_attributes_are_not_compatible) << AL << A;
+      S.Diag(A->getLocation(), diag::note_conflicting_attribute);      
+return false;
+    }
+    return true;
+  }
+
 void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectMatchRule, bool>> &MatchRules, const LangOptions &LangOpts) const override {
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
+}
+
+bool isParamExpr(size_t N) const override {
+  return false;
 }
 
 static const ParsedAttrInfoCPUDispatch Instance;
@@ -2168,7 +2518,9 @@ struct ParsedAttrInfoCPUSpecific final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CPUSpecific;
     NumArgs = 0;
     OptArgs = 15;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2192,8 +2544,33 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+  using ParsedAttrInfo::diagMutualExclusion;
+
+  bool diagMutualExclusion(Sema &S, const ParsedAttr &AL, const Decl *D) const override {
+    if (const auto *A = D->getAttr<TargetClonesAttr>()) {
+      S.Diag(AL.getLoc(), diag::err_attributes_are_not_compatible) << AL << A;
+      S.Diag(A->getLocation(), diag::note_conflicting_attribute);      
+return false;
+    }
+    if (const auto *A = D->getAttr<TargetAttr>()) {
+      S.Diag(AL.getLoc(), diag::err_attributes_are_not_compatible) << AL << A;
+      S.Diag(A->getLocation(), diag::note_conflicting_attribute);      
+return false;
+    }
+    if (const auto *A = D->getAttr<CPUDispatchAttr>()) {
+      S.Diag(AL.getLoc(), diag::err_attributes_are_not_compatible) << AL << A;
+      S.Diag(A->getLocation(), diag::note_conflicting_attribute);      
+return false;
+    }
+    return true;
+  }
+
 void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectMatchRule, bool>> &MatchRules, const LangOptions &LangOpts) const override {
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
+}
+
+bool isParamExpr(size_t N) const override {
+  return false;
 }
 
 static const ParsedAttrInfoCPUSpecific Instance;
@@ -2208,7 +2585,9 @@ struct ParsedAttrInfoCUDAConstant final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CUDAConstant;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2255,6 +2634,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCUDAConstant Instance;
 };
 const ParsedAttrInfoCUDAConstant ParsedAttrInfoCUDAConstant::Instance;
@@ -2267,7 +2650,9 @@ struct ParsedAttrInfoCUDADevice final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CUDADevice;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2310,6 +2695,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCUDADevice Instance;
 };
 const ParsedAttrInfoCUDADevice ParsedAttrInfoCUDADevice::Instance;
@@ -2322,7 +2711,9 @@ struct ParsedAttrInfoCUDADeviceBuiltinSurfaceType final : public ParsedAttrInfo 
     AttrKind = ParsedAttr::AT_CUDADeviceBuiltinSurfaceType;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2369,6 +2760,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCUDADeviceBuiltinSurfaceType Instance;
 };
 const ParsedAttrInfoCUDADeviceBuiltinSurfaceType ParsedAttrInfoCUDADeviceBuiltinSurfaceType::Instance;
@@ -2381,7 +2776,9 @@ struct ParsedAttrInfoCUDADeviceBuiltinTextureType final : public ParsedAttrInfo 
     AttrKind = ParsedAttr::AT_CUDADeviceBuiltinTextureType;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2428,6 +2825,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCUDADeviceBuiltinTextureType Instance;
 };
 const ParsedAttrInfoCUDADeviceBuiltinTextureType ParsedAttrInfoCUDADeviceBuiltinTextureType::Instance;
@@ -2440,7 +2841,9 @@ struct ParsedAttrInfoCUDAGlobal final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CUDAGlobal;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2487,6 +2890,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCUDAGlobal Instance;
 };
 const ParsedAttrInfoCUDAGlobal ParsedAttrInfoCUDAGlobal::Instance;
@@ -2499,7 +2906,9 @@ struct ParsedAttrInfoCUDAHost final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CUDAHost;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2546,6 +2955,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCUDAHost Instance;
 };
 const ParsedAttrInfoCUDAHost ParsedAttrInfoCUDAHost::Instance;
@@ -2554,7 +2967,9 @@ struct ParsedAttrInfoCUDAInvalidTarget final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CUDAInvalidTarget;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2580,6 +2995,10 @@ bool acceptsLangOpts(const LangOptions &LangOpts) const override {
   return LangOpts.CUDA;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCUDAInvalidTarget Instance;
 };
 const ParsedAttrInfoCUDAInvalidTarget ParsedAttrInfoCUDAInvalidTarget::Instance;
@@ -2594,7 +3013,9 @@ struct ParsedAttrInfoCUDALaunchBounds final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CUDALaunchBounds;
     NumArgs = 1;
     OptArgs = 1;
+    NumArgMembers = 2;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2627,6 +3048,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_hasType_functionType, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || (N == 1) || false;
+}
+
 static const ParsedAttrInfoCUDALaunchBounds Instance;
 };
 const ParsedAttrInfoCUDALaunchBounds ParsedAttrInfoCUDALaunchBounds::Instance;
@@ -2639,7 +3064,9 @@ struct ParsedAttrInfoCUDAShared final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CUDAShared;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2686,18 +3113,26 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCUDAShared Instance;
 };
 const ParsedAttrInfoCUDAShared ParsedAttrInfoCUDAShared::Instance;
 static constexpr ParsedAttrInfo::Spelling CXX11NoReturnSpellings[] = {
   {AttributeCommonInfo::AS_CXX11, "noreturn"},
+  {AttributeCommonInfo::AS_C2x, "noreturn"},
+  {AttributeCommonInfo::AS_C2x, "_Noreturn"},
 };
 struct ParsedAttrInfoCXX11NoReturn final : public ParsedAttrInfo {
   ParsedAttrInfoCXX11NoReturn() {
     AttrKind = ParsedAttr::AT_CXX11NoReturn;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2720,13 +3155,30 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override {
+  enum Spelling {
+    CXX11_noreturn = 0,
+    C2x_noreturn = 1,
+    C2x_Noreturn = 2,
+  SpellingNotCalculated = 15
+
+  };
+
+  unsigned Idx = Attr.getAttributeSpellingListIndex();
+  switch (Idx) {
+    default: llvm_unreachable("Unknown spelling list index");
+    case 0: return CXX11_noreturn;
+    case 1: return C2x_noreturn;
+    case 2: return C2x_Noreturn;
+  }
+}
+
 void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectMatchRule, bool>> &MatchRules, const LangOptions &LangOpts) const override {
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
-AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const override {
-  D->addAttr(::new (S.Context) CXX11NoReturnAttr(S.Context, Attr));
-  return AttributeApplied;
+bool isParamExpr(size_t N) const override {
+  return false;
 }
 
 static const ParsedAttrInfoCXX11NoReturn Instance;
@@ -2743,7 +3195,9 @@ struct ParsedAttrInfoCallableWhen final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CallableWhen;
     NumArgs = 0;
     OptArgs = 15;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2771,6 +3225,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function_is_member, /*IsSupported=*/LangOpts.CPlusPlus));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCallableWhen Instance;
 };
 const ParsedAttrInfoCallableWhen ParsedAttrInfoCallableWhen::Instance;
@@ -2786,7 +3244,9 @@ struct ParsedAttrInfoCallback final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Callback;
     NumArgs = 0;
     OptArgs = 15;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2814,6 +3274,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCallback Instance;
 };
 const ParsedAttrInfoCallback ParsedAttrInfoCallback::Instance;
@@ -2827,7 +3291,9 @@ struct ParsedAttrInfoCalledOnce final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CalledOnce;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2858,6 +3324,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCalledOnce Instance;
 };
 const ParsedAttrInfoCalledOnce ParsedAttrInfoCalledOnce::Instance;
@@ -2874,7 +3344,9 @@ struct ParsedAttrInfoCapability final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Capability;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2923,6 +3395,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_type_alias, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCapability Instance;
 };
 const ParsedAttrInfoCapability ParsedAttrInfoCapability::Instance;
@@ -2935,7 +3411,9 @@ struct ParsedAttrInfoCarriesDependency final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CarriesDependency;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -2964,6 +3442,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCarriesDependency Instance;
 };
 const ParsedAttrInfoCarriesDependency ParsedAttrInfoCarriesDependency::Instance;
@@ -2979,7 +3461,9 @@ struct ParsedAttrInfoCleanup final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Cleanup;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -3007,6 +3491,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_local, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCleanup Instance;
 };
 const ParsedAttrInfoCleanup ParsedAttrInfoCleanup::Instance;
@@ -3018,7 +3506,9 @@ struct ParsedAttrInfoCmseNSCall final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CmseNSCall;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 1;
     IsStmt = 0;
@@ -3035,6 +3525,10 @@ bool existsInTarget(const TargetInfo &Target) const override {
   return true && (T.getArch() == llvm::Triple::arm || T.getArch() == llvm::Triple::thumb || T.getArch() == llvm::Triple::armeb || T.getArch() == llvm::Triple::thumbeb);
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCmseNSCall Instance;
 };
 const ParsedAttrInfoCmseNSCall ParsedAttrInfoCmseNSCall::Instance;
@@ -3046,7 +3540,9 @@ struct ParsedAttrInfoCmseNSEntry final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CmseNSEntry;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -3082,6 +3578,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCmseNSEntry Instance;
 };
 const ParsedAttrInfoCmseNSEntry ParsedAttrInfoCmseNSEntry::Instance;
@@ -3095,7 +3595,9 @@ struct ParsedAttrInfoCodeSeg final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_CodeSeg;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -3119,6 +3621,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCodeSeg Instance;
 };
 const ParsedAttrInfoCodeSeg ParsedAttrInfoCodeSeg::Instance;
@@ -3132,7 +3638,9 @@ struct ParsedAttrInfoCold final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Cold;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -3175,6 +3683,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCold Instance;
 };
 const ParsedAttrInfoCold ParsedAttrInfoCold::Instance;
@@ -3188,7 +3700,9 @@ struct ParsedAttrInfoCommon final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Common;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -3226,6 +3740,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoCommon Instance;
 };
 const ParsedAttrInfoCommon ParsedAttrInfoCommon::Instance;
@@ -3242,7 +3760,9 @@ struct ParsedAttrInfoConst final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Const;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -3253,6 +3773,10 @@ struct ParsedAttrInfoConst final : public ParsedAttrInfo {
 AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const override {
   D->addAttr(::new (S.Context) ConstAttr(S.Context, Attr));
   return AttributeApplied;
+}
+
+bool isParamExpr(size_t N) const override {
+  return false;
 }
 
 static const ParsedAttrInfoConst Instance;
@@ -3268,7 +3792,9 @@ struct ParsedAttrInfoConstInit final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ConstInit;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -3322,6 +3848,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoConstInit Instance;
 };
 const ParsedAttrInfoConstInit ParsedAttrInfoConstInit::Instance;
@@ -3337,7 +3867,9 @@ struct ParsedAttrInfoConstructor final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Constructor;
     NumArgs = 0;
     OptArgs = 1;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -3365,6 +3897,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoConstructor Instance;
 };
 const ParsedAttrInfoConstructor ParsedAttrInfoConstructor::Instance;
@@ -3379,7 +3915,9 @@ struct ParsedAttrInfoConsumable final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Consumable;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -3407,6 +3945,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_record, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoConsumable Instance;
 };
 const ParsedAttrInfoConsumable ParsedAttrInfoConsumable::Instance;
@@ -3419,7 +3961,9 @@ struct ParsedAttrInfoConsumableAutoCast final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ConsumableAutoCast;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -3451,6 +3995,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoConsumableAutoCast Instance;
 };
 const ParsedAttrInfoConsumableAutoCast ParsedAttrInfoConsumableAutoCast::Instance;
@@ -3463,7 +4011,9 @@ struct ParsedAttrInfoConsumableSetOnRead final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ConsumableSetOnRead;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -3495,6 +4045,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoConsumableSetOnRead Instance;
 };
 const ParsedAttrInfoConsumableSetOnRead ParsedAttrInfoConsumableSetOnRead::Instance;
@@ -3508,7 +4062,9 @@ struct ParsedAttrInfoConvergent final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Convergent;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -3540,6 +4096,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoConvergent Instance;
 };
 const ParsedAttrInfoConvergent ParsedAttrInfoConvergent::Instance;
@@ -3554,7 +4114,9 @@ struct ParsedAttrInfoDLLExport final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_DLLExport;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -3589,6 +4151,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_interface, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoDLLExport Instance;
 };
 const ParsedAttrInfoDLLExport ParsedAttrInfoDLLExport::Instance;
@@ -3597,7 +4163,9 @@ struct ParsedAttrInfoDLLExportStaticLocal final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_DLLExportStaticLocal;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -3624,6 +4192,10 @@ bool existsInTarget(const TargetInfo &Target) const override {
   return true && ( Target.getTriple().hasDLLImportExport() );
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoDLLExportStaticLocal Instance;
 };
 const ParsedAttrInfoDLLExportStaticLocal ParsedAttrInfoDLLExportStaticLocal::Instance;
@@ -3638,7 +4210,9 @@ struct ParsedAttrInfoDLLImport final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_DLLImport;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -3673,6 +4247,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_interface, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoDLLImport Instance;
 };
 const ParsedAttrInfoDLLImport ParsedAttrInfoDLLImport::Instance;
@@ -3681,7 +4259,9 @@ struct ParsedAttrInfoDLLImportStaticLocal final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_DLLImportStaticLocal;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -3708,6 +4288,10 @@ bool existsInTarget(const TargetInfo &Target) const override {
   return true && ( Target.getTriple().hasDLLImportExport() );
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoDLLImportStaticLocal Instance;
 };
 const ParsedAttrInfoDLLImportStaticLocal ParsedAttrInfoDLLImportStaticLocal::Instance;
@@ -3726,7 +4310,9 @@ struct ParsedAttrInfoDeprecated final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Deprecated;
     NumArgs = 0;
     OptArgs = 2;
+    NumArgMembers = 2;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -3735,6 +4321,10 @@ struct ParsedAttrInfoDeprecated final : public ParsedAttrInfo {
     Spellings = DeprecatedSpellings;
     ArgNames = DeprecatedArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoDeprecated Instance;
 };
 const ParsedAttrInfoDeprecated ParsedAttrInfoDeprecated::Instance;
@@ -3750,7 +4340,9 @@ struct ParsedAttrInfoDestructor final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Destructor;
     NumArgs = 0;
     OptArgs = 1;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -3778,9 +4370,62 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoDestructor Instance;
 };
 const ParsedAttrInfoDestructor ParsedAttrInfoDestructor::Instance;
+static constexpr ParsedAttrInfo::Spelling DiagnoseAsBuiltinSpellings[] = {
+  {AttributeCommonInfo::AS_GNU, "diagnose_as_builtin"},
+  {AttributeCommonInfo::AS_CXX11, "clang::diagnose_as_builtin"},
+  {AttributeCommonInfo::AS_C2x, "clang::diagnose_as_builtin"},
+};
+static constexpr const char *DiagnoseAsBuiltinArgNames[] = {
+"Function","ArgIndices...",};
+struct ParsedAttrInfoDiagnoseAsBuiltin final : public ParsedAttrInfo {
+  ParsedAttrInfoDiagnoseAsBuiltin() {
+    AttrKind = ParsedAttr::AT_DiagnoseAsBuiltin;
+    NumArgs = 1;
+    OptArgs = 15;
+    NumArgMembers = 2;
+    HasCustomParsing = 0;
+    AcceptsExprPack = 0;
+    IsTargetSpecific = 0;
+    IsType = 0;
+    IsStmt = 0;
+    IsKnownToGCC = 0;
+    IsSupportedByPragmaAttribute = 1;
+    Spellings = DiagnoseAsBuiltinSpellings;
+    ArgNames = DiagnoseAsBuiltinArgNames;
+  }
+bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
+  if (!isa<FunctionDecl>(D)) {
+    S.Diag(Attr.getLoc(), diag::warn_attribute_wrong_decl_type_str)
+      << Attr << "functions";
+    return false;
+  }
+  return true;
+}
+
+bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const override {
+  S.Diag(AL.getLoc(), diag::err_decl_attribute_invalid_on_stmt)
+    << AL << St->getBeginLoc();
+  return false;
+}
+
+void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectMatchRule, bool>> &MatchRules, const LangOptions &LangOpts) const override {
+  MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
+}
+
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
+static const ParsedAttrInfoDiagnoseAsBuiltin Instance;
+};
+const ParsedAttrInfoDiagnoseAsBuiltin ParsedAttrInfoDiagnoseAsBuiltin::Instance;
 static constexpr ParsedAttrInfo::Spelling DiagnoseIfSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "diagnose_if"},
 };
@@ -3791,7 +4436,9 @@ struct ParsedAttrInfoDiagnoseIf final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_DiagnoseIf;
     NumArgs = 3;
     OptArgs = 0;
+    NumArgMembers = 3;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -3815,6 +4462,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || false;
+}
+
 static const ParsedAttrInfoDiagnoseIf Instance;
 };
 const ParsedAttrInfoDiagnoseIf ParsedAttrInfoDiagnoseIf::Instance;
@@ -3828,7 +4479,9 @@ struct ParsedAttrInfoDisableSanitizerInstrumentation final : public ParsedAttrIn
     AttrKind = ParsedAttr::AT_DisableSanitizerInstrumentation;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -3862,6 +4515,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoDisableSanitizerInstrumentation Instance;
 };
 const ParsedAttrInfoDisableSanitizerInstrumentation ParsedAttrInfoDisableSanitizerInstrumentation::Instance;
@@ -3875,7 +4532,9 @@ struct ParsedAttrInfoDisableTailCalls final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_DisableTailCalls;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -3919,6 +4578,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoDisableTailCalls Instance;
 };
 const ParsedAttrInfoDisableTailCalls ParsedAttrInfoDisableTailCalls::Instance;
@@ -3930,7 +4593,9 @@ struct ParsedAttrInfoEmptyBases final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_EmptyBases;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -3963,6 +4628,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoEmptyBases Instance;
 };
 const ParsedAttrInfoEmptyBases ParsedAttrInfoEmptyBases::Instance;
@@ -3976,7 +4645,9 @@ struct ParsedAttrInfoEnableIf final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_EnableIf;
     NumArgs = 2;
     OptArgs = 0;
+    NumArgMembers = 2;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4004,6 +4675,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || false;
+}
+
 static const ParsedAttrInfoEnableIf Instance;
 };
 const ParsedAttrInfoEnableIf ParsedAttrInfoEnableIf::Instance;
@@ -4019,7 +4694,9 @@ struct ParsedAttrInfoEnforceTCB final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_EnforceTCB;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4047,6 +4724,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoEnforceTCB Instance;
 };
 const ParsedAttrInfoEnforceTCB ParsedAttrInfoEnforceTCB::Instance;
@@ -4062,7 +4743,9 @@ struct ParsedAttrInfoEnforceTCBLeaf final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_EnforceTCBLeaf;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4090,6 +4773,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoEnforceTCBLeaf Instance;
 };
 const ParsedAttrInfoEnforceTCBLeaf ParsedAttrInfoEnforceTCBLeaf::Instance;
@@ -4105,7 +4792,9 @@ struct ParsedAttrInfoEnumExtensibility final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_EnumExtensibility;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4133,9 +4822,89 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_enum, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoEnumExtensibility Instance;
 };
 const ParsedAttrInfoEnumExtensibility ParsedAttrInfoEnumExtensibility::Instance;
+static constexpr ParsedAttrInfo::Spelling ErrorSpellings[] = {
+  {AttributeCommonInfo::AS_GNU, "error"},
+  {AttributeCommonInfo::AS_CXX11, "gnu::error"},
+  {AttributeCommonInfo::AS_C2x, "gnu::error"},
+  {AttributeCommonInfo::AS_GNU, "warning"},
+  {AttributeCommonInfo::AS_CXX11, "gnu::warning"},
+  {AttributeCommonInfo::AS_C2x, "gnu::warning"},
+};
+static constexpr const char *ErrorArgNames[] = {
+"UserDiagnostic",};
+struct ParsedAttrInfoError final : public ParsedAttrInfo {
+  ParsedAttrInfoError() {
+    AttrKind = ParsedAttr::AT_Error;
+    NumArgs = 1;
+    OptArgs = 0;
+    NumArgMembers = 1;
+    HasCustomParsing = 0;
+    AcceptsExprPack = 0;
+    IsTargetSpecific = 0;
+    IsType = 0;
+    IsStmt = 0;
+    IsKnownToGCC = 1;
+    IsSupportedByPragmaAttribute = 1;
+    Spellings = ErrorSpellings;
+    ArgNames = ErrorArgNames;
+  }
+bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
+  if (!isa<FunctionDecl>(D)) {
+    S.Diag(Attr.getLoc(), diag::err_attribute_wrong_decl_type_str)
+      << Attr << "functions";
+    return false;
+  }
+  return true;
+}
+
+bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const override {
+  S.Diag(AL.getLoc(), diag::err_decl_attribute_invalid_on_stmt)
+    << AL << St->getBeginLoc();
+  return false;
+}
+
+unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override {
+  enum Spelling {
+    GNU_error = 0,
+    CXX11_gnu_error = 1,
+    C2x_gnu_error = 2,
+    GNU_warning = 3,
+    CXX11_gnu_warning = 4,
+    C2x_gnu_warning = 5,
+  SpellingNotCalculated = 15
+
+  };
+
+  unsigned Idx = Attr.getAttributeSpellingListIndex();
+  switch (Idx) {
+    default: llvm_unreachable("Unknown spelling list index");
+    case 0: return GNU_error;
+    case 1: return CXX11_gnu_error;
+    case 2: return C2x_gnu_error;
+    case 3: return GNU_warning;
+    case 4: return CXX11_gnu_warning;
+    case 5: return C2x_gnu_warning;
+  }
+}
+
+void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectMatchRule, bool>> &MatchRules, const LangOptions &LangOpts) const override {
+  MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
+}
+
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
+static const ParsedAttrInfoError Instance;
+};
+const ParsedAttrInfoError ParsedAttrInfoError::Instance;
 static constexpr ParsedAttrInfo::Spelling ExcludeFromExplicitInstantiationSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "exclude_from_explicit_instantiation"},
   {AttributeCommonInfo::AS_CXX11, "clang::exclude_from_explicit_instantiation"},
@@ -4146,7 +4915,9 @@ struct ParsedAttrInfoExcludeFromExplicitInstantiation final : public ParsedAttrI
     AttrKind = ParsedAttr::AT_ExcludeFromExplicitInstantiation;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4180,6 +4951,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoExcludeFromExplicitInstantiation Instance;
 };
 const ParsedAttrInfoExcludeFromExplicitInstantiation ParsedAttrInfoExcludeFromExplicitInstantiation::Instance;
@@ -4193,7 +4968,9 @@ struct ParsedAttrInfoExclusiveTrylockFunction final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ExclusiveTrylockFunction;
     NumArgs = 1;
     OptArgs = 15;
+    NumArgMembers = 2;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4217,6 +4994,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || (N == 1) || false;
+}
+
 static const ParsedAttrInfoExclusiveTrylockFunction Instance;
 };
 const ParsedAttrInfoExclusiveTrylockFunction ParsedAttrInfoExclusiveTrylockFunction::Instance;
@@ -4230,7 +5011,9 @@ struct ParsedAttrInfoExtVectorType final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ExtVectorType;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4254,6 +5037,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || false;
+}
+
 static const ParsedAttrInfoExtVectorType Instance;
 };
 const ParsedAttrInfoExtVectorType ParsedAttrInfoExtVectorType::Instance;
@@ -4269,7 +5056,9 @@ struct ParsedAttrInfoExternalSourceSymbol final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ExternalSourceSymbol;
     NumArgs = 0;
     OptArgs = 3;
+    NumArgMembers = 3;
     HasCustomParsing = 1;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4311,6 +5100,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoExternalSourceSymbol Instance;
 };
 const ParsedAttrInfoExternalSourceSymbol ParsedAttrInfoExternalSourceSymbol::Instance;
@@ -4327,7 +5120,9 @@ struct ParsedAttrInfoFallThrough final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_FallThrough;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 1;
@@ -4350,6 +5145,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &Attr, const Stmt *St) const
   return true;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoFallThrough Instance;
 };
 const ParsedAttrInfoFallThrough ParsedAttrInfoFallThrough::Instance;
@@ -4365,7 +5164,9 @@ struct ParsedAttrInfoFastCall final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_FastCall;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -4373,6 +5174,10 @@ struct ParsedAttrInfoFastCall final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = FastCallSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoFastCall Instance;
 };
 const ParsedAttrInfoFastCall ParsedAttrInfoFastCall::Instance;
@@ -4386,7 +5191,9 @@ struct ParsedAttrInfoFlagEnum final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_FlagEnum;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4418,6 +5225,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoFlagEnum Instance;
 };
 const ParsedAttrInfoFlagEnum ParsedAttrInfoFlagEnum::Instance;
@@ -4431,7 +5242,9 @@ struct ParsedAttrInfoFlatten final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Flatten;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4463,6 +5276,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoFlatten Instance;
 };
 const ParsedAttrInfoFlatten ParsedAttrInfoFlatten::Instance;
@@ -4478,7 +5295,9 @@ struct ParsedAttrInfoFormat final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Format;
     NumArgs = 3;
     OptArgs = 0;
+    NumArgMembers = 3;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4502,6 +5321,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoFormat Instance;
 };
 const ParsedAttrInfoFormat ParsedAttrInfoFormat::Instance;
@@ -4517,7 +5340,9 @@ struct ParsedAttrInfoFormatArg final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_FormatArg;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4541,6 +5366,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoFormatArg Instance;
 };
 const ParsedAttrInfoFormatArg ParsedAttrInfoFormatArg::Instance;
@@ -4554,7 +5383,9 @@ struct ParsedAttrInfoGNUInline final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_GNUInline;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4581,6 +5412,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoGNUInline Instance;
 };
 const ParsedAttrInfoGNUInline ParsedAttrInfoGNUInline::Instance;
@@ -4594,7 +5429,9 @@ struct ParsedAttrInfoGuardedBy final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_GuardedBy;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4618,6 +5455,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || false;
+}
+
 static const ParsedAttrInfoGuardedBy Instance;
 };
 const ParsedAttrInfoGuardedBy ParsedAttrInfoGuardedBy::Instance;
@@ -4630,7 +5471,9 @@ struct ParsedAttrInfoGuardedVar final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_GuardedVar;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4658,6 +5501,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoGuardedVar Instance;
 };
 const ParsedAttrInfoGuardedVar ParsedAttrInfoGuardedVar::Instance;
@@ -4670,7 +5517,9 @@ struct ParsedAttrInfoHIPManaged final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_HIPManaged;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4717,6 +5566,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoHIPManaged Instance;
 };
 const ParsedAttrInfoHIPManaged ParsedAttrInfoHIPManaged::Instance;
@@ -4730,7 +5583,9 @@ struct ParsedAttrInfoHot final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Hot;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4773,6 +5628,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoHot Instance;
 };
 const ParsedAttrInfoHot ParsedAttrInfoHot::Instance;
@@ -4786,7 +5645,9 @@ struct ParsedAttrInfoIBAction final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_IBAction;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4818,6 +5679,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoIBAction Instance;
 };
 const ParsedAttrInfoIBAction ParsedAttrInfoIBAction::Instance;
@@ -4831,7 +5696,9 @@ struct ParsedAttrInfoIBOutlet final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_IBOutlet;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4839,6 +5706,10 @@ struct ParsedAttrInfoIBOutlet final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = IBOutletSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoIBOutlet Instance;
 };
 const ParsedAttrInfoIBOutlet ParsedAttrInfoIBOutlet::Instance;
@@ -4854,7 +5725,9 @@ struct ParsedAttrInfoIBOutletCollection final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_IBOutletCollection;
     NumArgs = 0;
     OptArgs = 1;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -4863,6 +5736,10 @@ struct ParsedAttrInfoIBOutletCollection final : public ParsedAttrInfo {
     Spellings = IBOutletCollectionSpellings;
     ArgNames = IBOutletCollectionArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoIBOutletCollection Instance;
 };
 const ParsedAttrInfoIBOutletCollection ParsedAttrInfoIBOutletCollection::Instance;
@@ -4878,7 +5755,9 @@ struct ParsedAttrInfoIFunc final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_IFunc;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -4911,6 +5790,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoIFunc Instance;
 };
 const ParsedAttrInfoIFunc ParsedAttrInfoIFunc::Instance;
@@ -4925,7 +5808,9 @@ struct ParsedAttrInfoInitPriority final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_InitPriority;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -4958,6 +5843,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoInitPriority Instance;
 };
 const ParsedAttrInfoInitPriority ParsedAttrInfoInitPriority::Instance;
@@ -4970,7 +5859,9 @@ struct ParsedAttrInfoIntelOclBicc final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_IntelOclBicc;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -4978,6 +5869,10 @@ struct ParsedAttrInfoIntelOclBicc final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = IntelOclBiccSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoIntelOclBicc Instance;
 };
 const ParsedAttrInfoIntelOclBicc ParsedAttrInfoIntelOclBicc::Instance;
@@ -4991,7 +5886,9 @@ struct ParsedAttrInfoInternalLinkage final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_InternalLinkage;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -5031,6 +5928,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_record, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoInternalLinkage Instance;
 };
 const ParsedAttrInfoInternalLinkage ParsedAttrInfoInternalLinkage::Instance;
@@ -5044,7 +5945,9 @@ struct ParsedAttrInfoLTOVisibilityPublic final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_LTOVisibilityPublic;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -5076,6 +5979,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoLTOVisibilityPublic Instance;
 };
 const ParsedAttrInfoLTOVisibilityPublic ParsedAttrInfoLTOVisibilityPublic::Instance;
@@ -5089,7 +5996,9 @@ struct ParsedAttrInfoLayoutVersion final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_LayoutVersion;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -5118,6 +6027,10 @@ bool existsInTarget(const TargetInfo &Target) const override {
   return true && (T.getArch() == llvm::Triple::x86 || T.getArch() == llvm::Triple::x86_64 || T.getArch() == llvm::Triple::arm || T.getArch() == llvm::Triple::thumb || T.getArch() == llvm::Triple::aarch64) && ( Target.getCXXABI().isMicrosoft() );
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoLayoutVersion Instance;
 };
 const ParsedAttrInfoLayoutVersion ParsedAttrInfoLayoutVersion::Instance;
@@ -5131,7 +6044,9 @@ struct ParsedAttrInfoLeaf final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Leaf;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -5163,6 +6078,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoLeaf Instance;
 };
 const ParsedAttrInfoLeaf ParsedAttrInfoLeaf::Instance;
@@ -5175,7 +6094,9 @@ struct ParsedAttrInfoLifetimeBound final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_LifetimeBound;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -5207,6 +6128,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoLifetimeBound Instance;
 };
 const ParsedAttrInfoLifetimeBound ParsedAttrInfoLifetimeBound::Instance;
@@ -5219,7 +6144,9 @@ struct ParsedAttrInfoLikely final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Likely;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 1;
@@ -5228,6 +6155,10 @@ struct ParsedAttrInfoLikely final : public ParsedAttrInfo {
     Spellings = LikelySpellings;
   }
   using ParsedAttrInfo::diagMutualExclusion;
+
+bool isParamExpr(size_t N) const override {
+  return false;
+}
 
 static const ParsedAttrInfoLikely Instance;
 };
@@ -5242,7 +6173,9 @@ struct ParsedAttrInfoLoaderUninitialized final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_LoaderUninitialized;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -5274,6 +6207,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoLoaderUninitialized Instance;
 };
 const ParsedAttrInfoLoaderUninitialized ParsedAttrInfoLoaderUninitialized::Instance;
@@ -5287,7 +6224,9 @@ struct ParsedAttrInfoLockReturned final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_LockReturned;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -5311,6 +6250,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || false;
+}
+
 static const ParsedAttrInfoLockReturned Instance;
 };
 const ParsedAttrInfoLockReturned ParsedAttrInfoLockReturned::Instance;
@@ -5322,7 +6265,9 @@ struct ParsedAttrInfoLockable final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Lockable;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -5349,6 +6294,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_record, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoLockable Instance;
 };
 const ParsedAttrInfoLockable ParsedAttrInfoLockable::Instance;
@@ -5362,7 +6311,9 @@ struct ParsedAttrInfoLocksExcluded final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_LocksExcluded;
     NumArgs = 0;
     OptArgs = 15;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -5386,6 +6337,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || false;
+}
+
 static const ParsedAttrInfoLocksExcluded Instance;
 };
 const ParsedAttrInfoLocksExcluded ParsedAttrInfoLocksExcluded::Instance;
@@ -5403,7 +6358,9 @@ struct ParsedAttrInfoLoopHint final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_LoopHint;
     NumArgs = 3;
     OptArgs = 0;
+    NumArgMembers = 3;
     HasCustomParsing = 1;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -5434,6 +6391,10 @@ unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override 
   }
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 2) || false;
+}
+
 static const ParsedAttrInfoLoopHint Instance;
 };
 const ParsedAttrInfoLoopHint ParsedAttrInfoLoopHint::Instance;
@@ -5447,7 +6408,9 @@ struct ParsedAttrInfoMIGServerRoutine final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_MIGServerRoutine;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -5476,6 +6439,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_block, /*IsSupported=*/LangOpts.Blocks));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoMIGServerRoutine Instance;
 };
 const ParsedAttrInfoMIGServerRoutine ParsedAttrInfoMIGServerRoutine::Instance;
@@ -5489,7 +6456,9 @@ struct ParsedAttrInfoMSABI final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_MSABI;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -5497,6 +6466,10 @@ struct ParsedAttrInfoMSABI final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = MSABISpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoMSABI Instance;
 };
 const ParsedAttrInfoMSABI ParsedAttrInfoMSABI::Instance;
@@ -5508,7 +6481,9 @@ struct ParsedAttrInfoMSAllocator final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_MSAllocator;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -5531,6 +6506,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoMSAllocator Instance;
 };
 const ParsedAttrInfoMSAllocator ParsedAttrInfoMSAllocator::Instance;
@@ -5545,7 +6524,9 @@ struct ParsedAttrInfoMSInheritance final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_MSInheritance;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -5577,6 +6558,10 @@ unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override 
   }
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoMSInheritance Instance;
 };
 const ParsedAttrInfoMSInheritance ParsedAttrInfoMSInheritance::Instance;
@@ -5588,7 +6573,9 @@ struct ParsedAttrInfoMSNoVTable final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_MSNoVTable;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -5621,6 +6608,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoMSNoVTable Instance;
 };
 const ParsedAttrInfoMSNoVTable ParsedAttrInfoMSNoVTable::Instance;
@@ -5634,7 +6625,9 @@ struct ParsedAttrInfoMSStruct final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_MSStruct;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -5666,6 +6659,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoMSStruct Instance;
 };
 const ParsedAttrInfoMSStruct ParsedAttrInfoMSStruct::Instance;
@@ -5681,7 +6678,9 @@ struct ParsedAttrInfoMatrixType final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_MatrixType;
     NumArgs = 2;
     OptArgs = 0;
+    NumArgMembers = 2;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -5705,6 +6704,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || (N == 1) || false;
+}
+
 static const ParsedAttrInfoMatrixType Instance;
 };
 const ParsedAttrInfoMatrixType ParsedAttrInfoMatrixType::Instance;
@@ -5718,7 +6721,9 @@ struct ParsedAttrInfoMayAlias final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_MayAlias;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -5729,6 +6734,10 @@ struct ParsedAttrInfoMayAlias final : public ParsedAttrInfo {
 AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const override {
   D->addAttr(::new (S.Context) MayAliasAttr(S.Context, Attr));
   return AttributeApplied;
+}
+
+bool isParamExpr(size_t N) const override {
+  return false;
 }
 
 static const ParsedAttrInfoMayAlias Instance;
@@ -5744,7 +6753,9 @@ struct ParsedAttrInfoMicroMips final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_MicroMips;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -5792,6 +6803,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoMicroMips Instance;
 };
 const ParsedAttrInfoMicroMips ParsedAttrInfoMicroMips::Instance;
@@ -5805,7 +6820,9 @@ struct ParsedAttrInfoMinSize final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_MinSize;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -5833,6 +6850,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_method, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoMinSize Instance;
 };
 const ParsedAttrInfoMinSize ParsedAttrInfoMinSize::Instance;
@@ -5848,7 +6869,9 @@ struct ParsedAttrInfoMinVectorWidth final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_MinVectorWidth;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -5876,6 +6899,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoMinVectorWidth Instance;
 };
 const ParsedAttrInfoMinVectorWidth ParsedAttrInfoMinVectorWidth::Instance;
@@ -5889,7 +6916,9 @@ struct ParsedAttrInfoMips16 final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Mips16;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -5942,6 +6971,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoMips16 Instance;
 };
 const ParsedAttrInfoMips16 ParsedAttrInfoMips16::Instance;
@@ -5958,7 +6991,9 @@ struct ParsedAttrInfoMipsLongCall final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_MipsLongCall;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -6030,6 +7065,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoMipsLongCall Instance;
 };
 const ParsedAttrInfoMipsLongCall ParsedAttrInfoMipsLongCall::Instance;
@@ -6046,7 +7085,9 @@ struct ParsedAttrInfoMipsShortCall final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_MipsShortCall;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -6118,6 +7159,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoMipsShortCall Instance;
 };
 const ParsedAttrInfoMipsShortCall ParsedAttrInfoMipsShortCall::Instance;
@@ -6133,7 +7178,9 @@ struct ParsedAttrInfoMode final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Mode;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -6157,6 +7204,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoMode Instance;
 };
 const ParsedAttrInfoMode ParsedAttrInfoMode::Instance;
@@ -6170,7 +7221,9 @@ struct ParsedAttrInfoMustTail final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_MustTail;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 1;
@@ -6193,6 +7246,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &Attr, const Stmt *St) const
   return true;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoMustTail Instance;
 };
 const ParsedAttrInfoMustTail ParsedAttrInfoMustTail::Instance;
@@ -6206,7 +7263,9 @@ struct ParsedAttrInfoNSConsumed final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NSConsumed;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -6233,6 +7292,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNSConsumed Instance;
 };
 const ParsedAttrInfoNSConsumed ParsedAttrInfoNSConsumed::Instance;
@@ -6246,7 +7309,9 @@ struct ParsedAttrInfoNSConsumesSelf final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NSConsumesSelf;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -6278,6 +7343,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNSConsumesSelf Instance;
 };
 const ParsedAttrInfoNSConsumesSelf ParsedAttrInfoNSConsumesSelf::Instance;
@@ -6291,7 +7360,9 @@ struct ParsedAttrInfoNSErrorDomain final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NSErrorDomain;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -6319,6 +7390,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_enum, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNSErrorDomain Instance;
 };
 const ParsedAttrInfoNSErrorDomain ParsedAttrInfoNSErrorDomain::Instance;
@@ -6332,7 +7407,9 @@ struct ParsedAttrInfoNSReturnsAutoreleased final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NSReturnsAutoreleased;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -6340,6 +7417,10 @@ struct ParsedAttrInfoNSReturnsAutoreleased final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = NSReturnsAutoreleasedSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNSReturnsAutoreleased Instance;
 };
 const ParsedAttrInfoNSReturnsAutoreleased ParsedAttrInfoNSReturnsAutoreleased::Instance;
@@ -6353,7 +7434,9 @@ struct ParsedAttrInfoNSReturnsNotRetained final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NSReturnsNotRetained;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -6361,6 +7444,10 @@ struct ParsedAttrInfoNSReturnsNotRetained final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = NSReturnsNotRetainedSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNSReturnsNotRetained Instance;
 };
 const ParsedAttrInfoNSReturnsNotRetained ParsedAttrInfoNSReturnsNotRetained::Instance;
@@ -6374,7 +7461,9 @@ struct ParsedAttrInfoNSReturnsRetained final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NSReturnsRetained;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -6382,6 +7471,10 @@ struct ParsedAttrInfoNSReturnsRetained final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = NSReturnsRetainedSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNSReturnsRetained Instance;
 };
 const ParsedAttrInfoNSReturnsRetained ParsedAttrInfoNSReturnsRetained::Instance;
@@ -6396,7 +7489,9 @@ struct ParsedAttrInfoNaked final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Naked;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -6434,6 +7529,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNaked Instance;
 };
 const ParsedAttrInfoNaked ParsedAttrInfoNaked::Instance;
@@ -6449,7 +7548,9 @@ struct ParsedAttrInfoNeonPolyVectorType final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NeonPolyVectorType;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -6458,6 +7559,10 @@ struct ParsedAttrInfoNeonPolyVectorType final : public ParsedAttrInfo {
     Spellings = NeonPolyVectorTypeSpellings;
     ArgNames = NeonPolyVectorTypeArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNeonPolyVectorType Instance;
 };
 const ParsedAttrInfoNeonPolyVectorType ParsedAttrInfoNeonPolyVectorType::Instance;
@@ -6473,7 +7578,9 @@ struct ParsedAttrInfoNeonVectorType final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NeonVectorType;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -6482,6 +7589,10 @@ struct ParsedAttrInfoNeonVectorType final : public ParsedAttrInfo {
     Spellings = NeonVectorTypeSpellings;
     ArgNames = NeonVectorTypeArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNeonVectorType Instance;
 };
 const ParsedAttrInfoNeonVectorType ParsedAttrInfoNeonVectorType::Instance;
@@ -6493,7 +7604,9 @@ struct ParsedAttrInfoNoAlias final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoAlias;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -6521,6 +7634,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoAlias Instance;
 };
 const ParsedAttrInfoNoAlias ParsedAttrInfoNoAlias::Instance;
@@ -6536,7 +7653,9 @@ struct ParsedAttrInfoNoBuiltin final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoBuiltin;
     NumArgs = 0;
     OptArgs = 15;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -6564,6 +7683,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoBuiltin Instance;
 };
 const ParsedAttrInfoNoBuiltin ParsedAttrInfoNoBuiltin::Instance;
@@ -6577,7 +7700,9 @@ struct ParsedAttrInfoNoCommon final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoCommon;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -6609,6 +7734,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoCommon Instance;
 };
 const ParsedAttrInfoNoCommon ParsedAttrInfoNoCommon::Instance;
@@ -6622,7 +7751,9 @@ struct ParsedAttrInfoNoDebug final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoDebug;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -6652,6 +7783,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_not_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoDebug Instance;
 };
 const ParsedAttrInfoNoDebug ParsedAttrInfoNoDebug::Instance;
@@ -6665,7 +7800,9 @@ struct ParsedAttrInfoNoDeref final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoDeref;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -6673,6 +7810,10 @@ struct ParsedAttrInfoNoDeref final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = NoDerefSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoDeref Instance;
 };
 const ParsedAttrInfoNoDeref ParsedAttrInfoNoDeref::Instance;
@@ -6685,7 +7826,9 @@ struct ParsedAttrInfoNoDestroy final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoDestroy;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -6723,6 +7866,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoDestroy Instance;
 };
 const ParsedAttrInfoNoDestroy ParsedAttrInfoNoDestroy::Instance;
@@ -6736,7 +7883,9 @@ struct ParsedAttrInfoNoDuplicate final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoDuplicate;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -6768,6 +7917,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoDuplicate Instance;
 };
 const ParsedAttrInfoNoDuplicate ParsedAttrInfoNoDuplicate::Instance;
@@ -6781,7 +7934,9 @@ struct ParsedAttrInfoNoEscape final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoEscape;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -6808,6 +7963,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoEscape Instance;
 };
 const ParsedAttrInfoNoEscape ParsedAttrInfoNoEscape::Instance;
@@ -6822,7 +7981,9 @@ struct ParsedAttrInfoNoInline final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoInline;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -6854,6 +8015,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoInline Instance;
 };
 const ParsedAttrInfoNoInline ParsedAttrInfoNoInline::Instance;
@@ -6867,7 +8032,9 @@ struct ParsedAttrInfoNoInstrumentFunction final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoInstrumentFunction;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -6876,9 +8043,9 @@ struct ParsedAttrInfoNoInstrumentFunction final : public ParsedAttrInfo {
     Spellings = NoInstrumentFunctionSpellings;
   }
 bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
-  if (!isa<FunctionDecl>(D)) {
+  if (!isa<FunctionDecl>(D) && !isa<ObjCMethodDecl>(D)) {
     S.Diag(Attr.getLoc(), diag::warn_attribute_wrong_decl_type_str)
-      << Attr << "functions";
+      << Attr << "functions and Objective-C methods";
     return false;
   }
   return true;
@@ -6892,11 +8059,16 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
 
 void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectMatchRule, bool>> &MatchRules, const LangOptions &LangOpts) const override {
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
+  MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_method, /*IsSupported=*/LangOpts.ObjC));
 }
 
 AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const override {
   D->addAttr(::new (S.Context) NoInstrumentFunctionAttr(S.Context, Attr));
   return AttributeApplied;
+}
+
+bool isParamExpr(size_t N) const override {
+  return false;
 }
 
 static const ParsedAttrInfoNoInstrumentFunction Instance;
@@ -6912,7 +8084,9 @@ struct ParsedAttrInfoNoMerge final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoMerge;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 1;
@@ -6947,6 +8121,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoMerge Instance;
 };
 const ParsedAttrInfoNoMerge ParsedAttrInfoNoMerge::Instance;
@@ -6960,7 +8138,9 @@ struct ParsedAttrInfoNoMicroMips final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoMicroMips;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -6997,6 +8177,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoMicroMips Instance;
 };
 const ParsedAttrInfoNoMicroMips ParsedAttrInfoNoMicroMips::Instance;
@@ -7010,7 +8194,9 @@ struct ParsedAttrInfoNoMips16 final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoMips16;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -7047,6 +8233,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoMips16 Instance;
 };
 const ParsedAttrInfoNoMips16 ParsedAttrInfoNoMips16::Instance;
@@ -7060,7 +8250,9 @@ struct ParsedAttrInfoNoProfileFunction final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoProfileFunction;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7092,6 +8284,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoProfileFunction Instance;
 };
 const ParsedAttrInfoNoProfileFunction ParsedAttrInfoNoProfileFunction::Instance;
@@ -7106,7 +8302,9 @@ struct ParsedAttrInfoNoReturn final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoReturn;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7114,6 +8312,10 @@ struct ParsedAttrInfoNoReturn final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = NoReturnSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoReturn Instance;
 };
 const ParsedAttrInfoNoReturn ParsedAttrInfoNoReturn::Instance;
@@ -7129,7 +8331,9 @@ struct ParsedAttrInfoNoSanitize final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoSanitize;
     NumArgs = 0;
     OptArgs = 15;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7159,6 +8363,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_global, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoSanitize Instance;
 };
 const ParsedAttrInfoNoSanitize ParsedAttrInfoNoSanitize::Instance;
@@ -7181,7 +8389,9 @@ struct ParsedAttrInfoNoSanitizeSpecific final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoSanitizeSpecific;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7209,6 +8419,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_global, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoSanitizeSpecific Instance;
 };
 const ParsedAttrInfoNoSanitizeSpecific ParsedAttrInfoNoSanitizeSpecific::Instance;
@@ -7222,7 +8436,9 @@ struct ParsedAttrInfoNoSpeculativeLoadHardening final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoSpeculativeLoadHardening;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7266,6 +8482,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoSpeculativeLoadHardening Instance;
 };
 const ParsedAttrInfoNoSpeculativeLoadHardening ParsedAttrInfoNoSpeculativeLoadHardening::Instance;
@@ -7279,7 +8499,9 @@ struct ParsedAttrInfoNoSplitStack final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoSplitStack;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7311,6 +8533,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoSplitStack Instance;
 };
 const ParsedAttrInfoNoSplitStack ParsedAttrInfoNoSplitStack::Instance;
@@ -7324,7 +8550,9 @@ struct ParsedAttrInfoNoStackProtector final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoStackProtector;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7356,6 +8584,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoStackProtector Instance;
 };
 const ParsedAttrInfoNoStackProtector ParsedAttrInfoNoStackProtector::Instance;
@@ -7369,7 +8601,9 @@ struct ParsedAttrInfoNoThreadSafetyAnalysis final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoThreadSafetyAnalysis;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7401,6 +8635,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoThreadSafetyAnalysis Instance;
 };
 const ParsedAttrInfoNoThreadSafetyAnalysis ParsedAttrInfoNoThreadSafetyAnalysis::Instance;
@@ -7415,7 +8653,9 @@ struct ParsedAttrInfoNoThrow final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoThrow;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7442,6 +8682,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_hasType_functionType, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoThrow Instance;
 };
 const ParsedAttrInfoNoThrow ParsedAttrInfoNoThrow::Instance;
@@ -7453,7 +8697,9 @@ struct ParsedAttrInfoNoUniqueAddress final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NoUniqueAddress;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -7486,6 +8732,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNoUniqueAddress Instance;
 };
 const ParsedAttrInfoNoUniqueAddress ParsedAttrInfoNoUniqueAddress::Instance;
@@ -7501,7 +8751,9 @@ struct ParsedAttrInfoNonNull final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NonNull;
     NumArgs = 0;
     OptArgs = 15;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7525,6 +8777,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNonNull Instance;
 };
 const ParsedAttrInfoNonNull ParsedAttrInfoNonNull::Instance;
@@ -7538,7 +8794,9 @@ struct ParsedAttrInfoNotTailCalled final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_NotTailCalled;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7581,6 +8839,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoNotTailCalled Instance;
 };
 const ParsedAttrInfoNotTailCalled ParsedAttrInfoNotTailCalled::Instance;
@@ -7594,7 +8856,9 @@ struct ParsedAttrInfoOSConsumed final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_OSConsumed;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7621,6 +8885,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOSConsumed Instance;
 };
 const ParsedAttrInfoOSConsumed ParsedAttrInfoOSConsumed::Instance;
@@ -7634,7 +8902,9 @@ struct ParsedAttrInfoOSConsumesThis final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_OSConsumesThis;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7662,6 +8932,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOSConsumesThis Instance;
 };
 const ParsedAttrInfoOSConsumesThis ParsedAttrInfoOSConsumesThis::Instance;
@@ -7675,7 +8949,9 @@ struct ParsedAttrInfoOSReturnsNotRetained final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_OSReturnsNotRetained;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7705,6 +8981,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOSReturnsNotRetained Instance;
 };
 const ParsedAttrInfoOSReturnsNotRetained ParsedAttrInfoOSReturnsNotRetained::Instance;
@@ -7718,7 +8998,9 @@ struct ParsedAttrInfoOSReturnsRetained final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_OSReturnsRetained;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7748,6 +9030,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOSReturnsRetained Instance;
 };
 const ParsedAttrInfoOSReturnsRetained ParsedAttrInfoOSReturnsRetained::Instance;
@@ -7761,7 +9047,9 @@ struct ParsedAttrInfoOSReturnsRetainedOnNonZero final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_OSReturnsRetainedOnNonZero;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7788,6 +9076,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOSReturnsRetainedOnNonZero Instance;
 };
 const ParsedAttrInfoOSReturnsRetainedOnNonZero ParsedAttrInfoOSReturnsRetainedOnNonZero::Instance;
@@ -7801,7 +9093,9 @@ struct ParsedAttrInfoOSReturnsRetainedOnZero final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_OSReturnsRetainedOnZero;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7828,6 +9122,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOSReturnsRetainedOnZero Instance;
 };
 const ParsedAttrInfoOSReturnsRetainedOnZero ParsedAttrInfoOSReturnsRetainedOnZero::Instance;
@@ -7841,7 +9139,9 @@ struct ParsedAttrInfoObjCBoxable final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCBoxable;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7868,6 +9168,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_record, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCBoxable Instance;
 };
 const ParsedAttrInfoObjCBoxable ParsedAttrInfoObjCBoxable::Instance;
@@ -7883,7 +9187,9 @@ struct ParsedAttrInfoObjCBridge final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCBridge;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7912,6 +9218,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_type_alias, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCBridge Instance;
 };
 const ParsedAttrInfoObjCBridge ParsedAttrInfoObjCBridge::Instance;
@@ -7927,7 +9237,9 @@ struct ParsedAttrInfoObjCBridgeMutable final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCBridgeMutable;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7955,6 +9267,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_record, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCBridgeMutable Instance;
 };
 const ParsedAttrInfoObjCBridgeMutable ParsedAttrInfoObjCBridgeMutable::Instance;
@@ -7970,7 +9286,9 @@ struct ParsedAttrInfoObjCBridgeRelated final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCBridgeRelated;
     NumArgs = 3;
     OptArgs = 0;
+    NumArgMembers = 3;
     HasCustomParsing = 1;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -7998,6 +9316,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_record, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCBridgeRelated Instance;
 };
 const ParsedAttrInfoObjCBridgeRelated ParsedAttrInfoObjCBridgeRelated::Instance;
@@ -8011,7 +9333,9 @@ struct ParsedAttrInfoObjCClassStub final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCClassStub;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8047,6 +9371,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCClassStub Instance;
 };
 const ParsedAttrInfoObjCClassStub ParsedAttrInfoObjCClassStub::Instance;
@@ -8060,7 +9388,9 @@ struct ParsedAttrInfoObjCDesignatedInitializer final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCDesignatedInitializer;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8087,6 +9417,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_method, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCDesignatedInitializer Instance;
 };
 const ParsedAttrInfoObjCDesignatedInitializer ParsedAttrInfoObjCDesignatedInitializer::Instance;
@@ -8100,7 +9434,9 @@ struct ParsedAttrInfoObjCDirect final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCDirect;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8131,6 +9467,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_method, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCDirect Instance;
 };
 const ParsedAttrInfoObjCDirect ParsedAttrInfoObjCDirect::Instance;
@@ -8144,7 +9484,9 @@ struct ParsedAttrInfoObjCDirectMembers final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCDirectMembers;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8177,6 +9519,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_category, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCDirectMembers Instance;
 };
 const ParsedAttrInfoObjCDirectMembers ParsedAttrInfoObjCDirectMembers::Instance;
@@ -8190,7 +9536,9 @@ struct ParsedAttrInfoObjCException final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCException;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8222,6 +9570,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCException Instance;
 };
 const ParsedAttrInfoObjCException ParsedAttrInfoObjCException::Instance;
@@ -8235,7 +9587,9 @@ struct ParsedAttrInfoObjCExplicitProtocolImpl final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCExplicitProtocolImpl;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8262,6 +9616,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_protocol, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCExplicitProtocolImpl Instance;
 };
 const ParsedAttrInfoObjCExplicitProtocolImpl ParsedAttrInfoObjCExplicitProtocolImpl::Instance;
@@ -8275,7 +9633,9 @@ struct ParsedAttrInfoObjCExternallyRetained final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCExternallyRetained;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8309,6 +9669,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_method, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCExternallyRetained Instance;
 };
 const ParsedAttrInfoObjCExternallyRetained ParsedAttrInfoObjCExternallyRetained::Instance;
@@ -8324,7 +9688,9 @@ struct ParsedAttrInfoObjCGC final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCGC;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -8333,6 +9699,10 @@ struct ParsedAttrInfoObjCGC final : public ParsedAttrInfo {
     Spellings = ObjCGCSpellings;
     ArgNames = ObjCGCArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCGC Instance;
 };
 const ParsedAttrInfoObjCGC ParsedAttrInfoObjCGC::Instance;
@@ -8346,7 +9716,9 @@ struct ParsedAttrInfoObjCIndependentClass final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCIndependentClass;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8354,6 +9726,10 @@ struct ParsedAttrInfoObjCIndependentClass final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = ObjCIndependentClassSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCIndependentClass Instance;
 };
 const ParsedAttrInfoObjCIndependentClass ParsedAttrInfoObjCIndependentClass::Instance;
@@ -8365,7 +9741,9 @@ struct ParsedAttrInfoObjCInertUnsafeUnretained final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCInertUnsafeUnretained;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -8373,6 +9751,10 @@ struct ParsedAttrInfoObjCInertUnsafeUnretained final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = ObjCInertUnsafeUnretainedSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCInertUnsafeUnretained Instance;
 };
 const ParsedAttrInfoObjCInertUnsafeUnretained ParsedAttrInfoObjCInertUnsafeUnretained::Instance;
@@ -8384,7 +9766,9 @@ struct ParsedAttrInfoObjCKindOf final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCKindOf;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -8392,6 +9776,10 @@ struct ParsedAttrInfoObjCKindOf final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = ObjCKindOfSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCKindOf Instance;
 };
 const ParsedAttrInfoObjCKindOf ParsedAttrInfoObjCKindOf::Instance;
@@ -8407,7 +9795,9 @@ struct ParsedAttrInfoObjCMethodFamily final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCMethodFamily;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8435,6 +9825,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_method, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCMethodFamily Instance;
 };
 const ParsedAttrInfoObjCMethodFamily ParsedAttrInfoObjCMethodFamily::Instance;
@@ -8448,7 +9842,9 @@ struct ParsedAttrInfoObjCNSObject final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCNSObject;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8456,6 +9852,10 @@ struct ParsedAttrInfoObjCNSObject final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = ObjCNSObjectSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCNSObject Instance;
 };
 const ParsedAttrInfoObjCNSObject ParsedAttrInfoObjCNSObject::Instance;
@@ -8469,7 +9869,9 @@ struct ParsedAttrInfoObjCNonLazyClass final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCNonLazyClass;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8506,6 +9908,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCNonLazyClass Instance;
 };
 const ParsedAttrInfoObjCNonLazyClass ParsedAttrInfoObjCNonLazyClass::Instance;
@@ -8519,7 +9925,9 @@ struct ParsedAttrInfoObjCNonRuntimeProtocol final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCNonRuntimeProtocol;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8555,6 +9963,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCNonRuntimeProtocol Instance;
 };
 const ParsedAttrInfoObjCNonRuntimeProtocol ParsedAttrInfoObjCNonRuntimeProtocol::Instance;
@@ -8570,7 +9982,9 @@ struct ParsedAttrInfoObjCOwnership final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCOwnership;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -8579,6 +9993,10 @@ struct ParsedAttrInfoObjCOwnership final : public ParsedAttrInfo {
     Spellings = ObjCOwnershipSpellings;
     ArgNames = ObjCOwnershipArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCOwnership Instance;
 };
 const ParsedAttrInfoObjCOwnership ParsedAttrInfoObjCOwnership::Instance;
@@ -8592,7 +10010,9 @@ struct ParsedAttrInfoObjCPreciseLifetime final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCPreciseLifetime;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8619,6 +10039,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCPreciseLifetime Instance;
 };
 const ParsedAttrInfoObjCPreciseLifetime ParsedAttrInfoObjCPreciseLifetime::Instance;
@@ -8632,7 +10056,9 @@ struct ParsedAttrInfoObjCRequiresPropertyDefs final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCRequiresPropertyDefs;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8664,6 +10090,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCRequiresPropertyDefs Instance;
 };
 const ParsedAttrInfoObjCRequiresPropertyDefs ParsedAttrInfoObjCRequiresPropertyDefs::Instance;
@@ -8677,7 +10107,9 @@ struct ParsedAttrInfoObjCRequiresSuper final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCRequiresSuper;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8704,6 +10136,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_method, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCRequiresSuper Instance;
 };
 const ParsedAttrInfoObjCRequiresSuper ParsedAttrInfoObjCRequiresSuper::Instance;
@@ -8717,7 +10153,9 @@ struct ParsedAttrInfoObjCReturnsInnerPointer final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCReturnsInnerPointer;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8745,6 +10183,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_property, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCReturnsInnerPointer Instance;
 };
 const ParsedAttrInfoObjCReturnsInnerPointer ParsedAttrInfoObjCReturnsInnerPointer::Instance;
@@ -8758,7 +10200,9 @@ struct ParsedAttrInfoObjCRootClass final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCRootClass;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8790,6 +10234,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCRootClass Instance;
 };
 const ParsedAttrInfoObjCRootClass ParsedAttrInfoObjCRootClass::Instance;
@@ -8805,7 +10253,9 @@ struct ParsedAttrInfoObjCRuntimeName final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCRuntimeName;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8834,6 +10284,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_protocol, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCRuntimeName Instance;
 };
 const ParsedAttrInfoObjCRuntimeName ParsedAttrInfoObjCRuntimeName::Instance;
@@ -8847,7 +10301,9 @@ struct ParsedAttrInfoObjCRuntimeVisible final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCRuntimeVisible;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8879,6 +10335,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCRuntimeVisible Instance;
 };
 const ParsedAttrInfoObjCRuntimeVisible ParsedAttrInfoObjCRuntimeVisible::Instance;
@@ -8892,7 +10352,9 @@ struct ParsedAttrInfoObjCSubclassingRestricted final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ObjCSubclassingRestricted;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8924,6 +10386,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoObjCSubclassingRestricted Instance;
 };
 const ParsedAttrInfoObjCSubclassingRestricted ParsedAttrInfoObjCSubclassingRestricted::Instance;
@@ -8940,7 +10406,9 @@ struct ParsedAttrInfoOpenCLAccess final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_OpenCLAccess;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -8984,6 +10452,10 @@ unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override 
   }
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOpenCLAccess Instance;
 };
 const ParsedAttrInfoOpenCLAccess ParsedAttrInfoOpenCLAccess::Instance;
@@ -8999,7 +10471,9 @@ struct ParsedAttrInfoOpenCLConstantAddressSpace final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_OpenCLConstantAddressSpace;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -9028,6 +10502,10 @@ unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override 
   }
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOpenCLConstantAddressSpace Instance;
 };
 const ParsedAttrInfoOpenCLConstantAddressSpace ParsedAttrInfoOpenCLConstantAddressSpace::Instance;
@@ -9043,7 +10521,9 @@ struct ParsedAttrInfoOpenCLGenericAddressSpace final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_OpenCLGenericAddressSpace;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -9072,6 +10552,10 @@ unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override 
   }
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOpenCLGenericAddressSpace Instance;
 };
 const ParsedAttrInfoOpenCLGenericAddressSpace ParsedAttrInfoOpenCLGenericAddressSpace::Instance;
@@ -9087,7 +10571,9 @@ struct ParsedAttrInfoOpenCLGlobalAddressSpace final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_OpenCLGlobalAddressSpace;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -9116,6 +10602,10 @@ unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override 
   }
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOpenCLGlobalAddressSpace Instance;
 };
 const ParsedAttrInfoOpenCLGlobalAddressSpace ParsedAttrInfoOpenCLGlobalAddressSpace::Instance;
@@ -9129,7 +10619,9 @@ struct ParsedAttrInfoOpenCLGlobalDeviceAddressSpace final : public ParsedAttrInf
     AttrKind = ParsedAttr::AT_OpenCLGlobalDeviceAddressSpace;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -9137,6 +10629,10 @@ struct ParsedAttrInfoOpenCLGlobalDeviceAddressSpace final : public ParsedAttrInf
     IsSupportedByPragmaAttribute = 0;
     Spellings = OpenCLGlobalDeviceAddressSpaceSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOpenCLGlobalDeviceAddressSpace Instance;
 };
 const ParsedAttrInfoOpenCLGlobalDeviceAddressSpace ParsedAttrInfoOpenCLGlobalDeviceAddressSpace::Instance;
@@ -9150,7 +10646,9 @@ struct ParsedAttrInfoOpenCLGlobalHostAddressSpace final : public ParsedAttrInfo 
     AttrKind = ParsedAttr::AT_OpenCLGlobalHostAddressSpace;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -9158,6 +10656,10 @@ struct ParsedAttrInfoOpenCLGlobalHostAddressSpace final : public ParsedAttrInfo 
     IsSupportedByPragmaAttribute = 0;
     Spellings = OpenCLGlobalHostAddressSpaceSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOpenCLGlobalHostAddressSpace Instance;
 };
 const ParsedAttrInfoOpenCLGlobalHostAddressSpace ParsedAttrInfoOpenCLGlobalHostAddressSpace::Instance;
@@ -9171,7 +10673,9 @@ struct ParsedAttrInfoOpenCLIntelReqdSubGroupSize final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_OpenCLIntelReqdSubGroupSize;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -9199,6 +10703,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOpenCLIntelReqdSubGroupSize Instance;
 };
 const ParsedAttrInfoOpenCLIntelReqdSubGroupSize ParsedAttrInfoOpenCLIntelReqdSubGroupSize::Instance;
@@ -9211,7 +10719,9 @@ struct ParsedAttrInfoOpenCLKernel final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_OpenCLKernel;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -9239,6 +10749,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOpenCLKernel Instance;
 };
 const ParsedAttrInfoOpenCLKernel ParsedAttrInfoOpenCLKernel::Instance;
@@ -9254,7 +10768,9 @@ struct ParsedAttrInfoOpenCLLocalAddressSpace final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_OpenCLLocalAddressSpace;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -9283,6 +10799,10 @@ unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override 
   }
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOpenCLLocalAddressSpace Instance;
 };
 const ParsedAttrInfoOpenCLLocalAddressSpace ParsedAttrInfoOpenCLLocalAddressSpace::Instance;
@@ -9294,7 +10814,9 @@ struct ParsedAttrInfoOpenCLNoSVM final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_OpenCLNoSVM;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -9325,6 +10847,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOpenCLNoSVM Instance;
 };
 const ParsedAttrInfoOpenCLNoSVM ParsedAttrInfoOpenCLNoSVM::Instance;
@@ -9340,7 +10866,9 @@ struct ParsedAttrInfoOpenCLPrivateAddressSpace final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_OpenCLPrivateAddressSpace;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -9369,6 +10897,10 @@ unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override 
   }
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOpenCLPrivateAddressSpace Instance;
 };
 const ParsedAttrInfoOpenCLPrivateAddressSpace ParsedAttrInfoOpenCLPrivateAddressSpace::Instance;
@@ -9382,7 +10914,9 @@ struct ParsedAttrInfoOpenCLUnrollHint final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_OpenCLUnrollHint;
     NumArgs = 0;
     OptArgs = 1;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 1;
@@ -9406,6 +10940,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &Attr, const Stmt *St) const
   return true;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOpenCLUnrollHint Instance;
 };
 const ParsedAttrInfoOpenCLUnrollHint ParsedAttrInfoOpenCLUnrollHint::Instance;
@@ -9419,7 +10957,9 @@ struct ParsedAttrInfoOptimizeNone final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_OptimizeNone;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -9447,6 +10987,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_method, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOptimizeNone Instance;
 };
 const ParsedAttrInfoOptimizeNone ParsedAttrInfoOptimizeNone::Instance;
@@ -9460,7 +11004,9 @@ struct ParsedAttrInfoOverloadable final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Overloadable;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -9492,6 +11038,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOverloadable Instance;
 };
 const ParsedAttrInfoOverloadable ParsedAttrInfoOverloadable::Instance;
@@ -9505,7 +11055,9 @@ struct ParsedAttrInfoOwner final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Owner;
     NumArgs = 0;
     OptArgs = 1;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -9544,6 +11096,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_record_not_is_union, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOwner Instance;
 };
 const ParsedAttrInfoOwner ParsedAttrInfoOwner::Instance;
@@ -9565,7 +11121,9 @@ struct ParsedAttrInfoOwnership final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Ownership;
     NumArgs = 1;
     OptArgs = 15;
+    NumArgMembers = 2;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -9619,6 +11177,10 @@ unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override 
   }
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoOwnership Instance;
 };
 const ParsedAttrInfoOwnership ParsedAttrInfoOwnership::Instance;
@@ -9632,7 +11194,9 @@ struct ParsedAttrInfoPacked final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Packed;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -9640,6 +11204,10 @@ struct ParsedAttrInfoPacked final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = PackedSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoPacked Instance;
 };
 const ParsedAttrInfoPacked ParsedAttrInfoPacked::Instance;
@@ -9654,7 +11222,9 @@ struct ParsedAttrInfoParamTypestate final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ParamTypestate;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -9682,6 +11252,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoParamTypestate Instance;
 };
 const ParsedAttrInfoParamTypestate ParsedAttrInfoParamTypestate::Instance;
@@ -9697,7 +11271,9 @@ struct ParsedAttrInfoPascal final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Pascal;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -9705,6 +11281,10 @@ struct ParsedAttrInfoPascal final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = PascalSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoPascal Instance;
 };
 const ParsedAttrInfoPascal ParsedAttrInfoPascal::Instance;
@@ -9723,7 +11303,9 @@ struct ParsedAttrInfoPassObjectSize final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_PassObjectSize;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -9775,6 +11357,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoPassObjectSize Instance;
 };
 const ParsedAttrInfoPassObjectSize ParsedAttrInfoPassObjectSize::Instance;
@@ -9790,7 +11376,9 @@ struct ParsedAttrInfoPatchableFunctionEntry final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_PatchableFunctionEntry;
     NumArgs = 1;
     OptArgs = 1;
+    NumArgMembers = 2;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -9824,6 +11412,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_method, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoPatchableFunctionEntry Instance;
 };
 const ParsedAttrInfoPatchableFunctionEntry ParsedAttrInfoPatchableFunctionEntry::Instance;
@@ -9839,7 +11431,9 @@ struct ParsedAttrInfoPcs final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Pcs;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -9848,6 +11442,10 @@ struct ParsedAttrInfoPcs final : public ParsedAttrInfo {
     Spellings = PcsSpellings;
     ArgNames = PcsArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoPcs Instance;
 };
 const ParsedAttrInfoPcs ParsedAttrInfoPcs::Instance;
@@ -9861,7 +11459,9 @@ struct ParsedAttrInfoPointer final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Pointer;
     NumArgs = 0;
     OptArgs = 1;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -9900,6 +11500,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_record_not_is_union, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoPointer Instance;
 };
 const ParsedAttrInfoPointer ParsedAttrInfoPointer::Instance;
@@ -9910,7 +11514,9 @@ struct ParsedAttrInfoPragmaClangBSSSection final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_PragmaClangBSSSection;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -9933,6 +11539,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoPragmaClangBSSSection Instance;
 };
 const ParsedAttrInfoPragmaClangBSSSection ParsedAttrInfoPragmaClangBSSSection::Instance;
@@ -9943,7 +11553,9 @@ struct ParsedAttrInfoPragmaClangDataSection final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_PragmaClangDataSection;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -9966,6 +11578,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoPragmaClangDataSection Instance;
 };
 const ParsedAttrInfoPragmaClangDataSection ParsedAttrInfoPragmaClangDataSection::Instance;
@@ -9976,7 +11592,9 @@ struct ParsedAttrInfoPragmaClangRelroSection final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_PragmaClangRelroSection;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -9999,6 +11617,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoPragmaClangRelroSection Instance;
 };
 const ParsedAttrInfoPragmaClangRelroSection ParsedAttrInfoPragmaClangRelroSection::Instance;
@@ -10009,7 +11631,9 @@ struct ParsedAttrInfoPragmaClangRodataSection final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_PragmaClangRodataSection;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -10032,6 +11656,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoPragmaClangRodataSection Instance;
 };
 const ParsedAttrInfoPragmaClangRodataSection ParsedAttrInfoPragmaClangRodataSection::Instance;
@@ -10042,7 +11670,9 @@ struct ParsedAttrInfoPragmaClangTextSection final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_PragmaClangTextSection;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -10065,6 +11695,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoPragmaClangTextSection Instance;
 };
 const ParsedAttrInfoPragmaClangTextSection ParsedAttrInfoPragmaClangTextSection::Instance;
@@ -10079,7 +11713,9 @@ struct ParsedAttrInfoPreferredName final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_PreferredName;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -10103,6 +11739,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoPreferredName Instance;
 };
 const ParsedAttrInfoPreferredName ParsedAttrInfoPreferredName::Instance;
@@ -10116,7 +11756,9 @@ struct ParsedAttrInfoPreserveAll final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_PreserveAll;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -10124,6 +11766,10 @@ struct ParsedAttrInfoPreserveAll final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = PreserveAllSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoPreserveAll Instance;
 };
 const ParsedAttrInfoPreserveAll ParsedAttrInfoPreserveAll::Instance;
@@ -10137,7 +11783,9 @@ struct ParsedAttrInfoPreserveMost final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_PreserveMost;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -10145,6 +11793,10 @@ struct ParsedAttrInfoPreserveMost final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = PreserveMostSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoPreserveMost Instance;
 };
 const ParsedAttrInfoPreserveMost ParsedAttrInfoPreserveMost::Instance;
@@ -10158,7 +11810,9 @@ struct ParsedAttrInfoPtGuardedBy final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_PtGuardedBy;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -10182,6 +11836,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || false;
+}
+
 static const ParsedAttrInfoPtGuardedBy Instance;
 };
 const ParsedAttrInfoPtGuardedBy ParsedAttrInfoPtGuardedBy::Instance;
@@ -10194,7 +11852,9 @@ struct ParsedAttrInfoPtGuardedVar final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_PtGuardedVar;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -10217,6 +11877,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoPtGuardedVar Instance;
 };
 const ParsedAttrInfoPtGuardedVar ParsedAttrInfoPtGuardedVar::Instance;
@@ -10228,7 +11892,9 @@ struct ParsedAttrInfoPtr32 final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Ptr32;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -10236,6 +11902,10 @@ struct ParsedAttrInfoPtr32 final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = Ptr32Spellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoPtr32 Instance;
 };
 const ParsedAttrInfoPtr32 ParsedAttrInfoPtr32::Instance;
@@ -10247,7 +11917,9 @@ struct ParsedAttrInfoPtr64 final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Ptr64;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -10255,6 +11927,10 @@ struct ParsedAttrInfoPtr64 final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = Ptr64Spellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoPtr64 Instance;
 };
 const ParsedAttrInfoPtr64 ParsedAttrInfoPtr64::Instance;
@@ -10268,7 +11944,9 @@ struct ParsedAttrInfoPure final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Pure;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -10279,6 +11957,10 @@ struct ParsedAttrInfoPure final : public ParsedAttrInfo {
 AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const override {
   D->addAttr(::new (S.Context) PureAttr(S.Context, Attr));
   return AttributeApplied;
+}
+
+bool isParamExpr(size_t N) const override {
+  return false;
 }
 
 static const ParsedAttrInfoPure Instance;
@@ -10295,7 +11977,9 @@ struct ParsedAttrInfoRegCall final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_RegCall;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -10303,6 +11987,10 @@ struct ParsedAttrInfoRegCall final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = RegCallSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoRegCall Instance;
 };
 const ParsedAttrInfoRegCall ParsedAttrInfoRegCall::Instance;
@@ -10318,7 +12006,9 @@ struct ParsedAttrInfoRegparm final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Regparm;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -10327,6 +12017,10 @@ struct ParsedAttrInfoRegparm final : public ParsedAttrInfo {
     Spellings = RegparmSpellings;
     ArgNames = RegparmArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoRegparm Instance;
 };
 const ParsedAttrInfoRegparm ParsedAttrInfoRegparm::Instance;
@@ -10339,7 +12033,9 @@ struct ParsedAttrInfoReinitializes final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Reinitializes;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -10367,6 +12063,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoReinitializes Instance;
 };
 const ParsedAttrInfoReinitializes ParsedAttrInfoReinitializes::Instance;
@@ -10387,7 +12087,9 @@ struct ParsedAttrInfoReleaseCapability final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ReleaseCapability;
     NumArgs = 0;
     OptArgs = 15;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -10439,6 +12141,10 @@ unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override 
   }
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || false;
+}
+
 static const ParsedAttrInfoReleaseCapability Instance;
 };
 const ParsedAttrInfoReleaseCapability ParsedAttrInfoReleaseCapability::Instance;
@@ -10454,7 +12160,9 @@ struct ParsedAttrInfoReleaseHandle final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ReleaseHandle;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -10482,6 +12190,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoReleaseHandle Instance;
 };
 const ParsedAttrInfoReleaseHandle ParsedAttrInfoReleaseHandle::Instance;
@@ -10493,7 +12205,9 @@ struct ParsedAttrInfoRenderScriptKernel final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_RenderScriptKernel;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -10529,6 +12243,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoRenderScriptKernel Instance;
 };
 const ParsedAttrInfoRenderScriptKernel ParsedAttrInfoRenderScriptKernel::Instance;
@@ -10542,7 +12260,9 @@ struct ParsedAttrInfoReqdWorkGroupSize final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ReqdWorkGroupSize;
     NumArgs = 3;
     OptArgs = 0;
+    NumArgMembers = 3;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -10570,6 +12290,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoReqdWorkGroupSize Instance;
 };
 const ParsedAttrInfoReqdWorkGroupSize ParsedAttrInfoReqdWorkGroupSize::Instance;
@@ -10590,7 +12314,9 @@ struct ParsedAttrInfoRequiresCapability final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_RequiresCapability;
     NumArgs = 0;
     OptArgs = 15;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -10642,6 +12368,10 @@ unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override 
   }
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || false;
+}
+
 static const ParsedAttrInfoRequiresCapability Instance;
 };
 const ParsedAttrInfoRequiresCapability ParsedAttrInfoRequiresCapability::Instance;
@@ -10656,7 +12386,9 @@ struct ParsedAttrInfoRestrict final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Restrict;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -10703,6 +12435,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoRestrict Instance;
 };
 const ParsedAttrInfoRestrict ParsedAttrInfoRestrict::Instance;
@@ -10716,7 +12452,9 @@ struct ParsedAttrInfoRetain final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Retain;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -10744,6 +12482,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoRetain Instance;
 };
 const ParsedAttrInfoRetain ParsedAttrInfoRetain::Instance;
@@ -10758,7 +12500,9 @@ struct ParsedAttrInfoReturnTypestate final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ReturnTypestate;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -10787,6 +12531,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoReturnTypestate Instance;
 };
 const ParsedAttrInfoReturnTypestate ParsedAttrInfoReturnTypestate::Instance;
@@ -10800,7 +12548,9 @@ struct ParsedAttrInfoReturnsNonNull final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ReturnsNonNull;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -10828,6 +12578,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoReturnsNonNull Instance;
 };
 const ParsedAttrInfoReturnsNonNull ParsedAttrInfoReturnsNonNull::Instance;
@@ -10841,7 +12595,9 @@ struct ParsedAttrInfoReturnsTwice final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ReturnsTwice;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -10873,6 +12629,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoReturnsTwice Instance;
 };
 const ParsedAttrInfoReturnsTwice ParsedAttrInfoReturnsTwice::Instance;
@@ -10884,7 +12644,9 @@ struct ParsedAttrInfoSPtr final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SPtr;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -10892,6 +12654,10 @@ struct ParsedAttrInfoSPtr final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = SPtrSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSPtr Instance;
 };
 const ParsedAttrInfoSPtr ParsedAttrInfoSPtr::Instance;
@@ -10905,7 +12671,9 @@ struct ParsedAttrInfoSYCLKernel final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SYCLKernel;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -10932,9 +12700,63 @@ bool acceptsLangOpts(const LangOptions &LangOpts) const override {
   return LangOpts.SYCLIsDevice;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSYCLKernel Instance;
 };
 const ParsedAttrInfoSYCLKernel ParsedAttrInfoSYCLKernel::Instance;
+static constexpr ParsedAttrInfo::Spelling SYCLSpecialClassSpellings[] = {
+  {AttributeCommonInfo::AS_GNU, "sycl_special_class"},
+  {AttributeCommonInfo::AS_CXX11, "clang::sycl_special_class"},
+  {AttributeCommonInfo::AS_C2x, "clang::sycl_special_class"},
+};
+struct ParsedAttrInfoSYCLSpecialClass final : public ParsedAttrInfo {
+  ParsedAttrInfoSYCLSpecialClass() {
+    AttrKind = ParsedAttr::AT_SYCLSpecialClass;
+    NumArgs = 0;
+    OptArgs = 0;
+    NumArgMembers = 0;
+    HasCustomParsing = 0;
+    AcceptsExprPack = 0;
+    IsTargetSpecific = 0;
+    IsType = 0;
+    IsStmt = 0;
+    IsKnownToGCC = 0;
+    IsSupportedByPragmaAttribute = 1;
+    Spellings = SYCLSpecialClassSpellings;
+  }
+bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
+  if (!isa<CXXRecordDecl>(D)) {
+    S.Diag(Attr.getLoc(), diag::warn_attribute_wrong_decl_type_str)
+      << Attr << "classes";
+    return false;
+  }
+  return true;
+}
+
+bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const override {
+  S.Diag(AL.getLoc(), diag::err_decl_attribute_invalid_on_stmt)
+    << AL << St->getBeginLoc();
+  return false;
+}
+
+bool acceptsLangOpts(const LangOptions &LangOpts) const override {
+  return LangOpts.SYCLIsDevice;
+}
+
+void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectMatchRule, bool>> &MatchRules, const LangOptions &LangOpts) const override {
+  MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_record, /*IsSupported=*/true));
+}
+
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
+static const ParsedAttrInfoSYCLSpecialClass Instance;
+};
+const ParsedAttrInfoSYCLSpecialClass ParsedAttrInfoSYCLSpecialClass::Instance;
 static constexpr ParsedAttrInfo::Spelling ScopedLockableSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "scoped_lockable"},
   {AttributeCommonInfo::AS_CXX11, "clang::scoped_lockable"},
@@ -10944,7 +12766,9 @@ struct ParsedAttrInfoScopedLockable final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ScopedLockable;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -10976,6 +12800,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoScopedLockable Instance;
 };
 const ParsedAttrInfoScopedLockable ParsedAttrInfoScopedLockable::Instance;
@@ -10992,7 +12820,9 @@ struct ParsedAttrInfoSection final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Section;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11043,6 +12873,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_property, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSection Instance;
 };
 const ParsedAttrInfoSection ParsedAttrInfoSection::Instance;
@@ -11057,7 +12891,9 @@ struct ParsedAttrInfoSelectAny final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SelectAny;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11068,6 +12904,10 @@ struct ParsedAttrInfoSelectAny final : public ParsedAttrInfo {
 AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const override {
   D->addAttr(::new (S.Context) SelectAnyAttr(S.Context, Attr));
   return AttributeApplied;
+}
+
+bool isParamExpr(size_t N) const override {
+  return false;
 }
 
 static const ParsedAttrInfoSelectAny Instance;
@@ -11085,7 +12925,9 @@ struct ParsedAttrInfoSentinel final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Sentinel;
     NumArgs = 0;
     OptArgs = 2;
+    NumArgMembers = 2;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11094,6 +12936,10 @@ struct ParsedAttrInfoSentinel final : public ParsedAttrInfo {
     Spellings = SentinelSpellings;
     ArgNames = SentinelArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSentinel Instance;
 };
 const ParsedAttrInfoSentinel ParsedAttrInfoSentinel::Instance;
@@ -11108,7 +12954,9 @@ struct ParsedAttrInfoSetTypestate final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SetTypestate;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11136,6 +12984,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function_is_member, /*IsSupported=*/LangOpts.CPlusPlus));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSetTypestate Instance;
 };
 const ParsedAttrInfoSetTypestate ParsedAttrInfoSetTypestate::Instance;
@@ -11149,7 +13001,9 @@ struct ParsedAttrInfoSharedTrylockFunction final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SharedTrylockFunction;
     NumArgs = 1;
     OptArgs = 15;
+    NumArgMembers = 2;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11173,6 +13027,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || (N == 1) || false;
+}
+
 static const ParsedAttrInfoSharedTrylockFunction Instance;
 };
 const ParsedAttrInfoSharedTrylockFunction ParsedAttrInfoSharedTrylockFunction::Instance;
@@ -11186,7 +13044,9 @@ struct ParsedAttrInfoSpeculativeLoadHardening final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SpeculativeLoadHardening;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11230,6 +13090,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSpeculativeLoadHardening Instance;
 };
 const ParsedAttrInfoSpeculativeLoadHardening ParsedAttrInfoSpeculativeLoadHardening::Instance;
@@ -11242,7 +13106,9 @@ struct ParsedAttrInfoStandaloneDebug final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_StandaloneDebug;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11278,6 +13144,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoStandaloneDebug Instance;
 };
 const ParsedAttrInfoStandaloneDebug ParsedAttrInfoStandaloneDebug::Instance;
@@ -11293,7 +13163,9 @@ struct ParsedAttrInfoStdCall final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_StdCall;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -11301,6 +13173,10 @@ struct ParsedAttrInfoStdCall final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = StdCallSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoStdCall Instance;
 };
 const ParsedAttrInfoStdCall ParsedAttrInfoStdCall::Instance;
@@ -11309,7 +13185,9 @@ struct ParsedAttrInfoStrictFP final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_StrictFP;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11331,6 +13209,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoStrictFP Instance;
 };
 const ParsedAttrInfoStrictFP ParsedAttrInfoStrictFP::Instance;
@@ -11344,7 +13226,9 @@ struct ParsedAttrInfoSuppress final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Suppress;
     NumArgs = 0;
     OptArgs = 15;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 1;
@@ -11353,6 +13237,10 @@ struct ParsedAttrInfoSuppress final : public ParsedAttrInfo {
     Spellings = SuppressSpellings;
     ArgNames = SuppressArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSuppress Instance;
 };
 const ParsedAttrInfoSuppress ParsedAttrInfoSuppress::Instance;
@@ -11368,7 +13256,9 @@ struct ParsedAttrInfoSwiftAsync final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SwiftAsync;
     NumArgs = 1;
     OptArgs = 1;
+    NumArgMembers = 2;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11397,6 +13287,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_method, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSwiftAsync Instance;
 };
 const ParsedAttrInfoSwiftAsync ParsedAttrInfoSwiftAsync::Instance;
@@ -11410,7 +13304,9 @@ struct ParsedAttrInfoSwiftAsyncCall final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SwiftAsyncCall;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -11418,6 +13314,10 @@ struct ParsedAttrInfoSwiftAsyncCall final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = SwiftAsyncCallSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSwiftAsyncCall Instance;
 };
 const ParsedAttrInfoSwiftAsyncCall ParsedAttrInfoSwiftAsyncCall::Instance;
@@ -11431,7 +13331,9 @@ struct ParsedAttrInfoSwiftAsyncContext final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SwiftAsyncContext;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11458,6 +13360,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSwiftAsyncContext Instance;
 };
 const ParsedAttrInfoSwiftAsyncContext ParsedAttrInfoSwiftAsyncContext::Instance;
@@ -11473,7 +13379,9 @@ struct ParsedAttrInfoSwiftAsyncError final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SwiftAsyncError;
     NumArgs = 1;
     OptArgs = 1;
+    NumArgMembers = 2;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11502,6 +13410,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_method, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSwiftAsyncError Instance;
 };
 const ParsedAttrInfoSwiftAsyncError ParsedAttrInfoSwiftAsyncError::Instance;
@@ -11515,7 +13427,9 @@ struct ParsedAttrInfoSwiftAsyncName final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SwiftAsyncName;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11544,6 +13458,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSwiftAsyncName Instance;
 };
 const ParsedAttrInfoSwiftAsyncName ParsedAttrInfoSwiftAsyncName::Instance;
@@ -11557,15 +13475,21 @@ struct ParsedAttrInfoSwiftAttr final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SwiftAttr;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
     IsKnownToGCC = 0;
-    IsSupportedByPragmaAttribute = 0;
+    IsSupportedByPragmaAttribute = 1;
     Spellings = SwiftAttrSpellings;
     ArgNames = SwiftAttrArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSwiftAttr Instance;
 };
 const ParsedAttrInfoSwiftAttr ParsedAttrInfoSwiftAttr::Instance;
@@ -11579,7 +13503,9 @@ struct ParsedAttrInfoSwiftBridge final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SwiftBridge;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11603,6 +13529,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSwiftBridge Instance;
 };
 const ParsedAttrInfoSwiftBridge ParsedAttrInfoSwiftBridge::Instance;
@@ -11614,7 +13544,9 @@ struct ParsedAttrInfoSwiftBridgedTypedef final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SwiftBridgedTypedef;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11646,6 +13578,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSwiftBridgedTypedef Instance;
 };
 const ParsedAttrInfoSwiftBridgedTypedef ParsedAttrInfoSwiftBridgedTypedef::Instance;
@@ -11659,7 +13595,9 @@ struct ParsedAttrInfoSwiftCall final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SwiftCall;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -11667,6 +13605,10 @@ struct ParsedAttrInfoSwiftCall final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = SwiftCallSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSwiftCall Instance;
 };
 const ParsedAttrInfoSwiftCall ParsedAttrInfoSwiftCall::Instance;
@@ -11680,7 +13622,9 @@ struct ParsedAttrInfoSwiftContext final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SwiftContext;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11707,6 +13651,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSwiftContext Instance;
 };
 const ParsedAttrInfoSwiftContext ParsedAttrInfoSwiftContext::Instance;
@@ -11720,7 +13668,9 @@ struct ParsedAttrInfoSwiftError final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SwiftError;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11749,6 +13699,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_method, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSwiftError Instance;
 };
 const ParsedAttrInfoSwiftError ParsedAttrInfoSwiftError::Instance;
@@ -11762,7 +13716,9 @@ struct ParsedAttrInfoSwiftErrorResult final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SwiftErrorResult;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11789,6 +13745,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSwiftErrorResult Instance;
 };
 const ParsedAttrInfoSwiftErrorResult ParsedAttrInfoSwiftErrorResult::Instance;
@@ -11802,7 +13762,9 @@ struct ParsedAttrInfoSwiftIndirectResult final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SwiftIndirectResult;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11829,6 +13791,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSwiftIndirectResult Instance;
 };
 const ParsedAttrInfoSwiftIndirectResult ParsedAttrInfoSwiftIndirectResult::Instance;
@@ -11842,7 +13808,9 @@ struct ParsedAttrInfoSwiftName final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SwiftName;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11851,6 +13819,10 @@ struct ParsedAttrInfoSwiftName final : public ParsedAttrInfo {
     Spellings = SwiftNameSpellings;
     ArgNames = SwiftNameArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSwiftName Instance;
 };
 const ParsedAttrInfoSwiftName ParsedAttrInfoSwiftName::Instance;
@@ -11865,7 +13837,9 @@ struct ParsedAttrInfoSwiftNewType final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SwiftNewType;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 1;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11909,6 +13883,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_type_alias, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSwiftNewType Instance;
 };
 const ParsedAttrInfoSwiftNewType ParsedAttrInfoSwiftNewType::Instance;
@@ -11920,7 +13898,9 @@ struct ParsedAttrInfoSwiftObjCMembers final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SwiftObjCMembers;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11952,6 +13932,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSwiftObjCMembers Instance;
 };
 const ParsedAttrInfoSwiftObjCMembers ParsedAttrInfoSwiftObjCMembers::Instance;
@@ -11963,7 +13947,9 @@ struct ParsedAttrInfoSwiftPrivate final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SwiftPrivate;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -11974,6 +13960,10 @@ struct ParsedAttrInfoSwiftPrivate final : public ParsedAttrInfo {
 AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const override {
   D->addAttr(::new (S.Context) SwiftPrivateAttr(S.Context, Attr));
   return AttributeApplied;
+}
+
+bool isParamExpr(size_t N) const override {
+  return false;
 }
 
 static const ParsedAttrInfoSwiftPrivate Instance;
@@ -11989,7 +13979,9 @@ struct ParsedAttrInfoSysVABI final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_SysVABI;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -11997,6 +13989,10 @@ struct ParsedAttrInfoSysVABI final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = SysVABISpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoSysVABI Instance;
 };
 const ParsedAttrInfoSysVABI ParsedAttrInfoSysVABI::Instance;
@@ -12012,7 +14008,9 @@ struct ParsedAttrInfoTLSModel final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_TLSModel;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12040,6 +14038,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_thread_local, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoTLSModel Instance;
 };
 const ParsedAttrInfoTLSModel ParsedAttrInfoTLSModel::Instance;
@@ -12055,7 +14057,9 @@ struct ParsedAttrInfoTarget final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Target;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12079,13 +14083,108 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+  using ParsedAttrInfo::diagMutualExclusion;
+
+  bool diagMutualExclusion(Sema &S, const ParsedAttr &AL, const Decl *D) const override {
+    if (const auto *A = D->getAttr<TargetClonesAttr>()) {
+      S.Diag(AL.getLoc(), diag::err_attributes_are_not_compatible) << AL << A;
+      S.Diag(A->getLocation(), diag::note_conflicting_attribute);      
+return false;
+    }
+    if (const auto *A = D->getAttr<CPUDispatchAttr>()) {
+      S.Diag(AL.getLoc(), diag::err_attributes_are_not_compatible) << AL << A;
+      S.Diag(A->getLocation(), diag::note_conflicting_attribute);      
+return false;
+    }
+    if (const auto *A = D->getAttr<CPUSpecificAttr>()) {
+      S.Diag(AL.getLoc(), diag::err_attributes_are_not_compatible) << AL << A;
+      S.Diag(A->getLocation(), diag::note_conflicting_attribute);      
+return false;
+    }
+    return true;
+  }
+
 void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectMatchRule, bool>> &MatchRules, const LangOptions &LangOpts) const override {
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
+}
+
+bool isParamExpr(size_t N) const override {
+  return false;
 }
 
 static const ParsedAttrInfoTarget Instance;
 };
 const ParsedAttrInfoTarget ParsedAttrInfoTarget::Instance;
+static constexpr ParsedAttrInfo::Spelling TargetClonesSpellings[] = {
+  {AttributeCommonInfo::AS_GNU, "target_clones"},
+  {AttributeCommonInfo::AS_CXX11, "gnu::target_clones"},
+  {AttributeCommonInfo::AS_C2x, "gnu::target_clones"},
+};
+static constexpr const char *TargetClonesArgNames[] = {
+"featuresStrs...",};
+struct ParsedAttrInfoTargetClones final : public ParsedAttrInfo {
+  ParsedAttrInfoTargetClones() {
+    AttrKind = ParsedAttr::AT_TargetClones;
+    NumArgs = 0;
+    OptArgs = 15;
+    NumArgMembers = 1;
+    HasCustomParsing = 0;
+    AcceptsExprPack = 0;
+    IsTargetSpecific = 0;
+    IsType = 0;
+    IsStmt = 0;
+    IsKnownToGCC = 1;
+    IsSupportedByPragmaAttribute = 1;
+    Spellings = TargetClonesSpellings;
+    ArgNames = TargetClonesArgNames;
+  }
+bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
+  if (!isa<FunctionDecl>(D)) {
+    S.Diag(Attr.getLoc(), diag::err_attribute_wrong_decl_type_str)
+      << Attr << "functions";
+    return false;
+  }
+  return true;
+}
+
+bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const override {
+  S.Diag(AL.getLoc(), diag::err_decl_attribute_invalid_on_stmt)
+    << AL << St->getBeginLoc();
+  return false;
+}
+
+  using ParsedAttrInfo::diagMutualExclusion;
+
+  bool diagMutualExclusion(Sema &S, const ParsedAttr &AL, const Decl *D) const override {
+    if (const auto *A = D->getAttr<TargetAttr>()) {
+      S.Diag(AL.getLoc(), diag::err_attributes_are_not_compatible) << AL << A;
+      S.Diag(A->getLocation(), diag::note_conflicting_attribute);      
+return false;
+    }
+    if (const auto *A = D->getAttr<CPUDispatchAttr>()) {
+      S.Diag(AL.getLoc(), diag::err_attributes_are_not_compatible) << AL << A;
+      S.Diag(A->getLocation(), diag::note_conflicting_attribute);      
+return false;
+    }
+    if (const auto *A = D->getAttr<CPUSpecificAttr>()) {
+      S.Diag(AL.getLoc(), diag::err_attributes_are_not_compatible) << AL << A;
+      S.Diag(A->getLocation(), diag::note_conflicting_attribute);      
+return false;
+    }
+    return true;
+  }
+
+void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectMatchRule, bool>> &MatchRules, const LangOptions &LangOpts) const override {
+  MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
+}
+
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
+static const ParsedAttrInfoTargetClones Instance;
+};
+const ParsedAttrInfoTargetClones ParsedAttrInfoTargetClones::Instance;
 static constexpr ParsedAttrInfo::Spelling TestTypestateSpellings[] = {
   {AttributeCommonInfo::AS_GNU, "test_typestate"},
   {AttributeCommonInfo::AS_CXX11, "clang::test_typestate"},
@@ -12097,7 +14196,9 @@ struct ParsedAttrInfoTestTypestate final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_TestTypestate;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12125,6 +14226,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function_is_member, /*IsSupported=*/LangOpts.CPlusPlus));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoTestTypestate Instance;
 };
 const ParsedAttrInfoTestTypestate ParsedAttrInfoTestTypestate::Instance;
@@ -12140,7 +14245,9 @@ struct ParsedAttrInfoThisCall final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_ThisCall;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -12148,6 +14255,10 @@ struct ParsedAttrInfoThisCall final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = ThisCallSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoThisCall Instance;
 };
 const ParsedAttrInfoThisCall ParsedAttrInfoThisCall::Instance;
@@ -12159,7 +14270,9 @@ struct ParsedAttrInfoThread final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Thread;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12186,6 +14299,10 @@ bool acceptsLangOpts(const LangOptions &LangOpts) const override {
   return LangOpts.MicrosoftExt;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoThread Instance;
 };
 const ParsedAttrInfoThread ParsedAttrInfoThread::Instance;
@@ -12199,7 +14316,9 @@ struct ParsedAttrInfoTransparentUnion final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_TransparentUnion;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12209,6 +14328,10 @@ struct ParsedAttrInfoTransparentUnion final : public ParsedAttrInfo {
   }
 bool acceptsLangOpts(const LangOptions &LangOpts) const override {
   return (!LangOpts.CPlusPlus);
+}
+
+bool isParamExpr(size_t N) const override {
+  return false;
 }
 
 static const ParsedAttrInfoTransparentUnion Instance;
@@ -12223,7 +14346,9 @@ struct ParsedAttrInfoTrivialABI final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_TrivialABI;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12259,6 +14384,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoTrivialABI Instance;
 };
 const ParsedAttrInfoTrivialABI ParsedAttrInfoTrivialABI::Instance;
@@ -12275,7 +14404,9 @@ struct ParsedAttrInfoTryAcquireCapability final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_TryAcquireCapability;
     NumArgs = 1;
     OptArgs = 15;
+    NumArgMembers = 2;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12319,6 +14450,10 @@ unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override 
   }
 }
 
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || (N == 1) || false;
+}
+
 static const ParsedAttrInfoTryAcquireCapability Instance;
 };
 const ParsedAttrInfoTryAcquireCapability ParsedAttrInfoTryAcquireCapability::Instance;
@@ -12330,7 +14465,9 @@ struct ParsedAttrInfoTypeNonNull final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_TypeNonNull;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -12338,6 +14475,10 @@ struct ParsedAttrInfoTypeNonNull final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = TypeNonNullSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoTypeNonNull Instance;
 };
 const ParsedAttrInfoTypeNonNull ParsedAttrInfoTypeNonNull::Instance;
@@ -12349,7 +14490,9 @@ struct ParsedAttrInfoTypeNullUnspecified final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_TypeNullUnspecified;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -12357,6 +14500,10 @@ struct ParsedAttrInfoTypeNullUnspecified final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = TypeNullUnspecifiedSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoTypeNullUnspecified Instance;
 };
 const ParsedAttrInfoTypeNullUnspecified ParsedAttrInfoTypeNullUnspecified::Instance;
@@ -12368,7 +14515,9 @@ struct ParsedAttrInfoTypeNullable final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_TypeNullable;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -12376,6 +14525,10 @@ struct ParsedAttrInfoTypeNullable final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = TypeNullableSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoTypeNullable Instance;
 };
 const ParsedAttrInfoTypeNullable ParsedAttrInfoTypeNullable::Instance;
@@ -12387,7 +14540,9 @@ struct ParsedAttrInfoTypeNullableResult final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_TypeNullableResult;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -12395,6 +14550,10 @@ struct ParsedAttrInfoTypeNullableResult final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = TypeNullableResultSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoTypeNullableResult Instance;
 };
 const ParsedAttrInfoTypeNullableResult ParsedAttrInfoTypeNullableResult::Instance;
@@ -12410,7 +14569,9 @@ struct ParsedAttrInfoTypeTagForDatatype final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_TypeTagForDatatype;
     NumArgs = 4;
     OptArgs = 0;
+    NumArgMembers = 4;
     HasCustomParsing = 1;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12419,6 +14580,10 @@ struct ParsedAttrInfoTypeTagForDatatype final : public ParsedAttrInfo {
     Spellings = TypeTagForDatatypeSpellings;
     ArgNames = TypeTagForDatatypeArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoTypeTagForDatatype Instance;
 };
 const ParsedAttrInfoTypeTagForDatatype ParsedAttrInfoTypeTagForDatatype::Instance;
@@ -12434,7 +14599,9 @@ struct ParsedAttrInfoTypeVisibility final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_TypeVisibility;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12443,6 +14610,10 @@ struct ParsedAttrInfoTypeVisibility final : public ParsedAttrInfo {
     Spellings = TypeVisibilitySpellings;
     ArgNames = TypeVisibilityArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoTypeVisibility Instance;
 };
 const ParsedAttrInfoTypeVisibility ParsedAttrInfoTypeVisibility::Instance;
@@ -12454,7 +14625,9 @@ struct ParsedAttrInfoUPtr final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_UPtr;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -12462,6 +14635,10 @@ struct ParsedAttrInfoUPtr final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = UPtrSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoUPtr Instance;
 };
 const ParsedAttrInfoUPtr ParsedAttrInfoUPtr::Instance;
@@ -12477,7 +14654,9 @@ struct ParsedAttrInfoUnavailable final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Unavailable;
     NumArgs = 0;
     OptArgs = 1;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12486,6 +14665,10 @@ struct ParsedAttrInfoUnavailable final : public ParsedAttrInfo {
     Spellings = UnavailableSpellings;
     ArgNames = UnavailableArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoUnavailable Instance;
 };
 const ParsedAttrInfoUnavailable ParsedAttrInfoUnavailable::Instance;
@@ -12498,7 +14681,9 @@ struct ParsedAttrInfoUninitialized final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Uninitialized;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12525,6 +14710,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_local, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoUninitialized Instance;
 };
 const ParsedAttrInfoUninitialized ParsedAttrInfoUninitialized::Instance;
@@ -12537,7 +14726,9 @@ struct ParsedAttrInfoUnlikely final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Unlikely;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 1;
@@ -12546,6 +14737,10 @@ struct ParsedAttrInfoUnlikely final : public ParsedAttrInfo {
     Spellings = UnlikelySpellings;
   }
   using ParsedAttrInfo::diagMutualExclusion;
+
+bool isParamExpr(size_t N) const override {
+  return false;
+}
 
 static const ParsedAttrInfoUnlikely Instance;
 };
@@ -12562,7 +14757,9 @@ struct ParsedAttrInfoUnused final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Unused;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12607,6 +14804,10 @@ unsigned spellingIndexToSemanticSpelling(const ParsedAttr &Attr) const override 
   }
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoUnused Instance;
 };
 const ParsedAttrInfoUnused ParsedAttrInfoUnused::Instance;
@@ -12622,7 +14823,9 @@ struct ParsedAttrInfoUseHandle final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_UseHandle;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12650,6 +14853,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_variable_is_parameter, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoUseHandle Instance;
 };
 const ParsedAttrInfoUseHandle ParsedAttrInfoUseHandle::Instance;
@@ -12663,7 +14870,9 @@ struct ParsedAttrInfoUsed final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Used;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12691,6 +14900,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoUsed Instance;
 };
 const ParsedAttrInfoUsed ParsedAttrInfoUsed::Instance;
@@ -12703,7 +14916,9 @@ struct ParsedAttrInfoUsingIfExists final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_UsingIfExists;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12726,6 +14941,10 @@ bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const o
   return false;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoUsingIfExists Instance;
 };
 const ParsedAttrInfoUsingIfExists ParsedAttrInfoUsingIfExists::Instance;
@@ -12740,7 +14959,9 @@ struct ParsedAttrInfoUuid final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Uuid;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12768,6 +14989,10 @@ bool acceptsLangOpts(const LangOptions &LangOpts) const override {
   return LangOpts.MicrosoftExt || LangOpts.Borland;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoUuid Instance;
 };
 const ParsedAttrInfoUuid ParsedAttrInfoUuid::Instance;
@@ -12780,7 +15005,9 @@ struct ParsedAttrInfoVecReturn final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_VecReturn;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12807,6 +15034,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_record, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoVecReturn Instance;
 };
 const ParsedAttrInfoVecReturn ParsedAttrInfoVecReturn::Instance;
@@ -12820,7 +15051,9 @@ struct ParsedAttrInfoVecTypeHint final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_VecTypeHint;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12848,6 +15081,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoVecTypeHint Instance;
 };
 const ParsedAttrInfoVecTypeHint ParsedAttrInfoVecTypeHint::Instance;
@@ -12863,7 +15100,9 @@ struct ParsedAttrInfoVectorCall final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_VectorCall;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -12871,6 +15110,10 @@ struct ParsedAttrInfoVectorCall final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = VectorCallSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoVectorCall Instance;
 };
 const ParsedAttrInfoVectorCall ParsedAttrInfoVectorCall::Instance;
@@ -12886,7 +15129,9 @@ struct ParsedAttrInfoVectorSize final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_VectorSize;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 1;
     IsStmt = 0;
@@ -12895,6 +15140,10 @@ struct ParsedAttrInfoVectorSize final : public ParsedAttrInfo {
     Spellings = VectorSizeSpellings;
     ArgNames = VectorSizeArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return (N == 0) || false;
+}
+
 static const ParsedAttrInfoVectorSize Instance;
 };
 const ParsedAttrInfoVectorSize ParsedAttrInfoVectorSize::Instance;
@@ -12910,7 +15159,9 @@ struct ParsedAttrInfoVisibility final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Visibility;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12919,6 +15170,10 @@ struct ParsedAttrInfoVisibility final : public ParsedAttrInfo {
     Spellings = VisibilitySpellings;
     ArgNames = VisibilityArgNames;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoVisibility Instance;
 };
 const ParsedAttrInfoVisibility ParsedAttrInfoVisibility::Instance;
@@ -12932,7 +15187,9 @@ struct ParsedAttrInfoWarnUnused final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_WarnUnused;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -12964,6 +15221,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoWarnUnused Instance;
 };
 const ParsedAttrInfoWarnUnused ParsedAttrInfoWarnUnused::Instance;
@@ -12982,7 +15243,9 @@ struct ParsedAttrInfoWarnUnusedResult final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_WarnUnusedResult;
     NumArgs = 0;
     OptArgs = 1;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -13037,6 +15300,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_hasType_functionType, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoWarnUnusedResult Instance;
 };
 const ParsedAttrInfoWarnUnusedResult ParsedAttrInfoWarnUnusedResult::Instance;
@@ -13050,7 +15317,9 @@ struct ParsedAttrInfoWeak final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_Weak;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -13084,6 +15353,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoWeak Instance;
 };
 const ParsedAttrInfoWeak ParsedAttrInfoWeak::Instance;
@@ -13097,7 +15370,9 @@ struct ParsedAttrInfoWeakImport final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_WeakImport;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -13105,6 +15380,10 @@ struct ParsedAttrInfoWeakImport final : public ParsedAttrInfo {
     IsSupportedByPragmaAttribute = 0;
     Spellings = WeakImportSpellings;
   }
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoWeakImport Instance;
 };
 const ParsedAttrInfoWeakImport ParsedAttrInfoWeakImport::Instance;
@@ -13120,7 +15399,9 @@ struct ParsedAttrInfoWeakRef final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_WeakRef;
     NumArgs = 0;
     OptArgs = 1;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -13149,6 +15430,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoWeakRef Instance;
 };
 const ParsedAttrInfoWeakRef ParsedAttrInfoWeakRef::Instance;
@@ -13164,7 +15449,9 @@ struct ParsedAttrInfoWebAssemblyExportName final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_WebAssemblyExportName;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -13197,6 +15484,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoWebAssemblyExportName Instance;
 };
 const ParsedAttrInfoWebAssemblyExportName ParsedAttrInfoWebAssemblyExportName::Instance;
@@ -13212,7 +15503,9 @@ struct ParsedAttrInfoWebAssemblyImportModule final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_WebAssemblyImportModule;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -13245,6 +15538,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoWebAssemblyImportModule Instance;
 };
 const ParsedAttrInfoWebAssemblyImportModule ParsedAttrInfoWebAssemblyImportModule::Instance;
@@ -13260,7 +15557,9 @@ struct ParsedAttrInfoWebAssemblyImportName final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_WebAssemblyImportName;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -13293,6 +15592,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoWebAssemblyImportName Instance;
 };
 const ParsedAttrInfoWebAssemblyImportName ParsedAttrInfoWebAssemblyImportName::Instance;
@@ -13306,7 +15609,9 @@ struct ParsedAttrInfoWorkGroupSizeHint final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_WorkGroupSizeHint;
     NumArgs = 3;
     OptArgs = 0;
+    NumArgMembers = 3;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -13334,6 +15639,10 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoWorkGroupSizeHint Instance;
 };
 const ParsedAttrInfoWorkGroupSizeHint ParsedAttrInfoWorkGroupSizeHint::Instance;
@@ -13347,7 +15656,9 @@ struct ParsedAttrInfoX86ForceAlignArgPointer final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_X86ForceAlignArgPointer;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 1;
     IsType = 0;
     IsStmt = 0;
@@ -13358,6 +15669,10 @@ struct ParsedAttrInfoX86ForceAlignArgPointer final : public ParsedAttrInfo {
 bool existsInTarget(const TargetInfo &Target) const override {
   const llvm::Triple &T = Target.getTriple(); (void)T;
   return true && (T.getArch() == llvm::Triple::x86 || T.getArch() == llvm::Triple::x86_64);
+}
+
+bool isParamExpr(size_t N) const override {
+  return false;
 }
 
 static const ParsedAttrInfoX86ForceAlignArgPointer Instance;
@@ -13376,7 +15691,9 @@ struct ParsedAttrInfoXRayInstrument final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_XRayInstrument;
     NumArgs = 0;
     OptArgs = 0;
+    NumArgMembers = 0;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -13433,6 +15750,10 @@ AttrHandling handleDeclAttribute(Sema &S, Decl *D,const ParsedAttr &Attr) const 
   return AttributeApplied;
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoXRayInstrument Instance;
 };
 const ParsedAttrInfoXRayInstrument ParsedAttrInfoXRayInstrument::Instance;
@@ -13448,7 +15769,9 @@ struct ParsedAttrInfoXRayLogArgs final : public ParsedAttrInfo {
     AttrKind = ParsedAttr::AT_XRayLogArgs;
     NumArgs = 1;
     OptArgs = 0;
+    NumArgMembers = 1;
     HasCustomParsing = 0;
+    AcceptsExprPack = 0;
     IsTargetSpecific = 0;
     IsType = 0;
     IsStmt = 0;
@@ -13477,9 +15800,62 @@ void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectM
   MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_objc_method, /*IsSupported=*/LangOpts.ObjC));
 }
 
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
 static const ParsedAttrInfoXRayLogArgs Instance;
 };
 const ParsedAttrInfoXRayLogArgs ParsedAttrInfoXRayLogArgs::Instance;
+static constexpr ParsedAttrInfo::Spelling ZeroCallUsedRegsSpellings[] = {
+  {AttributeCommonInfo::AS_GNU, "zero_call_used_regs"},
+  {AttributeCommonInfo::AS_CXX11, "gnu::zero_call_used_regs"},
+  {AttributeCommonInfo::AS_C2x, "gnu::zero_call_used_regs"},
+};
+static constexpr const char *ZeroCallUsedRegsArgNames[] = {
+"ZeroCallUsedRegs",};
+struct ParsedAttrInfoZeroCallUsedRegs final : public ParsedAttrInfo {
+  ParsedAttrInfoZeroCallUsedRegs() {
+    AttrKind = ParsedAttr::AT_ZeroCallUsedRegs;
+    NumArgs = 1;
+    OptArgs = 0;
+    NumArgMembers = 1;
+    HasCustomParsing = 0;
+    AcceptsExprPack = 0;
+    IsTargetSpecific = 0;
+    IsType = 0;
+    IsStmt = 0;
+    IsKnownToGCC = 1;
+    IsSupportedByPragmaAttribute = 1;
+    Spellings = ZeroCallUsedRegsSpellings;
+    ArgNames = ZeroCallUsedRegsArgNames;
+  }
+bool diagAppertainsToDecl(Sema &S, const ParsedAttr &Attr, const Decl *D) const override {
+  if (!isa<FunctionDecl>(D)) {
+    S.Diag(Attr.getLoc(), diag::err_attribute_wrong_decl_type_str)
+      << Attr << "functions";
+    return false;
+  }
+  return true;
+}
+
+bool diagAppertainsToStmt(Sema &S, const ParsedAttr &AL, const Stmt *St) const override {
+  S.Diag(AL.getLoc(), diag::err_decl_attribute_invalid_on_stmt)
+    << AL << St->getBeginLoc();
+  return false;
+}
+
+void getPragmaAttributeMatchRules(llvm::SmallVectorImpl<std::pair<attr::SubjectMatchRule, bool>> &MatchRules, const LangOptions &LangOpts) const override {
+  MatchRules.push_back(std::make_pair(attr::SubjectMatchRule_function, /*IsSupported=*/true));
+}
+
+bool isParamExpr(size_t N) const override {
+  return false;
+}
+
+static const ParsedAttrInfoZeroCallUsedRegs Instance;
+};
+const ParsedAttrInfoZeroCallUsedRegs ParsedAttrInfoZeroCallUsedRegs::Instance;
 static const ParsedAttrInfo *AttrInfoMap[] = {
 &ParsedAttrInfoAArch64VectorPcs::Instance,
 &ParsedAttrInfoAMDGPUFlatWorkGroupSize::Instance,
@@ -13518,7 +15894,8 @@ static const ParsedAttrInfo *AttrInfoMap[] = {
 &ParsedAttrInfoAssumption::Instance,
 &ParsedAttrInfoAvailability::Instance,
 &ParsedAttrInfoBPFPreserveAccessIndex::Instance,
-&ParsedAttrInfoBTFTag::Instance,
+&ParsedAttrInfoBTFDeclTag::Instance,
+&ParsedAttrInfoBTFTypeTag::Instance,
 &ParsedAttrInfoBlocks::Instance,
 &ParsedAttrInfoBuiltinAlias::Instance,
 &ParsedAttrInfoCDecl::Instance,
@@ -13565,6 +15942,7 @@ static const ParsedAttrInfo *AttrInfoMap[] = {
 &ParsedAttrInfoDLLImportStaticLocal::Instance,
 &ParsedAttrInfoDeprecated::Instance,
 &ParsedAttrInfoDestructor::Instance,
+&ParsedAttrInfoDiagnoseAsBuiltin::Instance,
 &ParsedAttrInfoDiagnoseIf::Instance,
 &ParsedAttrInfoDisableSanitizerInstrumentation::Instance,
 &ParsedAttrInfoDisableTailCalls::Instance,
@@ -13573,6 +15951,7 @@ static const ParsedAttrInfo *AttrInfoMap[] = {
 &ParsedAttrInfoEnforceTCB::Instance,
 &ParsedAttrInfoEnforceTCBLeaf::Instance,
 &ParsedAttrInfoEnumExtensibility::Instance,
+&ParsedAttrInfoError::Instance,
 &ParsedAttrInfoExcludeFromExplicitInstantiation::Instance,
 &ParsedAttrInfoExclusiveTrylockFunction::Instance,
 &ParsedAttrInfoExtVectorType::Instance,
@@ -13740,6 +16119,7 @@ static const ParsedAttrInfo *AttrInfoMap[] = {
 &ParsedAttrInfoReturnsTwice::Instance,
 &ParsedAttrInfoSPtr::Instance,
 &ParsedAttrInfoSYCLKernel::Instance,
+&ParsedAttrInfoSYCLSpecialClass::Instance,
 &ParsedAttrInfoScopedLockable::Instance,
 &ParsedAttrInfoSection::Instance,
 &ParsedAttrInfoSelectAny::Instance,
@@ -13771,6 +16151,7 @@ static const ParsedAttrInfo *AttrInfoMap[] = {
 &ParsedAttrInfoSysVABI::Instance,
 &ParsedAttrInfoTLSModel::Instance,
 &ParsedAttrInfoTarget::Instance,
+&ParsedAttrInfoTargetClones::Instance,
 &ParsedAttrInfoTestTypestate::Instance,
 &ParsedAttrInfoThisCall::Instance,
 &ParsedAttrInfoThread::Instance,
@@ -13809,7 +16190,27 @@ static const ParsedAttrInfo *AttrInfoMap[] = {
 &ParsedAttrInfoX86ForceAlignArgPointer::Instance,
 &ParsedAttrInfoXRayInstrument::Instance,
 &ParsedAttrInfoXRayLogArgs::Instance,
+&ParsedAttrInfoZeroCallUsedRegs::Instance,
 };
+
+static void handleAttrWithDelayedArgs(Sema &S, Decl *D, const ParsedAttr &Attr) {
+  SmallVector<Expr *, 4> ArgExprs;
+  ArgExprs.reserve(Attr.getNumArgs());
+  for (unsigned I = 0; I < Attr.getNumArgs(); ++I) {
+    assert(!Attr.isArgIdent(I));
+    ArgExprs.push_back(Attr.getArgAsExpr(I));
+  }
+  clang::Attr *CreatedAttr = nullptr;
+  switch (Attr.getKind()) {
+  default:
+    llvm_unreachable("Attribute cannot hold delayed arguments.");
+  case ParsedAttr::AT_Annotate: {
+    CreatedAttr = AnnotateAttr::CreateWithDelayedArgs(S.Context, ArgExprs.data(), ArgExprs.size(), Attr);
+    break;
+  }
+  }
+  D->addAttr(CreatedAttr);
+}
 
 static bool checkAttributeMatchRuleAppliesTo(const Decl *D, attr::SubjectMatchRule rule) {
   switch (rule) {
@@ -13898,6 +16299,42 @@ static bool DiagnoseMutualExclusions(Sema &S, const NamedDecl *D, const Attr *A)
   }
   if (const auto *Second = dyn_cast<CFUnknownTransferAttr>(A)) {
     if (const auto *First = D->getAttr<CFAuditedTransferAttr>()) {
+      S.Diag(First->getLocation(), diag::err_attributes_are_not_compatible) << First << Second;
+      S.Diag(Second->getLocation(), diag::note_conflicting_attribute);
+      return false;
+    }
+    return true;
+  }
+  if (const auto *Second = dyn_cast<CPUDispatchAttr>(A)) {
+    if (const auto *First = D->getAttr<TargetClonesAttr>()) {
+      S.Diag(First->getLocation(), diag::err_attributes_are_not_compatible) << First << Second;
+      S.Diag(Second->getLocation(), diag::note_conflicting_attribute);
+      return false;
+    }
+    if (const auto *First = D->getAttr<TargetAttr>()) {
+      S.Diag(First->getLocation(), diag::err_attributes_are_not_compatible) << First << Second;
+      S.Diag(Second->getLocation(), diag::note_conflicting_attribute);
+      return false;
+    }
+    if (const auto *First = D->getAttr<CPUSpecificAttr>()) {
+      S.Diag(First->getLocation(), diag::err_attributes_are_not_compatible) << First << Second;
+      S.Diag(Second->getLocation(), diag::note_conflicting_attribute);
+      return false;
+    }
+    return true;
+  }
+  if (const auto *Second = dyn_cast<CPUSpecificAttr>(A)) {
+    if (const auto *First = D->getAttr<TargetClonesAttr>()) {
+      S.Diag(First->getLocation(), diag::err_attributes_are_not_compatible) << First << Second;
+      S.Diag(Second->getLocation(), diag::note_conflicting_attribute);
+      return false;
+    }
+    if (const auto *First = D->getAttr<TargetAttr>()) {
+      S.Diag(First->getLocation(), diag::err_attributes_are_not_compatible) << First << Second;
+      S.Diag(Second->getLocation(), diag::note_conflicting_attribute);
+      return false;
+    }
+    if (const auto *First = D->getAttr<CPUDispatchAttr>()) {
       S.Diag(First->getLocation(), diag::err_attributes_are_not_compatible) << First << Second;
       S.Diag(Second->getLocation(), diag::note_conflicting_attribute);
       return false;
@@ -14115,6 +16552,42 @@ static bool DiagnoseMutualExclusions(Sema &S, const NamedDecl *D, const Attr *A)
   }
   if (const auto *Second = dyn_cast<SpeculativeLoadHardeningAttr>(A)) {
     if (const auto *First = D->getAttr<NoSpeculativeLoadHardeningAttr>()) {
+      S.Diag(First->getLocation(), diag::err_attributes_are_not_compatible) << First << Second;
+      S.Diag(Second->getLocation(), diag::note_conflicting_attribute);
+      return false;
+    }
+    return true;
+  }
+  if (const auto *Second = dyn_cast<TargetAttr>(A)) {
+    if (const auto *First = D->getAttr<TargetClonesAttr>()) {
+      S.Diag(First->getLocation(), diag::err_attributes_are_not_compatible) << First << Second;
+      S.Diag(Second->getLocation(), diag::note_conflicting_attribute);
+      return false;
+    }
+    if (const auto *First = D->getAttr<CPUDispatchAttr>()) {
+      S.Diag(First->getLocation(), diag::err_attributes_are_not_compatible) << First << Second;
+      S.Diag(Second->getLocation(), diag::note_conflicting_attribute);
+      return false;
+    }
+    if (const auto *First = D->getAttr<CPUSpecificAttr>()) {
+      S.Diag(First->getLocation(), diag::err_attributes_are_not_compatible) << First << Second;
+      S.Diag(Second->getLocation(), diag::note_conflicting_attribute);
+      return false;
+    }
+    return true;
+  }
+  if (const auto *Second = dyn_cast<TargetClonesAttr>(A)) {
+    if (const auto *First = D->getAttr<TargetAttr>()) {
+      S.Diag(First->getLocation(), diag::err_attributes_are_not_compatible) << First << Second;
+      S.Diag(Second->getLocation(), diag::note_conflicting_attribute);
+      return false;
+    }
+    if (const auto *First = D->getAttr<CPUDispatchAttr>()) {
+      S.Diag(First->getLocation(), diag::err_attributes_are_not_compatible) << First << Second;
+      S.Diag(Second->getLocation(), diag::note_conflicting_attribute);
+      return false;
+    }
+    if (const auto *First = D->getAttr<CPUSpecificAttr>()) {
       S.Diag(First->getLocation(), diag::err_attributes_are_not_compatible) << First << Second;
       S.Diag(Second->getLocation(), diag::note_conflicting_attribute);
       return false;

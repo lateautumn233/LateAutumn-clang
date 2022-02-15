@@ -352,6 +352,13 @@ struct ReadDispatcher<UnaryTransformType::UTTKind> {
   }
 };
 template <>
+struct ReadDispatcher<UsingShadowDecl*> {
+  template <class BasicReader, class... Args>
+  static UsingShadowDecl* read(BasicReader &R, Args &&... args) {
+    return R.readUsingShadowDeclRef(std::forward<Args>(args)...);
+  }
+};
+template <>
 struct ReadDispatcher<ValueDecl*> {
   template <class BasicReader, class... Args>
   static ValueDecl* read(BasicReader &R, Args &&... args) {
@@ -500,6 +507,12 @@ template <>
 struct UnpackOptionalValue<uint64_t> {
   static Optional<uint64_t> unpack(uint64_t value) {
     return value ? llvm::Optional<uint64_t>(value - 1) : llvm::None;
+  }
+};
+template <>
+struct UnpackOptionalValue<UsingShadowDecl*> {
+  static Optional<UsingShadowDecl*> unpack(UsingShadowDecl* value) {
+    return value ? llvm::Optional<UsingShadowDecl*>(value) : llvm::None;
   }
 };
 template <>
@@ -1051,6 +1064,9 @@ public:
   }
   UnaryTransformType::UTTKind readUnaryTypeTransformKind() {
     return asImpl().template readEnum<UnaryTransformType::UTTKind>();
+  }
+  UsingShadowDecl* readUsingShadowDeclRef() {
+    return cast_or_null<UsingShadowDecl>(asImpl().readDeclRef());
   }
   ValueDecl* readValueDeclRef() {
     return cast_or_null<ValueDecl>(asImpl().readDeclRef());

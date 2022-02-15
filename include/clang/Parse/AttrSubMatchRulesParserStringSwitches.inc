@@ -11,12 +11,12 @@ Optional<attr::SubjectMatchRule> isAttributeSubjectMatchSubRuleFor_function(Stri
   Default(None);
 }
 
-Optional<attr::SubjectMatchRule> isAttributeSubjectMatchSubRuleFor_hasType(StringRef Name, bool IsUnless) {
+Optional<attr::SubjectMatchRule> isAttributeSubjectMatchSubRuleFor_objc_method(StringRef Name, bool IsUnless) {
   if (IsUnless)
     return llvm::StringSwitch<Optional<attr::SubjectMatchRule>>(Name).
     Default(None);
   return llvm::StringSwitch<Optional<attr::SubjectMatchRule>>(Name).
-  Case("functionType", attr::SubjectMatchRule_hasType_functionType).
+  Case("is_instance", attr::SubjectMatchRule_objc_method_is_instance).
   Default(None);
 }
 
@@ -26,6 +26,15 @@ Optional<attr::SubjectMatchRule> isAttributeSubjectMatchSubRuleFor_record(String
     Case("is_union", attr::SubjectMatchRule_record_not_is_union).
     Default(None);
   return llvm::StringSwitch<Optional<attr::SubjectMatchRule>>(Name).
+  Default(None);
+}
+
+Optional<attr::SubjectMatchRule> isAttributeSubjectMatchSubRuleFor_hasType(StringRef Name, bool IsUnless) {
+  if (IsUnless)
+    return llvm::StringSwitch<Optional<attr::SubjectMatchRule>>(Name).
+    Default(None);
+  return llvm::StringSwitch<Optional<attr::SubjectMatchRule>>(Name).
+  Case("functionType", attr::SubjectMatchRule_hasType_functionType).
   Default(None);
 }
 
@@ -39,15 +48,6 @@ Optional<attr::SubjectMatchRule> isAttributeSubjectMatchSubRuleFor_variable(Stri
   Case("is_global", attr::SubjectMatchRule_variable_is_global).
   Case("is_local", attr::SubjectMatchRule_variable_is_local).
   Case("is_parameter", attr::SubjectMatchRule_variable_is_parameter).
-  Default(None);
-}
-
-Optional<attr::SubjectMatchRule> isAttributeSubjectMatchSubRuleFor_objc_method(StringRef Name, bool IsUnless) {
-  if (IsUnless)
-    return llvm::StringSwitch<Optional<attr::SubjectMatchRule>>(Name).
-    Default(None);
-  return llvm::StringSwitch<Optional<attr::SubjectMatchRule>>(Name).
-  Case("is_instance", attr::SubjectMatchRule_objc_method_is_instance).
   Default(None);
 }
 
@@ -76,14 +76,14 @@ const char *validAttributeSubjectMatchSubRules(attr::SubjectMatchRule Rule) {
   switch (Rule) {
   case attr::SubjectMatchRule_function:
   return "'is_member'";
-  case attr::SubjectMatchRule_hasType_abstract:
-  return "'functionType'";
-  case attr::SubjectMatchRule_record:
-  return "'unless(is_union)'";
-  case attr::SubjectMatchRule_variable:
-  return "'is_thread_local', 'is_global', 'is_local', 'is_parameter', 'unless(is_parameter)'";
   case attr::SubjectMatchRule_objc_method:
   return "'is_instance'";
+  case attr::SubjectMatchRule_record:
+  return "'unless(is_union)'";
+  case attr::SubjectMatchRule_hasType_abstract:
+  return "'functionType'";
+  case attr::SubjectMatchRule_variable:
+  return "'is_thread_local', 'is_global', 'is_local', 'is_parameter', 'unless(is_parameter)'";
   default: return nullptr;
   }
 }

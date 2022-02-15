@@ -70,7 +70,6 @@ ATTRIBUTE_ENUM(StrictFP,strictfp)
 ATTRIBUTE_ENUM(SwiftAsync,swiftasync)
 ATTRIBUTE_ENUM(SwiftError,swifterror)
 ATTRIBUTE_ENUM(SwiftSelf,swiftself)
-ATTRIBUTE_ENUM(UWTable,uwtable)
 ATTRIBUTE_ENUM(WillReturn,willreturn)
 ATTRIBUTE_ENUM(WriteOnly,writeonly)
 ATTRIBUTE_ENUM(ZExt,zeroext)
@@ -85,6 +84,7 @@ ATTRIBUTE_ENUM(AllocSize,allocsize)
 ATTRIBUTE_ENUM(Dereferenceable,dereferenceable)
 ATTRIBUTE_ENUM(DereferenceableOrNull,dereferenceable_or_null)
 ATTRIBUTE_ENUM(StackAlignment,alignstack)
+ATTRIBUTE_ENUM(UWTable,uwtable)
 ATTRIBUTE_ENUM(VScaleRange,vscale_range)
 #undef ATTRIBUTE_ENUM
 
@@ -92,6 +92,8 @@ ATTRIBUTE_ENUM(VScaleRange,vscale_range)
 #define ATTRIBUTE_STRBOOL(FIRST, SECOND) ATTRIBUTE_ALL(FIRST, SECOND)
 #endif
 
+ATTRIBUTE_STRBOOL(AMDGPUUnsafeFPAtomics,amdgpu-unsafe-fp-atomics)
+ATTRIBUTE_STRBOOL(ApproxFuncFPMath,approx-func-fp-math)
 ATTRIBUTE_STRBOOL(LessPreciseFPMAD,less-precise-fpmad)
 ATTRIBUTE_STRBOOL(NoInfsFPMath,no-infs-fp-math)
 ATTRIBUTE_STRBOOL(NoInlineLineTables,no-inline-line-tables)
@@ -171,25 +173,25 @@ StrictFP = 59,
 SwiftAsync = 60,
 SwiftError = 61,
 SwiftSelf = 62,
-UWTable = 63,
-WillReturn = 64,
-WriteOnly = 65,
-ZExt = 66,
-LastEnumAttr = 66,
-FirstTypeAttr = 67,
-ByRef = 67,
-ByVal = 68,
-ElementType = 69,
-InAlloca = 70,
-Preallocated = 71,
-StructRet = 72,
-LastTypeAttr = 72,
-FirstIntAttr = 73,
-Alignment = 73,
-AllocSize = 74,
-Dereferenceable = 75,
-DereferenceableOrNull = 76,
-StackAlignment = 77,
+WillReturn = 63,
+WriteOnly = 64,
+ZExt = 65,
+LastEnumAttr = 65,
+FirstTypeAttr = 66,
+ByRef = 66,
+ByVal = 67,
+ElementType = 68,
+InAlloca = 69,
+Preallocated = 70,
+StructRet = 71,
+LastTypeAttr = 71,
+FirstIntAttr = 72,
+Alignment = 72,
+AllocSize = 73,
+Dereferenceable = 74,
+DereferenceableOrNull = 75,
+StackAlignment = 76,
+UWTable = 77,
 VScaleRange = 78,
 LastIntAttr = 78,
 #endif
@@ -217,6 +219,7 @@ static inline void mergeFnAttrs(Function &Caller,
                                 const Function &Callee) {
   setAND<NoInfsFPMathAttr>(Caller, Callee);
   setAND<NoNansFPMathAttr>(Caller, Callee);
+  setAND<ApproxFuncFPMathAttr>(Caller, Callee);
   setAND<NoSignedZerosFPMathAttr>(Caller, Callee);
   setAND<UnsafeFPMathAttr>(Caller, Callee);
   setOR<NoImplicitFloatAttr>(Caller, Callee);
@@ -229,6 +232,7 @@ static inline void mergeFnAttrs(Function &Caller,
   adjustMinLegalVectorWidth(Caller, Callee);
   adjustNullPointerValidAttr(Caller, Callee);
   setAND<MustProgressAttr>(Caller, Callee);
+  setAND<AMDGPUUnsafeFPAtomicsAttr>(Caller, Callee);
   setAND<LessPreciseFPMADAttr>(Caller, Callee);
 }
 
@@ -299,7 +303,6 @@ static const uint8_t AttrPropTable[] = {
 0 | AttributeProperty::ParamAttr,
 0 | AttributeProperty::ParamAttr,
 0 | AttributeProperty::FnAttr,
-0 | AttributeProperty::FnAttr,
 0 | AttributeProperty::FnAttr | AttributeProperty::ParamAttr,
 0 | AttributeProperty::ParamAttr | AttributeProperty::RetAttr,
 0 | AttributeProperty::ParamAttr,
@@ -313,6 +316,7 @@ static const uint8_t AttrPropTable[] = {
 0 | AttributeProperty::ParamAttr | AttributeProperty::RetAttr,
 0 | AttributeProperty::ParamAttr | AttributeProperty::RetAttr,
 0 | AttributeProperty::FnAttr | AttributeProperty::ParamAttr,
+0 | AttributeProperty::FnAttr,
 0 | AttributeProperty::FnAttr,
 };
 #endif

@@ -12,6 +12,7 @@
     adjust_trampoline,                         // llvm.adjust.trampoline
     annotation,                                // llvm.annotation
     arithmetic_fence,                          // llvm.arithmetic.fence
+    asan_check_memaccess,                      // llvm.asan.check.memaccess
     assume,                                    // llvm.assume
     bitreverse,                                // llvm.bitreverse
     bswap,                                     // llvm.bswap
@@ -25,6 +26,7 @@
     convert_from_fp16,                         // llvm.convert.from.fp16
     convert_to_fp16,                           // llvm.convert.to.fp16
     copysign,                                  // llvm.copysign
+    coro_align,                                // llvm.coro.align
     coro_alloc,                                // llvm.coro.alloc
     coro_alloca_alloc,                         // llvm.coro.alloca.alloc
     coro_alloca_free,                          // llvm.coro.alloca.free
@@ -45,7 +47,6 @@
     coro_id_retcon,                            // llvm.coro.id.retcon
     coro_id_retcon_once,                       // llvm.coro.id.retcon.once
     coro_noop,                                 // llvm.coro.noop
-    coro_param,                                // llvm.coro.param
     coro_prepare_async,                        // llvm.coro.prepare.async
     coro_prepare_retcon,                       // llvm.coro.prepare.retcon
     coro_promise,                              // llvm.coro.promise
@@ -140,6 +141,7 @@
     experimental_vector_insert,                // llvm.experimental.vector.insert
     experimental_vector_reverse,               // llvm.experimental.vector.reverse
     experimental_vector_splice,                // llvm.experimental.vector.splice
+    experimental_vp_splice,                    // llvm.experimental.vp.splice
     experimental_widenable_condition,          // llvm.experimental.widenable.condition
     fabs,                                      // llvm.fabs
     floor,                                     // llvm.floor
@@ -148,6 +150,7 @@
     fmuladd,                                   // llvm.fmuladd
     fptosi_sat,                                // llvm.fptosi.sat
     fptoui_sat,                                // llvm.fptoui.sat
+    fptrunc_round,                             // llvm.fptrunc.round
     frameaddress,                              // llvm.frameaddress
     fshl,                                      // llvm.fshl
     fshr,                                      // llvm.fshr
@@ -160,13 +163,13 @@
     hwasan_check_memaccess_shortgranules,      // llvm.hwasan.check.memaccess.shortgranules
     icall_branch_funnel,                       // llvm.icall.branch.funnel
     init_trampoline,                           // llvm.init.trampoline
+    instrprof_cover,                           // llvm.instrprof.cover
     instrprof_increment,                       // llvm.instrprof.increment
     instrprof_increment_step,                  // llvm.instrprof.increment.step
     instrprof_value_profile,                   // llvm.instrprof.value.profile
     invariant_end,                             // llvm.invariant.end
     invariant_start,                           // llvm.invariant.start
     is_constant,                               // llvm.is.constant
-    isnan,                                     // llvm.isnan
     launder_invariant_group,                   // llvm.launder.invariant.group
     lifetime_end,                              // llvm.lifetime.end
     lifetime_start,                            // llvm.lifetime.start
@@ -246,6 +249,12 @@
     preserve_union_access_index,               // llvm.preserve.union.access.index
     pseudoprobe,                               // llvm.pseudoprobe
     ptr_annotation,                            // llvm.ptr.annotation
+    ptrauth_auth,                              // llvm.ptrauth.auth
+    ptrauth_blend,                             // llvm.ptrauth.blend
+    ptrauth_resign,                            // llvm.ptrauth.resign
+    ptrauth_sign,                              // llvm.ptrauth.sign
+    ptrauth_sign_generic,                      // llvm.ptrauth.sign.generic
+    ptrauth_strip,                             // llvm.ptrauth.strip
     ptrmask,                                   // llvm.ptrmask
     read_register,                             // llvm.read_register
     read_volatile_register,                    // llvm.read_volatile_register
@@ -326,12 +335,15 @@
     vp_ashr,                                   // llvm.vp.ashr
     vp_fadd,                                   // llvm.vp.fadd
     vp_fdiv,                                   // llvm.vp.fdiv
+    vp_fma,                                    // llvm.vp.fma
     vp_fmul,                                   // llvm.vp.fmul
+    vp_fneg,                                   // llvm.vp.fneg
     vp_frem,                                   // llvm.vp.frem
     vp_fsub,                                   // llvm.vp.fsub
     vp_gather,                                 // llvm.vp.gather
     vp_load,                                   // llvm.vp.load
     vp_lshr,                                   // llvm.vp.lshr
+    vp_merge,                                  // llvm.vp.merge
     vp_mul,                                    // llvm.vp.mul
     vp_or,                                     // llvm.vp.or
     vp_reduce_add,                             // llvm.vp.reduce.add
@@ -349,6 +361,7 @@
     vp_reduce_xor,                             // llvm.vp.reduce.xor
     vp_scatter,                                // llvm.vp.scatter
     vp_sdiv,                                   // llvm.vp.sdiv
+    vp_select,                                 // llvm.vp.select
     vp_shl,                                    // llvm.vp.shl
     vp_srem,                                   // llvm.vp.srem
     vp_store,                                  // llvm.vp.store
@@ -360,4 +373,4 @@
     write_register,                            // llvm.write_register
     xray_customevent,                          // llvm.xray.customevent
     xray_typedevent,                           // llvm.xray.typedevent
-    num_intrinsics = 10496
+    num_intrinsics = 10764

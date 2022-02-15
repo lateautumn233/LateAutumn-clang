@@ -48,6 +48,7 @@ enum class Directive {
   OMPD_master,
   OMPD_master_taskloop,
   OMPD_master_taskloop_simd,
+  OMPD_metadirective,
   OMPD_ordered,
   OMPD_parallel,
   OMPD_parallel_do,
@@ -103,10 +104,11 @@ enum class Directive {
   OMPD_workshare,
   OMPD_dispatch,
   OMPD_interop,
+  OMPD_loop,
   OMPD_masked,
 };
 
-static constexpr std::size_t Directive_enumSize = 94;
+static constexpr std::size_t Directive_enumSize = 96;
 
 constexpr auto OMPD_allocate = llvm::omp::Directive::OMPD_allocate;
 constexpr auto OMPD_assumes = llvm::omp::Directive::OMPD_assumes;
@@ -146,6 +148,7 @@ constexpr auto OMPD_for_simd = llvm::omp::Directive::OMPD_for_simd;
 constexpr auto OMPD_master = llvm::omp::Directive::OMPD_master;
 constexpr auto OMPD_master_taskloop = llvm::omp::Directive::OMPD_master_taskloop;
 constexpr auto OMPD_master_taskloop_simd = llvm::omp::Directive::OMPD_master_taskloop_simd;
+constexpr auto OMPD_metadirective = llvm::omp::Directive::OMPD_metadirective;
 constexpr auto OMPD_ordered = llvm::omp::Directive::OMPD_ordered;
 constexpr auto OMPD_parallel = llvm::omp::Directive::OMPD_parallel;
 constexpr auto OMPD_parallel_do = llvm::omp::Directive::OMPD_parallel_do;
@@ -201,18 +204,24 @@ constexpr auto OMPD_unroll = llvm::omp::Directive::OMPD_unroll;
 constexpr auto OMPD_workshare = llvm::omp::Directive::OMPD_workshare;
 constexpr auto OMPD_dispatch = llvm::omp::Directive::OMPD_dispatch;
 constexpr auto OMPD_interop = llvm::omp::Directive::OMPD_interop;
+constexpr auto OMPD_loop = llvm::omp::Directive::OMPD_loop;
 constexpr auto OMPD_masked = llvm::omp::Directive::OMPD_masked;
 
 enum class Clause {
   OMPC_acq_rel,
   OMPC_acquire,
+  OMPC_adjust_args,
   OMPC_affinity,
+  OMPC_align,
   OMPC_aligned,
   OMPC_allocate,
   OMPC_allocator,
+  OMPC_append_args,
   OMPC_atomic_default_mem_order,
+  OMPC_bind,
   OMPC_capture,
   OMPC_collapse,
+  OMPC_compare,
   OMPC_copyprivate,
   OMPC_copyin,
   OMPC_default,
@@ -238,6 +247,7 @@ enum class Clause {
   OMPC_in_reduction,
   OMPC_inbranch,
   OMPC_inclusive,
+  OMPC_indirect,
   OMPC_init,
   OMPC_is_device_ptr,
   OMPC_lastprivate,
@@ -245,6 +255,7 @@ enum class Clause {
   OMPC_link,
   OMPC_map,
   OMPC_match,
+  OMPC_memory_order,
   OMPC_mergeable,
   OMPC_nogroup,
   OMPC_nowait,
@@ -288,20 +299,26 @@ enum class Clause {
   OMPC_use_device_addr,
   OMPC_use_device_ptr,
   OMPC_uses_allocators,
+  OMPC_when,
   OMPC_write,
 };
 
-static constexpr std::size_t Clause_enumSize = 85;
+static constexpr std::size_t Clause_enumSize = 93;
 
 constexpr auto OMPC_acq_rel = llvm::omp::Clause::OMPC_acq_rel;
 constexpr auto OMPC_acquire = llvm::omp::Clause::OMPC_acquire;
+constexpr auto OMPC_adjust_args = llvm::omp::Clause::OMPC_adjust_args;
 constexpr auto OMPC_affinity = llvm::omp::Clause::OMPC_affinity;
+constexpr auto OMPC_align = llvm::omp::Clause::OMPC_align;
 constexpr auto OMPC_aligned = llvm::omp::Clause::OMPC_aligned;
 constexpr auto OMPC_allocate = llvm::omp::Clause::OMPC_allocate;
 constexpr auto OMPC_allocator = llvm::omp::Clause::OMPC_allocator;
+constexpr auto OMPC_append_args = llvm::omp::Clause::OMPC_append_args;
 constexpr auto OMPC_atomic_default_mem_order = llvm::omp::Clause::OMPC_atomic_default_mem_order;
+constexpr auto OMPC_bind = llvm::omp::Clause::OMPC_bind;
 constexpr auto OMPC_capture = llvm::omp::Clause::OMPC_capture;
 constexpr auto OMPC_collapse = llvm::omp::Clause::OMPC_collapse;
+constexpr auto OMPC_compare = llvm::omp::Clause::OMPC_compare;
 constexpr auto OMPC_copyprivate = llvm::omp::Clause::OMPC_copyprivate;
 constexpr auto OMPC_copyin = llvm::omp::Clause::OMPC_copyin;
 constexpr auto OMPC_default = llvm::omp::Clause::OMPC_default;
@@ -327,6 +344,7 @@ constexpr auto OMPC_if = llvm::omp::Clause::OMPC_if;
 constexpr auto OMPC_in_reduction = llvm::omp::Clause::OMPC_in_reduction;
 constexpr auto OMPC_inbranch = llvm::omp::Clause::OMPC_inbranch;
 constexpr auto OMPC_inclusive = llvm::omp::Clause::OMPC_inclusive;
+constexpr auto OMPC_indirect = llvm::omp::Clause::OMPC_indirect;
 constexpr auto OMPC_init = llvm::omp::Clause::OMPC_init;
 constexpr auto OMPC_is_device_ptr = llvm::omp::Clause::OMPC_is_device_ptr;
 constexpr auto OMPC_lastprivate = llvm::omp::Clause::OMPC_lastprivate;
@@ -334,6 +352,7 @@ constexpr auto OMPC_linear = llvm::omp::Clause::OMPC_linear;
 constexpr auto OMPC_link = llvm::omp::Clause::OMPC_link;
 constexpr auto OMPC_map = llvm::omp::Clause::OMPC_map;
 constexpr auto OMPC_match = llvm::omp::Clause::OMPC_match;
+constexpr auto OMPC_memory_order = llvm::omp::Clause::OMPC_memory_order;
 constexpr auto OMPC_mergeable = llvm::omp::Clause::OMPC_mergeable;
 constexpr auto OMPC_nogroup = llvm::omp::Clause::OMPC_nogroup;
 constexpr auto OMPC_nowait = llvm::omp::Clause::OMPC_nowait;
@@ -377,12 +396,31 @@ constexpr auto OMPC_use = llvm::omp::Clause::OMPC_use;
 constexpr auto OMPC_use_device_addr = llvm::omp::Clause::OMPC_use_device_addr;
 constexpr auto OMPC_use_device_ptr = llvm::omp::Clause::OMPC_use_device_ptr;
 constexpr auto OMPC_uses_allocators = llvm::omp::Clause::OMPC_uses_allocators;
+constexpr auto OMPC_when = llvm::omp::Clause::OMPC_when;
 constexpr auto OMPC_write = llvm::omp::Clause::OMPC_write;
 
-enum class OrderKind {
-  OMP_ORDER_concurrent=2,
+enum class MemoryOrderKind {
+  OMP_MEMORY_ORDER_SeqCst=1,
+  OMP_MEMORY_ORDER_AcqRel=2,
+  OMP_MEMORY_ORDER_Acquire=3,
+  OMP_MEMORY_ORDER_Release=4,
+  OMP_MEMORY_ORDER_Relaxed=5,
+  OMP_MEMORY_ORDER_Default=6,
 };
 
+constexpr auto OMP_MEMORY_ORDER_SeqCst = llvm::omp::MemoryOrderKind::OMP_MEMORY_ORDER_SeqCst;
+constexpr auto OMP_MEMORY_ORDER_AcqRel = llvm::omp::MemoryOrderKind::OMP_MEMORY_ORDER_AcqRel;
+constexpr auto OMP_MEMORY_ORDER_Acquire = llvm::omp::MemoryOrderKind::OMP_MEMORY_ORDER_Acquire;
+constexpr auto OMP_MEMORY_ORDER_Release = llvm::omp::MemoryOrderKind::OMP_MEMORY_ORDER_Release;
+constexpr auto OMP_MEMORY_ORDER_Relaxed = llvm::omp::MemoryOrderKind::OMP_MEMORY_ORDER_Relaxed;
+constexpr auto OMP_MEMORY_ORDER_Default = llvm::omp::MemoryOrderKind::OMP_MEMORY_ORDER_Default;
+
+enum class OrderKind {
+  OMP_ORDER_unknown=2,
+  OMP_ORDER_concurrent=1,
+};
+
+constexpr auto OMP_ORDER_unknown = llvm::omp::OrderKind::OMP_ORDER_unknown;
 constexpr auto OMP_ORDER_concurrent = llvm::omp::OrderKind::OMP_ORDER_concurrent;
 
 enum class ProcBindKind {
@@ -429,6 +467,8 @@ llvm::StringRef getOpenMPClauseName(Clause C);
 /// Return true if \p C is a valid clause for \p D in version \p Version.
 bool isAllowedClauseForDirective(Directive D, Clause C, unsigned Version);
 
+MemoryOrderKind getMemoryOrderKind(StringRef);
+llvm::StringRef getOpenMPMemoryOrderKindName(MemoryOrderKind);
 OrderKind getOrderKind(StringRef);
 llvm::StringRef getOpenMPOrderKindName(OrderKind);
 ProcBindKind getProcBindKind(StringRef);
