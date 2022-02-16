@@ -338,6 +338,7 @@
     vp_fma,                                    // llvm.vp.fma
     vp_fmul,                                   // llvm.vp.fmul
     vp_fneg,                                   // llvm.vp.fneg
+    vp_fptosi,                                 // llvm.vp.fptosi
     vp_frem,                                   // llvm.vp.frem
     vp_fsub,                                   // llvm.vp.fsub
     vp_gather,                                 // llvm.vp.gather
@@ -373,4 +374,4 @@
     write_register,                            // llvm.write_register
     xray_customevent,                          // llvm.xray.customevent
     xray_typedevent,                           // llvm.xray.typedevent
-    num_intrinsics = 10764
+    num_intrinsics = 10765
