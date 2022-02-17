@@ -60,7 +60,9 @@ case RISCVVector::BI__builtin_rvv_vundefined:
 case RISCVVector::BI__builtin_rvv_vaadd_vv:
 case RISCVVector::BI__builtin_rvv_vaadd_vx:
   ID = Intrinsic::riscv_vaadd;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vaadd_vv_m:
 case RISCVVector::BI__builtin_rvv_vaadd_vx_m:
@@ -72,7 +74,9 @@ case RISCVVector::BI__builtin_rvv_vaadd_vx_m:
 case RISCVVector::BI__builtin_rvv_vaaddu_vv:
 case RISCVVector::BI__builtin_rvv_vaaddu_vx:
   ID = Intrinsic::riscv_vaaddu;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vaaddu_vv_m:
 case RISCVVector::BI__builtin_rvv_vaaddu_vx_m:
@@ -89,7 +93,9 @@ case RISCVVector::BI__builtin_rvv_vadc_vxm:
 case RISCVVector::BI__builtin_rvv_vadd_vv:
 case RISCVVector::BI__builtin_rvv_vadd_vx:
   ID = Intrinsic::riscv_vadd;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vadd_vv_m:
 case RISCVVector::BI__builtin_rvv_vadd_vx_m:
@@ -101,7 +107,9 @@ case RISCVVector::BI__builtin_rvv_vadd_vx_m:
 case RISCVVector::BI__builtin_rvv_vand_vv:
 case RISCVVector::BI__builtin_rvv_vand_vx:
   ID = Intrinsic::riscv_vand;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vand_vv_m:
 case RISCVVector::BI__builtin_rvv_vand_vx_m:
@@ -113,7 +121,9 @@ case RISCVVector::BI__builtin_rvv_vand_vx_m:
 case RISCVVector::BI__builtin_rvv_vasub_vv:
 case RISCVVector::BI__builtin_rvv_vasub_vx:
   ID = Intrinsic::riscv_vasub;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vasub_vv_m:
 case RISCVVector::BI__builtin_rvv_vasub_vx_m:
@@ -125,7 +135,9 @@ case RISCVVector::BI__builtin_rvv_vasub_vx_m:
 case RISCVVector::BI__builtin_rvv_vasubu_vv:
 case RISCVVector::BI__builtin_rvv_vasubu_vx:
   ID = Intrinsic::riscv_vasubu;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vasubu_vv_m:
 case RISCVVector::BI__builtin_rvv_vasubu_vx_m:
@@ -152,7 +164,9 @@ case RISCVVector::BI__builtin_rvv_vcpop_m_m:
 case RISCVVector::BI__builtin_rvv_vdiv_vv:
 case RISCVVector::BI__builtin_rvv_vdiv_vx:
   ID = Intrinsic::riscv_vdiv;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vdiv_vv_m:
 case RISCVVector::BI__builtin_rvv_vdiv_vx_m:
@@ -164,7 +178,9 @@ case RISCVVector::BI__builtin_rvv_vdiv_vx_m:
 case RISCVVector::BI__builtin_rvv_vdivu_vv:
 case RISCVVector::BI__builtin_rvv_vdivu_vx:
   ID = Intrinsic::riscv_vdivu;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vdivu_vv_m:
 case RISCVVector::BI__builtin_rvv_vdivu_vx_m:
@@ -176,7 +192,9 @@ case RISCVVector::BI__builtin_rvv_vdivu_vx_m:
 case RISCVVector::BI__builtin_rvv_vfadd_vv:
 case RISCVVector::BI__builtin_rvv_vfadd_vf:
   ID = Intrinsic::riscv_vfadd;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfadd_vv_m:
 case RISCVVector::BI__builtin_rvv_vfadd_vf_m:
@@ -187,16 +205,21 @@ case RISCVVector::BI__builtin_rvv_vfadd_vf_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfclass_v:
   ID = Intrinsic::riscv_vfclass;
-  IntrinsicTypes = {Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfclass_v_m:
   ID = Intrinsic::riscv_vfclass_mask;
   std::rotate(Ops.begin(), Ops.begin() + 1, Ops.end() - 1);
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfcvt_f_x_v:
   ID = Intrinsic::riscv_vfcvt_f_x_v;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfcvt_f_x_v_m:
   ID = Intrinsic::riscv_vfcvt_f_x_v_mask;
@@ -206,7 +229,9 @@ case RISCVVector::BI__builtin_rvv_vfcvt_f_x_v_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfcvt_f_xu_v:
   ID = Intrinsic::riscv_vfcvt_f_xu_v;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfcvt_f_xu_v_m:
   ID = Intrinsic::riscv_vfcvt_f_xu_v_mask;
@@ -216,7 +241,9 @@ case RISCVVector::BI__builtin_rvv_vfcvt_f_xu_v_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfcvt_rtz_x_f_v:
   ID = Intrinsic::riscv_vfcvt_rtz_x_f_v;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfcvt_rtz_x_f_v_m:
   ID = Intrinsic::riscv_vfcvt_rtz_x_f_v_mask;
@@ -226,7 +253,9 @@ case RISCVVector::BI__builtin_rvv_vfcvt_rtz_x_f_v_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfcvt_rtz_xu_f_v:
   ID = Intrinsic::riscv_vfcvt_rtz_xu_f_v;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfcvt_rtz_xu_f_v_m:
   ID = Intrinsic::riscv_vfcvt_rtz_xu_f_v_mask;
@@ -236,7 +265,9 @@ case RISCVVector::BI__builtin_rvv_vfcvt_rtz_xu_f_v_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfcvt_x_f_v:
   ID = Intrinsic::riscv_vfcvt_x_f_v;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfcvt_x_f_v_m:
   ID = Intrinsic::riscv_vfcvt_x_f_v_mask;
@@ -246,7 +277,9 @@ case RISCVVector::BI__builtin_rvv_vfcvt_x_f_v_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfcvt_xu_f_v:
   ID = Intrinsic::riscv_vfcvt_xu_f_v;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfcvt_xu_f_v_m:
   ID = Intrinsic::riscv_vfcvt_xu_f_v_mask;
@@ -257,7 +290,9 @@ case RISCVVector::BI__builtin_rvv_vfcvt_xu_f_v_m:
 case RISCVVector::BI__builtin_rvv_vfdiv_vv:
 case RISCVVector::BI__builtin_rvv_vfdiv_vf:
   ID = Intrinsic::riscv_vfdiv;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfdiv_vv_m:
 case RISCVVector::BI__builtin_rvv_vfdiv_vf_m:
@@ -302,7 +337,9 @@ case RISCVVector::BI__builtin_rvv_vfmadd_vf_m:
 case RISCVVector::BI__builtin_rvv_vfmax_vv:
 case RISCVVector::BI__builtin_rvv_vfmax_vf:
   ID = Intrinsic::riscv_vfmax;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfmax_vv_m:
 case RISCVVector::BI__builtin_rvv_vfmax_vf_m:
@@ -320,7 +357,9 @@ case RISCVVector::BI__builtin_rvv_vfmerge_vfm:
 case RISCVVector::BI__builtin_rvv_vfmin_vv:
 case RISCVVector::BI__builtin_rvv_vfmin_vf:
   ID = Intrinsic::riscv_vfmin;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfmin_vv_m:
 case RISCVVector::BI__builtin_rvv_vfmin_vf_m:
@@ -356,7 +395,9 @@ case RISCVVector::BI__builtin_rvv_vfmsub_vf_m:
 case RISCVVector::BI__builtin_rvv_vfmul_vv:
 case RISCVVector::BI__builtin_rvv_vfmul_vf:
   ID = Intrinsic::riscv_vfmul;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfmul_vv_m:
 case RISCVVector::BI__builtin_rvv_vfmul_vf_m:
@@ -380,7 +421,9 @@ case RISCVVector::BI__builtin_rvv_vfmv_v_f:
   break;
 case RISCVVector::BI__builtin_rvv_vfncvt_f_f_w:
   ID = Intrinsic::riscv_vfncvt_f_f_w;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfncvt_f_f_w_m:
   ID = Intrinsic::riscv_vfncvt_f_f_w_mask;
@@ -390,7 +433,9 @@ case RISCVVector::BI__builtin_rvv_vfncvt_f_f_w_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfncvt_f_x_w:
   ID = Intrinsic::riscv_vfncvt_f_x_w;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfncvt_f_x_w_m:
   ID = Intrinsic::riscv_vfncvt_f_x_w_mask;
@@ -400,7 +445,9 @@ case RISCVVector::BI__builtin_rvv_vfncvt_f_x_w_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfncvt_f_xu_w:
   ID = Intrinsic::riscv_vfncvt_f_xu_w;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfncvt_f_xu_w_m:
   ID = Intrinsic::riscv_vfncvt_f_xu_w_mask;
@@ -410,7 +457,9 @@ case RISCVVector::BI__builtin_rvv_vfncvt_f_xu_w_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfncvt_rod_f_f_w:
   ID = Intrinsic::riscv_vfncvt_rod_f_f_w;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfncvt_rod_f_f_w_m:
   ID = Intrinsic::riscv_vfncvt_rod_f_f_w_mask;
@@ -420,7 +469,9 @@ case RISCVVector::BI__builtin_rvv_vfncvt_rod_f_f_w_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfncvt_rtz_x_f_w:
   ID = Intrinsic::riscv_vfncvt_rtz_x_f_w;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfncvt_rtz_x_f_w_m:
   ID = Intrinsic::riscv_vfncvt_rtz_x_f_w_mask;
@@ -430,7 +481,9 @@ case RISCVVector::BI__builtin_rvv_vfncvt_rtz_x_f_w_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfncvt_rtz_xu_f_w:
   ID = Intrinsic::riscv_vfncvt_rtz_xu_f_w;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfncvt_rtz_xu_f_w_m:
   ID = Intrinsic::riscv_vfncvt_rtz_xu_f_w_mask;
@@ -440,7 +493,9 @@ case RISCVVector::BI__builtin_rvv_vfncvt_rtz_xu_f_w_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfncvt_x_f_w:
   ID = Intrinsic::riscv_vfncvt_x_f_w;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfncvt_x_f_w_m:
   ID = Intrinsic::riscv_vfncvt_x_f_w_mask;
@@ -450,7 +505,9 @@ case RISCVVector::BI__builtin_rvv_vfncvt_x_f_w_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfncvt_xu_f_w:
   ID = Intrinsic::riscv_vfncvt_xu_f_w;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfncvt_xu_f_w_m:
   ID = Intrinsic::riscv_vfncvt_xu_f_w_mask;
@@ -508,7 +565,9 @@ case RISCVVector::BI__builtin_rvv_vfnmsub_vf_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfrdiv_vf:
   ID = Intrinsic::riscv_vfrdiv;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfrdiv_vf_m:
   ID = Intrinsic::riscv_vfrdiv_mask;
@@ -518,6 +577,8 @@ case RISCVVector::BI__builtin_rvv_vfrdiv_vf_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfrec7_v:
   ID = Intrinsic::riscv_vfrec7;
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
   IntrinsicTypes = {ResultType, Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfrec7_v_m:
@@ -564,6 +625,8 @@ case RISCVVector::BI__builtin_rvv_vfredusum_vs_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfrsqrt7_v:
   ID = Intrinsic::riscv_vfrsqrt7;
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
   IntrinsicTypes = {ResultType, Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfrsqrt7_v_m:
@@ -574,7 +637,9 @@ case RISCVVector::BI__builtin_rvv_vfrsqrt7_v_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfrsub_vf:
   ID = Intrinsic::riscv_vfrsub;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfrsub_vf_m:
   ID = Intrinsic::riscv_vfrsub_mask;
@@ -585,7 +650,9 @@ case RISCVVector::BI__builtin_rvv_vfrsub_vf_m:
 case RISCVVector::BI__builtin_rvv_vfsgnj_vv:
 case RISCVVector::BI__builtin_rvv_vfsgnj_vf:
   ID = Intrinsic::riscv_vfsgnj;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfsgnj_vv_m:
 case RISCVVector::BI__builtin_rvv_vfsgnj_vf_m:
@@ -597,7 +664,9 @@ case RISCVVector::BI__builtin_rvv_vfsgnj_vf_m:
 case RISCVVector::BI__builtin_rvv_vfsgnjn_vv:
 case RISCVVector::BI__builtin_rvv_vfsgnjn_vf:
   ID = Intrinsic::riscv_vfsgnjn;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfneg_v:
   ID = Intrinsic::riscv_vfsgnjn;
@@ -607,6 +676,8 @@ case RISCVVector::BI__builtin_rvv_vfneg_v:
         IntrinsicTypes = {ResultType,
                           Ops[0]->getType(), Ops[1]->getType()};
         Ops.insert(Ops.begin() + 1, Ops[0]);
+        // insert undef passthru
+        Ops.insert(Ops.begin(), llvm::UndefValue::get(ResultType));
         break;
       }
       break;
@@ -634,7 +705,9 @@ case RISCVVector::BI__builtin_rvv_vfneg_v_m:
 case RISCVVector::BI__builtin_rvv_vfsgnjx_vv:
 case RISCVVector::BI__builtin_rvv_vfsgnjx_vf:
   ID = Intrinsic::riscv_vfsgnjx;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfabs_v:
   ID = Intrinsic::riscv_vfsgnjx;
@@ -644,6 +717,8 @@ case RISCVVector::BI__builtin_rvv_vfabs_v:
         IntrinsicTypes = {ResultType,
                           Ops[0]->getType(), Ops[1]->getType()};
         Ops.insert(Ops.begin() + 1, Ops[0]);
+        // insert undef passthru
+        Ops.insert(Ops.begin(), llvm::UndefValue::get(ResultType));
         break;
       }
       break;
@@ -670,7 +745,9 @@ case RISCVVector::BI__builtin_rvv_vfabs_v_m:
       break;
 case RISCVVector::BI__builtin_rvv_vfslide1down_vf:
   ID = Intrinsic::riscv_vfslide1down;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfslide1down_vf_m:
   ID = Intrinsic::riscv_vfslide1down_mask;
@@ -680,7 +757,9 @@ case RISCVVector::BI__builtin_rvv_vfslide1down_vf_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfslide1up_vf:
   ID = Intrinsic::riscv_vfslide1up;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfslide1up_vf_m:
   ID = Intrinsic::riscv_vfslide1up_mask;
@@ -690,6 +769,8 @@ case RISCVVector::BI__builtin_rvv_vfslide1up_vf_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfsqrt_v:
   ID = Intrinsic::riscv_vfsqrt;
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
   IntrinsicTypes = {ResultType, Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfsqrt_v_m:
@@ -701,7 +782,9 @@ case RISCVVector::BI__builtin_rvv_vfsqrt_v_m:
 case RISCVVector::BI__builtin_rvv_vfsub_vv:
 case RISCVVector::BI__builtin_rvv_vfsub_vf:
   ID = Intrinsic::riscv_vfsub;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfsub_vv_m:
 case RISCVVector::BI__builtin_rvv_vfsub_vf_m:
@@ -713,7 +796,9 @@ case RISCVVector::BI__builtin_rvv_vfsub_vf_m:
 case RISCVVector::BI__builtin_rvv_vfwadd_vv:
 case RISCVVector::BI__builtin_rvv_vfwadd_vf:
   ID = Intrinsic::riscv_vfwadd;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfwadd_vv_m:
 case RISCVVector::BI__builtin_rvv_vfwadd_vf_m:
@@ -725,7 +810,9 @@ case RISCVVector::BI__builtin_rvv_vfwadd_vf_m:
 case RISCVVector::BI__builtin_rvv_vfwadd_wv:
 case RISCVVector::BI__builtin_rvv_vfwadd_wf:
   ID = Intrinsic::riscv_vfwadd_w;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfwadd_wv_m:
 case RISCVVector::BI__builtin_rvv_vfwadd_wf_m:
@@ -736,7 +823,9 @@ case RISCVVector::BI__builtin_rvv_vfwadd_wf_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfwcvt_f_f_v:
   ID = Intrinsic::riscv_vfwcvt_f_f_v;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfwcvt_f_f_v_m:
   ID = Intrinsic::riscv_vfwcvt_f_f_v_mask;
@@ -746,7 +835,9 @@ case RISCVVector::BI__builtin_rvv_vfwcvt_f_f_v_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfwcvt_f_x_v:
   ID = Intrinsic::riscv_vfwcvt_f_x_v;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfwcvt_f_x_v_m:
   ID = Intrinsic::riscv_vfwcvt_f_x_v_mask;
@@ -756,7 +847,9 @@ case RISCVVector::BI__builtin_rvv_vfwcvt_f_x_v_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfwcvt_f_xu_v:
   ID = Intrinsic::riscv_vfwcvt_f_xu_v;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfwcvt_f_xu_v_m:
   ID = Intrinsic::riscv_vfwcvt_f_xu_v_mask;
@@ -766,7 +859,9 @@ case RISCVVector::BI__builtin_rvv_vfwcvt_f_xu_v_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfwcvt_rtz_x_f_v:
   ID = Intrinsic::riscv_vfwcvt_rtz_x_f_v;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfwcvt_rtz_x_f_v_m:
   ID = Intrinsic::riscv_vfwcvt_rtz_x_f_v_mask;
@@ -776,7 +871,9 @@ case RISCVVector::BI__builtin_rvv_vfwcvt_rtz_x_f_v_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfwcvt_rtz_xu_f_v:
   ID = Intrinsic::riscv_vfwcvt_rtz_xu_f_v;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfwcvt_rtz_xu_f_v_m:
   ID = Intrinsic::riscv_vfwcvt_rtz_xu_f_v_mask;
@@ -786,7 +883,9 @@ case RISCVVector::BI__builtin_rvv_vfwcvt_rtz_xu_f_v_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfwcvt_x_f_v:
   ID = Intrinsic::riscv_vfwcvt_x_f_v;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfwcvt_x_f_v_m:
   ID = Intrinsic::riscv_vfwcvt_x_f_v_mask;
@@ -796,7 +895,9 @@ case RISCVVector::BI__builtin_rvv_vfwcvt_x_f_v_m:
   break;
 case RISCVVector::BI__builtin_rvv_vfwcvt_xu_f_v:
   ID = Intrinsic::riscv_vfwcvt_xu_f_v;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfwcvt_xu_f_v_m:
   ID = Intrinsic::riscv_vfwcvt_xu_f_v_mask;
@@ -831,7 +932,9 @@ case RISCVVector::BI__builtin_rvv_vfwmsac_vf_m:
 case RISCVVector::BI__builtin_rvv_vfwmul_vv:
 case RISCVVector::BI__builtin_rvv_vfwmul_vf:
   ID = Intrinsic::riscv_vfwmul;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfwmul_vv_m:
 case RISCVVector::BI__builtin_rvv_vfwmul_vf_m:
@@ -885,7 +988,9 @@ case RISCVVector::BI__builtin_rvv_vfwredusum_vs_m:
 case RISCVVector::BI__builtin_rvv_vfwsub_vv:
 case RISCVVector::BI__builtin_rvv_vfwsub_vf:
   ID = Intrinsic::riscv_vfwsub;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfwsub_vv_m:
 case RISCVVector::BI__builtin_rvv_vfwsub_vf_m:
@@ -897,7 +1002,9 @@ case RISCVVector::BI__builtin_rvv_vfwsub_vf_m:
 case RISCVVector::BI__builtin_rvv_vfwsub_wv:
 case RISCVVector::BI__builtin_rvv_vfwsub_wf:
   ID = Intrinsic::riscv_vfwsub_w;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfwsub_wv_m:
 case RISCVVector::BI__builtin_rvv_vfwsub_wf_m:
@@ -908,6 +1015,8 @@ case RISCVVector::BI__builtin_rvv_vfwsub_wf_m:
   break;
 case RISCVVector::BI__builtin_rvv_vid_v:
   ID = Intrinsic::riscv_vid;
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
   IntrinsicTypes = {ResultType, Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vid_v_m:
@@ -917,6 +1026,8 @@ case RISCVVector::BI__builtin_rvv_vid_v_m:
   break;
 case RISCVVector::BI__builtin_rvv_viota_m:
   ID = Intrinsic::riscv_viota;
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
   IntrinsicTypes = {ResultType, Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_viota_m_m:
@@ -3166,7 +3277,9 @@ case RISCVVector::BI__builtin_rvv_vmandn_mm:
 case RISCVVector::BI__builtin_rvv_vmax_vv:
 case RISCVVector::BI__builtin_rvv_vmax_vx:
   ID = Intrinsic::riscv_vmax;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vmax_vv_m:
 case RISCVVector::BI__builtin_rvv_vmax_vx_m:
@@ -3178,7 +3291,9 @@ case RISCVVector::BI__builtin_rvv_vmax_vx_m:
 case RISCVVector::BI__builtin_rvv_vmaxu_vv:
 case RISCVVector::BI__builtin_rvv_vmaxu_vx:
   ID = Intrinsic::riscv_vmaxu;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vmaxu_vv_m:
 case RISCVVector::BI__builtin_rvv_vmaxu_vx_m:
@@ -3267,7 +3382,9 @@ case RISCVVector::BI__builtin_rvv_vmfne_vf_m:
 case RISCVVector::BI__builtin_rvv_vmin_vv:
 case RISCVVector::BI__builtin_rvv_vmin_vx:
   ID = Intrinsic::riscv_vmin;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vmin_vv_m:
 case RISCVVector::BI__builtin_rvv_vmin_vx_m:
@@ -3279,7 +3396,9 @@ case RISCVVector::BI__builtin_rvv_vmin_vx_m:
 case RISCVVector::BI__builtin_rvv_vminu_vv:
 case RISCVVector::BI__builtin_rvv_vminu_vx:
   ID = Intrinsic::riscv_vminu;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vminu_vv_m:
 case RISCVVector::BI__builtin_rvv_vminu_vx_m:
@@ -3469,7 +3588,9 @@ case RISCVVector::BI__builtin_rvv_vmsof_m_m:
 case RISCVVector::BI__builtin_rvv_vmul_vv:
 case RISCVVector::BI__builtin_rvv_vmul_vx:
   ID = Intrinsic::riscv_vmul;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vmul_vv_m:
 case RISCVVector::BI__builtin_rvv_vmul_vx_m:
@@ -3481,7 +3602,9 @@ case RISCVVector::BI__builtin_rvv_vmul_vx_m:
 case RISCVVector::BI__builtin_rvv_vmulh_vv:
 case RISCVVector::BI__builtin_rvv_vmulh_vx:
   ID = Intrinsic::riscv_vmulh;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vmulh_vv_m:
 case RISCVVector::BI__builtin_rvv_vmulh_vx_m:
@@ -3493,7 +3616,9 @@ case RISCVVector::BI__builtin_rvv_vmulh_vx_m:
 case RISCVVector::BI__builtin_rvv_vmulhsu_vv:
 case RISCVVector::BI__builtin_rvv_vmulhsu_vx:
   ID = Intrinsic::riscv_vmulhsu;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vmulhsu_vv_m:
 case RISCVVector::BI__builtin_rvv_vmulhsu_vx_m:
@@ -3505,7 +3630,9 @@ case RISCVVector::BI__builtin_rvv_vmulhsu_vx_m:
 case RISCVVector::BI__builtin_rvv_vmulhu_vv:
 case RISCVVector::BI__builtin_rvv_vmulhu_vx:
   ID = Intrinsic::riscv_vmulhu;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vmulhu_vv_m:
 case RISCVVector::BI__builtin_rvv_vmulhu_vx_m:
@@ -3541,7 +3668,9 @@ case RISCVVector::BI__builtin_rvv_vmxor_mm:
 case RISCVVector::BI__builtin_rvv_vnclip_wv:
 case RISCVVector::BI__builtin_rvv_vnclip_wx:
   ID = Intrinsic::riscv_vnclip;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vnclip_wv_m:
 case RISCVVector::BI__builtin_rvv_vnclip_wx_m:
@@ -3553,7 +3682,9 @@ case RISCVVector::BI__builtin_rvv_vnclip_wx_m:
 case RISCVVector::BI__builtin_rvv_vnclipu_wv:
 case RISCVVector::BI__builtin_rvv_vnclipu_wx:
   ID = Intrinsic::riscv_vnclipu;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vnclipu_wv_m:
 case RISCVVector::BI__builtin_rvv_vnclipu_wx_m:
@@ -3589,7 +3720,9 @@ case RISCVVector::BI__builtin_rvv_vnmsub_vx_m:
 case RISCVVector::BI__builtin_rvv_vnsra_wv:
 case RISCVVector::BI__builtin_rvv_vnsra_wx:
   ID = Intrinsic::riscv_vnsra;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vnsra_wv_m:
 case RISCVVector::BI__builtin_rvv_vnsra_wx_m:
@@ -3601,7 +3734,9 @@ case RISCVVector::BI__builtin_rvv_vnsra_wx_m:
 case RISCVVector::BI__builtin_rvv_vnsrl_wv:
 case RISCVVector::BI__builtin_rvv_vnsrl_wx:
   ID = Intrinsic::riscv_vnsrl;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vncvt_x_x_w:
   ID = Intrinsic::riscv_vnsrl;
@@ -3613,6 +3748,8 @@ case RISCVVector::BI__builtin_rvv_vncvt_x_x_w:
                           Ops[1]->getType(),
                           Ops[1]->getType()};
         Ops.insert(Ops.begin() + 1, llvm::Constant::getNullValue(IntrinsicTypes[2]));
+        // insert undef passthru
+        Ops.insert(Ops.begin(), llvm::UndefValue::get(ResultType));
         break;
       }
       break;
@@ -3641,7 +3778,9 @@ case RISCVVector::BI__builtin_rvv_vncvt_x_x_w_m:
 case RISCVVector::BI__builtin_rvv_vor_vv:
 case RISCVVector::BI__builtin_rvv_vor_vx:
   ID = Intrinsic::riscv_vor;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vor_vv_m:
 case RISCVVector::BI__builtin_rvv_vor_vx_m:
@@ -3725,7 +3864,9 @@ case RISCVVector::BI__builtin_rvv_vredxor_vs_m:
 case RISCVVector::BI__builtin_rvv_vrem_vv:
 case RISCVVector::BI__builtin_rvv_vrem_vx:
   ID = Intrinsic::riscv_vrem;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vrem_vv_m:
 case RISCVVector::BI__builtin_rvv_vrem_vx_m:
@@ -3737,7 +3878,9 @@ case RISCVVector::BI__builtin_rvv_vrem_vx_m:
 case RISCVVector::BI__builtin_rvv_vremu_vv:
 case RISCVVector::BI__builtin_rvv_vremu_vx:
   ID = Intrinsic::riscv_vremu;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vremu_vv_m:
 case RISCVVector::BI__builtin_rvv_vremu_vx_m:
@@ -3748,6 +3891,8 @@ case RISCVVector::BI__builtin_rvv_vremu_vx_m:
   break;
 case RISCVVector::BI__builtin_rvv_vrgather_vv:
   ID = Intrinsic::riscv_vrgather_vv;
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
   IntrinsicTypes = {ResultType, Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vrgather_vv_m:
@@ -3758,6 +3903,8 @@ case RISCVVector::BI__builtin_rvv_vrgather_vv_m:
   break;
 case RISCVVector::BI__builtin_rvv_vrgather_vx:
   ID = Intrinsic::riscv_vrgather_vx;
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
   IntrinsicTypes = {ResultType, Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vrgather_vx_m:
@@ -3768,6 +3915,8 @@ case RISCVVector::BI__builtin_rvv_vrgather_vx_m:
   break;
 case RISCVVector::BI__builtin_rvv_vrgatherei16_vv:
   ID = Intrinsic::riscv_vrgatherei16_vv;
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
   IntrinsicTypes = {ResultType, Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vrgatherei16_vv_m:
@@ -3778,7 +3927,9 @@ case RISCVVector::BI__builtin_rvv_vrgatherei16_vv_m:
   break;
 case RISCVVector::BI__builtin_rvv_vrsub_vx:
   ID = Intrinsic::riscv_vrsub;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vneg_v:
   ID = Intrinsic::riscv_vrsub;
@@ -3789,6 +3940,8 @@ case RISCVVector::BI__builtin_rvv_vneg_v:
                           cast<llvm::VectorType>(ResultType)->getElementType(),
                           Ops[1]->getType()};
         Ops.insert(Ops.begin() + 1, llvm::Constant::getNullValue(IntrinsicTypes[1]));
+        // insert undef passthru
+        Ops.insert(Ops.begin(), llvm::UndefValue::get(ResultType));
         break;
       }
       break;
@@ -3815,7 +3968,9 @@ case RISCVVector::BI__builtin_rvv_vneg_v_m:
 case RISCVVector::BI__builtin_rvv_vsadd_vv:
 case RISCVVector::BI__builtin_rvv_vsadd_vx:
   ID = Intrinsic::riscv_vsadd;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vsadd_vv_m:
 case RISCVVector::BI__builtin_rvv_vsadd_vx_m:
@@ -3827,7 +3982,9 @@ case RISCVVector::BI__builtin_rvv_vsadd_vx_m:
 case RISCVVector::BI__builtin_rvv_vsaddu_vv:
 case RISCVVector::BI__builtin_rvv_vsaddu_vx:
   ID = Intrinsic::riscv_vsaddu;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vsaddu_vv_m:
 case RISCVVector::BI__builtin_rvv_vsaddu_vx_m:
@@ -3873,7 +4030,9 @@ case RISCVVector::BI__builtin_rvv_vsext_vf2:
 case RISCVVector::BI__builtin_rvv_vsext_vf4:
 case RISCVVector::BI__builtin_rvv_vsext_vf8:
   ID = Intrinsic::riscv_vsext;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vsext_vf2_m:
 case RISCVVector::BI__builtin_rvv_vsext_vf4_m:
@@ -3885,7 +4044,9 @@ case RISCVVector::BI__builtin_rvv_vsext_vf8_m:
   break;
 case RISCVVector::BI__builtin_rvv_vslide1down_vx:
   ID = Intrinsic::riscv_vslide1down;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vslide1down_vx_m:
   ID = Intrinsic::riscv_vslide1down_mask;
@@ -3895,7 +4056,9 @@ case RISCVVector::BI__builtin_rvv_vslide1down_vx_m:
   break;
 case RISCVVector::BI__builtin_rvv_vslide1up_vx:
   ID = Intrinsic::riscv_vslide1up;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vslide1up_vx_m:
   ID = Intrinsic::riscv_vslide1up_mask;
@@ -3926,7 +4089,9 @@ case RISCVVector::BI__builtin_rvv_vslideup_vx_m:
 case RISCVVector::BI__builtin_rvv_vsll_vv:
 case RISCVVector::BI__builtin_rvv_vsll_vx:
   ID = Intrinsic::riscv_vsll;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vsll_vv_m:
 case RISCVVector::BI__builtin_rvv_vsll_vx_m:
@@ -3946,7 +4111,9 @@ case RISCVVector::BI__builtin_rvv_vsm_v:
 case RISCVVector::BI__builtin_rvv_vsmul_vv:
 case RISCVVector::BI__builtin_rvv_vsmul_vx:
   ID = Intrinsic::riscv_vsmul;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vsmul_vv_m:
 case RISCVVector::BI__builtin_rvv_vsmul_vx_m:
@@ -4211,7 +4378,9 @@ case RISCVVector::BI__builtin_rvv_vsoxseg8ei64_v_m:
 case RISCVVector::BI__builtin_rvv_vsra_vv:
 case RISCVVector::BI__builtin_rvv_vsra_vx:
   ID = Intrinsic::riscv_vsra;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vsra_vv_m:
 case RISCVVector::BI__builtin_rvv_vsra_vx_m:
@@ -4223,7 +4392,9 @@ case RISCVVector::BI__builtin_rvv_vsra_vx_m:
 case RISCVVector::BI__builtin_rvv_vsrl_vv:
 case RISCVVector::BI__builtin_rvv_vsrl_vx:
   ID = Intrinsic::riscv_vsrl;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vsrl_vv_m:
 case RISCVVector::BI__builtin_rvv_vsrl_vx_m:
@@ -4474,7 +4645,9 @@ case RISCVVector::BI__builtin_rvv_vsseg8e64_v_m:
 case RISCVVector::BI__builtin_rvv_vssra_vv:
 case RISCVVector::BI__builtin_rvv_vssra_vx:
   ID = Intrinsic::riscv_vssra;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vssra_vv_m:
 case RISCVVector::BI__builtin_rvv_vssra_vx_m:
@@ -4486,7 +4659,9 @@ case RISCVVector::BI__builtin_rvv_vssra_vx_m:
 case RISCVVector::BI__builtin_rvv_vssrl_vv:
 case RISCVVector::BI__builtin_rvv_vssrl_vx:
   ID = Intrinsic::riscv_vssrl;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vssrl_vv_m:
 case RISCVVector::BI__builtin_rvv_vssrl_vx_m:
@@ -4715,7 +4890,9 @@ case RISCVVector::BI__builtin_rvv_vssseg8e64_v_m:
 case RISCVVector::BI__builtin_rvv_vssub_vv:
 case RISCVVector::BI__builtin_rvv_vssub_vx:
   ID = Intrinsic::riscv_vssub;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vssub_vv_m:
 case RISCVVector::BI__builtin_rvv_vssub_vx_m:
@@ -4727,7 +4904,9 @@ case RISCVVector::BI__builtin_rvv_vssub_vx_m:
 case RISCVVector::BI__builtin_rvv_vssubu_vv:
 case RISCVVector::BI__builtin_rvv_vssubu_vx:
   ID = Intrinsic::riscv_vssubu;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vssubu_vv_m:
 case RISCVVector::BI__builtin_rvv_vssubu_vx_m:
@@ -4739,7 +4918,9 @@ case RISCVVector::BI__builtin_rvv_vssubu_vx_m:
 case RISCVVector::BI__builtin_rvv_vsub_vv:
 case RISCVVector::BI__builtin_rvv_vsub_vx:
   ID = Intrinsic::riscv_vsub;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vsub_vv_m:
 case RISCVVector::BI__builtin_rvv_vsub_vx_m:
@@ -5004,7 +5185,9 @@ case RISCVVector::BI__builtin_rvv_vsuxseg8ei64_v_m:
 case RISCVVector::BI__builtin_rvv_vwadd_vv:
 case RISCVVector::BI__builtin_rvv_vwadd_vx:
   ID = Intrinsic::riscv_vwadd;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vwcvt_x_x_v:
   ID = Intrinsic::riscv_vwadd;
@@ -5016,6 +5199,8 @@ case RISCVVector::BI__builtin_rvv_vwcvt_x_x_v:
                           cast<llvm::VectorType>(Ops[0]->getType())->getElementType(),
                           Ops[1]->getType()};
         Ops.insert(Ops.begin() + 1, llvm::Constant::getNullValue(IntrinsicTypes[2]));
+        // insert undef passthru
+        Ops.insert(Ops.begin(), llvm::UndefValue::get(ResultType));
         break;
       }
       break;
@@ -5044,7 +5229,9 @@ case RISCVVector::BI__builtin_rvv_vwcvt_x_x_v_m:
 case RISCVVector::BI__builtin_rvv_vwadd_wv:
 case RISCVVector::BI__builtin_rvv_vwadd_wx:
   ID = Intrinsic::riscv_vwadd_w;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vwadd_wv_m:
 case RISCVVector::BI__builtin_rvv_vwadd_wx_m:
@@ -5056,7 +5243,9 @@ case RISCVVector::BI__builtin_rvv_vwadd_wx_m:
 case RISCVVector::BI__builtin_rvv_vwaddu_vv:
 case RISCVVector::BI__builtin_rvv_vwaddu_vx:
   ID = Intrinsic::riscv_vwaddu;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vwcvtu_x_x_v:
   ID = Intrinsic::riscv_vwaddu;
@@ -5068,6 +5257,8 @@ case RISCVVector::BI__builtin_rvv_vwcvtu_x_x_v:
                           cast<llvm::VectorType>(Ops[0]->getType())->getElementType(),
                           Ops[1]->getType()};
         Ops.insert(Ops.begin() + 1, llvm::Constant::getNullValue(IntrinsicTypes[2]));
+        // insert undef passthru
+        Ops.insert(Ops.begin(), llvm::UndefValue::get(ResultType));
         break;
       }
       break;
@@ -5096,7 +5287,9 @@ case RISCVVector::BI__builtin_rvv_vwcvtu_x_x_v_m:
 case RISCVVector::BI__builtin_rvv_vwaddu_wx:
 case RISCVVector::BI__builtin_rvv_vwaddu_wv:
   ID = Intrinsic::riscv_vwaddu_w;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vwaddu_wx_m:
 case RISCVVector::BI__builtin_rvv_vwaddu_wv_m:
@@ -5154,7 +5347,9 @@ case RISCVVector::BI__builtin_rvv_vwmaccus_vx_m:
 case RISCVVector::BI__builtin_rvv_vwmul_vv:
 case RISCVVector::BI__builtin_rvv_vwmul_vx:
   ID = Intrinsic::riscv_vwmul;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vwmul_vv_m:
 case RISCVVector::BI__builtin_rvv_vwmul_vx_m:
@@ -5166,7 +5361,9 @@ case RISCVVector::BI__builtin_rvv_vwmul_vx_m:
 case RISCVVector::BI__builtin_rvv_vwmulsu_vv:
 case RISCVVector::BI__builtin_rvv_vwmulsu_vx:
   ID = Intrinsic::riscv_vwmulsu;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vwmulsu_vv_m:
 case RISCVVector::BI__builtin_rvv_vwmulsu_vx_m:
@@ -5178,7 +5375,9 @@ case RISCVVector::BI__builtin_rvv_vwmulsu_vx_m:
 case RISCVVector::BI__builtin_rvv_vwmulu_vv:
 case RISCVVector::BI__builtin_rvv_vwmulu_vx:
   ID = Intrinsic::riscv_vwmulu;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vwmulu_vv_m:
 case RISCVVector::BI__builtin_rvv_vwmulu_vx_m:
@@ -5208,7 +5407,9 @@ case RISCVVector::BI__builtin_rvv_vwredsumu_vs_m:
 case RISCVVector::BI__builtin_rvv_vwsub_vv:
 case RISCVVector::BI__builtin_rvv_vwsub_vx:
   ID = Intrinsic::riscv_vwsub;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vwsub_vv_m:
 case RISCVVector::BI__builtin_rvv_vwsub_vx_m:
@@ -5220,7 +5421,9 @@ case RISCVVector::BI__builtin_rvv_vwsub_vx_m:
 case RISCVVector::BI__builtin_rvv_vwsub_wv:
 case RISCVVector::BI__builtin_rvv_vwsub_wx:
   ID = Intrinsic::riscv_vwsub_w;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vwsub_wv_m:
 case RISCVVector::BI__builtin_rvv_vwsub_wx_m:
@@ -5232,7 +5435,9 @@ case RISCVVector::BI__builtin_rvv_vwsub_wx_m:
 case RISCVVector::BI__builtin_rvv_vwsubu_vv:
 case RISCVVector::BI__builtin_rvv_vwsubu_vx:
   ID = Intrinsic::riscv_vwsubu;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vwsubu_vv_m:
 case RISCVVector::BI__builtin_rvv_vwsubu_vx_m:
@@ -5244,7 +5449,9 @@ case RISCVVector::BI__builtin_rvv_vwsubu_vx_m:
 case RISCVVector::BI__builtin_rvv_vwsubu_wv:
 case RISCVVector::BI__builtin_rvv_vwsubu_wx:
   ID = Intrinsic::riscv_vwsubu_w;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vwsubu_wv_m:
 case RISCVVector::BI__builtin_rvv_vwsubu_wx_m:
@@ -5256,7 +5463,9 @@ case RISCVVector::BI__builtin_rvv_vwsubu_wx_m:
 case RISCVVector::BI__builtin_rvv_vxor_vv:
 case RISCVVector::BI__builtin_rvv_vxor_vx:
   ID = Intrinsic::riscv_vxor;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vnot_v:
   ID = Intrinsic::riscv_vxor;
@@ -5268,6 +5477,8 @@ case RISCVVector::BI__builtin_rvv_vnot_v:
                           Ops[1]->getType()};
         Ops.insert(Ops.begin() + 1,
                    llvm::Constant::getAllOnesValue(IntrinsicTypes[1]));
+        // insert undef passthru
+        Ops.insert(Ops.begin(), llvm::UndefValue::get(ResultType));
         break;
       }
       break;
@@ -5297,7 +5508,9 @@ case RISCVVector::BI__builtin_rvv_vzext_vf2:
 case RISCVVector::BI__builtin_rvv_vzext_vf4:
 case RISCVVector::BI__builtin_rvv_vzext_vf8:
   ID = Intrinsic::riscv_vzext;
-  IntrinsicTypes = {ResultType, Ops[0]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vzext_vf2_m:
 case RISCVVector::BI__builtin_rvv_vzext_vf4_m:
