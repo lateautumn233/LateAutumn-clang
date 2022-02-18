@@ -276,7 +276,7 @@ case ARM::BI__builtin_arm_mve_vldrhq_u16: {
   }
   Address Val0 = EmitPointerWithAlignment(E->getArg(0));
   Value *Val1 = Builder.CreatePointerCast((Val0.getPointer()), Param0);
-  Address Val2 = Address(Val1, CharUnits::fromQuantity(2));
+  Address Val2 = Address::deprecated(Val1, CharUnits::fromQuantity(2));
   return Builder.CreateLoad(Val2);
 }
 case ARM::BI__builtin_arm_mve_vld1q_f32:
@@ -308,7 +308,7 @@ case ARM::BI__builtin_arm_mve_vldrwq_u32: {
   }
   Address Val0 = EmitPointerWithAlignment(E->getArg(0));
   Value *Val1 = Builder.CreatePointerCast((Val0.getPointer()), Param0);
-  Address Val2 = Address(Val1, CharUnits::fromQuantity(4));
+  Address Val2 = Address::deprecated(Val1, CharUnits::fromQuantity(4));
   return Builder.CreateLoad(Val2);
 }
 case ARM::BI__builtin_arm_mve_vld1q_z_f32:
@@ -348,7 +348,7 @@ case ARM::BI__builtin_arm_mve_vldrhq_u32: {
   }
   Address Val0 = EmitPointerWithAlignment(E->getArg(0));
   Value *Val1 = Builder.CreatePointerCast((Val0.getPointer()), llvm::PointerType::getUnqual(llvm::FixedVectorType::get(Int16Ty, 4)));
-  Address Val2 = Address(Val1, CharUnits::fromQuantity(2));
+  Address Val2 = Address::deprecated(Val1, CharUnits::fromQuantity(2));
   Value *Val3 = Builder.CreateLoad(Val2);
   llvm::Type *Val4 = llvm::FixedVectorType::get(Int32Ty, 4);
   return SignOrZeroExtend(Builder, Val3, Val4, static_cast<bool>(Param0));
@@ -410,7 +410,7 @@ case ARM::BI__builtin_arm_mve_vldrbq_s8:
 case ARM::BI__builtin_arm_mve_vldrbq_u8: {
   Address Val0 = EmitPointerWithAlignment(E->getArg(0));
   Value *Val1 = Builder.CreatePointerCast((Val0.getPointer()), llvm::PointerType::getUnqual(llvm::FixedVectorType::get(Int8Ty, 16)));
-  Address Val2 = Address(Val1, CharUnits::fromQuantity(1));
+  Address Val2 = Address::deprecated(Val1, CharUnits::fromQuantity(1));
   return Builder.CreateLoad(Val2);
 }
 case ARM::BI__builtin_arm_mve_vld1q_z_s8:
@@ -440,7 +440,7 @@ case ARM::BI__builtin_arm_mve_vldrbq_u32: {
   }
   Address Val0 = EmitPointerWithAlignment(E->getArg(0));
   Value *Val1 = Builder.CreatePointerCast((Val0.getPointer()), llvm::PointerType::getUnqual(llvm::FixedVectorType::get(Int8Ty, 4)));
-  Address Val2 = Address(Val1, CharUnits::fromQuantity(1));
+  Address Val2 = Address::deprecated(Val1, CharUnits::fromQuantity(1));
   Value *Val3 = Builder.CreateLoad(Val2);
   llvm::Type *Val4 = llvm::FixedVectorType::get(Int32Ty, 4);
   return SignOrZeroExtend(Builder, Val3, Val4, static_cast<bool>(Param0));
@@ -481,7 +481,7 @@ case ARM::BI__builtin_arm_mve_vldrbq_u16: {
   }
   Address Val0 = EmitPointerWithAlignment(E->getArg(0));
   Value *Val1 = Builder.CreatePointerCast((Val0.getPointer()), llvm::PointerType::getUnqual(llvm::FixedVectorType::get(Int8Ty, 8)));
-  Address Val2 = Address(Val1, CharUnits::fromQuantity(1));
+  Address Val2 = Address::deprecated(Val1, CharUnits::fromQuantity(1));
   Value *Val3 = Builder.CreateLoad(Val2);
   llvm::Type *Val4 = llvm::FixedVectorType::get(Int16Ty, 8);
   return SignOrZeroExtend(Builder, Val3, Val4, static_cast<bool>(Param0));
@@ -8760,7 +8760,7 @@ case ARM::BI__builtin_arm_mve_vstrhq_u16: {
   Value *Val0 = EmitScalarExpr(E->getArg(1));
   Address Val1 = EmitPointerWithAlignment(E->getArg(0));
   Value *Val2 = Builder.CreatePointerCast((Val1.getPointer()), Param0);
-  Address Val3 = Address(Val2, CharUnits::fromQuantity(2));
+  Address Val3 = Address::deprecated(Val2, CharUnits::fromQuantity(2));
   return Builder.CreateStore(Val0, Val3);
 }
 case ARM::BI__builtin_arm_mve_vst1q_f32:
@@ -8793,7 +8793,7 @@ case ARM::BI__builtin_arm_mve_vstrwq_u32: {
   Value *Val0 = EmitScalarExpr(E->getArg(1));
   Address Val1 = EmitPointerWithAlignment(E->getArg(0));
   Value *Val2 = Builder.CreatePointerCast((Val1.getPointer()), Param0);
-  Address Val3 = Address(Val2, CharUnits::fromQuantity(4));
+  Address Val3 = Address::deprecated(Val2, CharUnits::fromQuantity(4));
   return Builder.CreateStore(Val0, Val3);
 }
 case ARM::BI__builtin_arm_mve_vst1q_p_f16:
@@ -8930,7 +8930,7 @@ case ARM::BI__builtin_arm_mve_vstrbq_u8: {
   Value *Val0 = EmitScalarExpr(E->getArg(1));
   Address Val1 = EmitPointerWithAlignment(E->getArg(0));
   Value *Val2 = Builder.CreatePointerCast((Val1.getPointer()), llvm::PointerType::getUnqual(llvm::FixedVectorType::get(Int8Ty, 16)));
-  Address Val3 = Address(Val2, CharUnits::fromQuantity(1));
+  Address Val3 = Address::deprecated(Val2, CharUnits::fromQuantity(1));
   return Builder.CreateStore(Val0, Val3);
 }
 case ARM::BI__builtin_arm_mve_vctp16q_m:
@@ -11516,7 +11516,7 @@ case ARM::BI__builtin_arm_mve_vstrhq_u32: {
   Value *Val2 = Builder.CreateTrunc(Val0, Val1);
   Address Val3 = EmitPointerWithAlignment(E->getArg(0));
   Value *Val4 = Builder.CreatePointerCast((Val3.getPointer()), llvm::PointerType::getUnqual(llvm::FixedVectorType::get(Int16Ty, 4)));
-  Address Val5 = Address(Val4, CharUnits::fromQuantity(2));
+  Address Val5 = Address::deprecated(Val4, CharUnits::fromQuantity(2));
   return Builder.CreateStore(Val2, Val5);
 }
 case ARM::BI__builtin_arm_mve_vstrhq_p_s32:
@@ -11872,7 +11872,7 @@ case ARM::BI__builtin_arm_mve_vstrbq_u32: {
   Value *Val2 = Builder.CreateTrunc(Val0, Val1);
   Address Val3 = EmitPointerWithAlignment(E->getArg(0));
   Value *Val4 = Builder.CreatePointerCast((Val3.getPointer()), llvm::PointerType::getUnqual(llvm::FixedVectorType::get(Int8Ty, 4)));
-  Address Val5 = Address(Val4, CharUnits::fromQuantity(1));
+  Address Val5 = Address::deprecated(Val4, CharUnits::fromQuantity(1));
   return Builder.CreateStore(Val2, Val5);
 }
 case ARM::BI__builtin_arm_mve_vstrbq_p_s32:
@@ -11895,7 +11895,7 @@ case ARM::BI__builtin_arm_mve_vstrbq_u16: {
   Value *Val2 = Builder.CreateTrunc(Val0, Val1);
   Address Val3 = EmitPointerWithAlignment(E->getArg(0));
   Value *Val4 = Builder.CreatePointerCast((Val3.getPointer()), llvm::PointerType::getUnqual(llvm::FixedVectorType::get(Int8Ty, 8)));
-  Address Val5 = Address(Val4, CharUnits::fromQuantity(1));
+  Address Val5 = Address::deprecated(Val4, CharUnits::fromQuantity(1));
   return Builder.CreateStore(Val2, Val5);
 }
 case ARM::BI__builtin_arm_mve_vstrbq_p_s16:

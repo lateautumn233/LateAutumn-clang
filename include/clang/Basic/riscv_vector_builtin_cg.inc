@@ -88,7 +88,9 @@ case RISCVVector::BI__builtin_rvv_vaaddu_vx_m:
 case RISCVVector::BI__builtin_rvv_vadc_vvm:
 case RISCVVector::BI__builtin_rvv_vadc_vxm:
   ID = Intrinsic::riscv_vadc;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vadd_vv:
 case RISCVVector::BI__builtin_rvv_vadd_vx:
@@ -313,6 +315,7 @@ case RISCVVector::BI__builtin_rvv_vfirst_m_m:
 case RISCVVector::BI__builtin_rvv_vfmacc_vv:
 case RISCVVector::BI__builtin_rvv_vfmacc_vf:
   ID = Intrinsic::riscv_vfmacc;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfmacc_vv_m:
@@ -325,6 +328,7 @@ case RISCVVector::BI__builtin_rvv_vfmacc_vf_m:
 case RISCVVector::BI__builtin_rvv_vfmadd_vv:
 case RISCVVector::BI__builtin_rvv_vfmadd_vf:
   ID = Intrinsic::riscv_vfmadd;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfmadd_vv_m:
@@ -353,6 +357,8 @@ case RISCVVector::BI__builtin_rvv_vfmerge_vfm:
 
       std::rotate(Ops.begin(), Ops.begin() + 1, Ops.begin() + 3);
       IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[3]->getType()};
+      // insert undef passthru
+      Ops.insert(Ops.begin(), llvm::UndefValue::get(ResultType));
     break;
 case RISCVVector::BI__builtin_rvv_vfmin_vv:
 case RISCVVector::BI__builtin_rvv_vfmin_vf:
@@ -371,6 +377,7 @@ case RISCVVector::BI__builtin_rvv_vfmin_vf_m:
 case RISCVVector::BI__builtin_rvv_vfmsac_vv:
 case RISCVVector::BI__builtin_rvv_vfmsac_vf:
   ID = Intrinsic::riscv_vfmsac;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfmsac_vv_m:
@@ -383,6 +390,7 @@ case RISCVVector::BI__builtin_rvv_vfmsac_vf_m:
 case RISCVVector::BI__builtin_rvv_vfmsub_vv:
 case RISCVVector::BI__builtin_rvv_vfmsub_vf:
   ID = Intrinsic::riscv_vfmsub;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfmsub_vv_m:
@@ -417,6 +425,8 @@ case RISCVVector::BI__builtin_rvv_vfmv_s_x:
   break;
 case RISCVVector::BI__builtin_rvv_vfmv_v_f:
   ID = Intrinsic::riscv_vfmv_v_f;
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
   IntrinsicTypes = {ResultType, Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfncvt_f_f_w:
@@ -518,6 +528,7 @@ case RISCVVector::BI__builtin_rvv_vfncvt_xu_f_w_m:
 case RISCVVector::BI__builtin_rvv_vfnmacc_vv:
 case RISCVVector::BI__builtin_rvv_vfnmacc_vf:
   ID = Intrinsic::riscv_vfnmacc;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfnmacc_vv_m:
@@ -530,6 +541,7 @@ case RISCVVector::BI__builtin_rvv_vfnmacc_vf_m:
 case RISCVVector::BI__builtin_rvv_vfnmadd_vv:
 case RISCVVector::BI__builtin_rvv_vfnmadd_vf:
   ID = Intrinsic::riscv_vfnmadd;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfnmadd_vv_m:
@@ -542,6 +554,7 @@ case RISCVVector::BI__builtin_rvv_vfnmadd_vf_m:
 case RISCVVector::BI__builtin_rvv_vfnmsac_vv:
 case RISCVVector::BI__builtin_rvv_vfnmsac_vf:
   ID = Intrinsic::riscv_vfnmsac;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfnmsac_vv_m:
@@ -554,6 +567,7 @@ case RISCVVector::BI__builtin_rvv_vfnmsac_vf_m:
 case RISCVVector::BI__builtin_rvv_vfnmsub_vv:
 case RISCVVector::BI__builtin_rvv_vfnmsub_vf:
   ID = Intrinsic::riscv_vfnmsub;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfnmsub_vv_m:
@@ -908,6 +922,7 @@ case RISCVVector::BI__builtin_rvv_vfwcvt_xu_f_v_m:
 case RISCVVector::BI__builtin_rvv_vfwmacc_vv:
 case RISCVVector::BI__builtin_rvv_vfwmacc_vf:
   ID = Intrinsic::riscv_vfwmacc;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfwmacc_vv_m:
@@ -920,6 +935,7 @@ case RISCVVector::BI__builtin_rvv_vfwmacc_vf_m:
 case RISCVVector::BI__builtin_rvv_vfwmsac_vv:
 case RISCVVector::BI__builtin_rvv_vfwmsac_vf:
   ID = Intrinsic::riscv_vfwmsac;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfwmsac_vv_m:
@@ -946,6 +962,7 @@ case RISCVVector::BI__builtin_rvv_vfwmul_vf_m:
 case RISCVVector::BI__builtin_rvv_vfwnmacc_vv:
 case RISCVVector::BI__builtin_rvv_vfwnmacc_vf:
   ID = Intrinsic::riscv_vfwnmacc;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfwnmacc_vv_m:
@@ -958,6 +975,7 @@ case RISCVVector::BI__builtin_rvv_vfwnmacc_vf_m:
 case RISCVVector::BI__builtin_rvv_vfwnmsac_vv:
 case RISCVVector::BI__builtin_rvv_vfwnmsac_vf:
   ID = Intrinsic::riscv_vfwnmsac;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vfwnmsac_vv_m:
@@ -1076,7 +1094,7 @@ case RISCVVector::BI__builtin_rvv_vle8ff_v:
         clang::CharUnits Align =
             CGM.getNaturalPointeeTypeAlignment(E->getArg(1)->getType());
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {1}),
-                            Address(NewVL, Align));
+                            Address::deprecated(NewVL, Align));
         return V;
       }
       break;
@@ -1101,7 +1119,7 @@ case RISCVVector::BI__builtin_rvv_vle8ff_v_m:
         clang::CharUnits Align =
             CGM.getNaturalPointeeTypeAlignment(E->getArg(3)->getType());
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {1}),
-                            Address(NewVL, Align));
+                            Address::deprecated(NewVL, Align));
         return V;
       }
       break;
@@ -1153,7 +1171,7 @@ case RISCVVector::BI__builtin_rvv_vloxseg2ei8_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1186,7 +1204,7 @@ case RISCVVector::BI__builtin_rvv_vloxseg2ei8_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1211,7 +1229,7 @@ case RISCVVector::BI__builtin_rvv_vloxseg3ei64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1244,7 +1262,7 @@ case RISCVVector::BI__builtin_rvv_vloxseg3ei64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1269,7 +1287,7 @@ case RISCVVector::BI__builtin_rvv_vloxseg4ei64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1302,7 +1320,7 @@ case RISCVVector::BI__builtin_rvv_vloxseg4ei64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1327,7 +1345,7 @@ case RISCVVector::BI__builtin_rvv_vloxseg5ei64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1360,7 +1378,7 @@ case RISCVVector::BI__builtin_rvv_vloxseg5ei64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1385,7 +1403,7 @@ case RISCVVector::BI__builtin_rvv_vloxseg6ei64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1418,7 +1436,7 @@ case RISCVVector::BI__builtin_rvv_vloxseg6ei64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1443,7 +1461,7 @@ case RISCVVector::BI__builtin_rvv_vloxseg7ei64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1476,7 +1494,7 @@ case RISCVVector::BI__builtin_rvv_vloxseg7ei64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1501,7 +1519,7 @@ case RISCVVector::BI__builtin_rvv_vloxseg8ei64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1534,7 +1552,7 @@ case RISCVVector::BI__builtin_rvv_vloxseg8ei64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1581,7 +1599,7 @@ case RISCVVector::BI__builtin_rvv_vlseg2e64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1613,7 +1631,7 @@ case RISCVVector::BI__builtin_rvv_vlseg2e64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1638,11 +1656,11 @@ case RISCVVector::BI__builtin_rvv_vlseg2e8ff_v:
           CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                            Address(Ops[I], Align));
+                            Address::deprecated(Ops[I], Align));
       }
       // Store new_vl.
       return Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {NF}),
-                                 Address(NewVL, Align));
+                                 Address::deprecated(NewVL, Align));
     }
             break;
 case RISCVVector::BI__builtin_rvv_vlseg2e16ff_v_m:
@@ -1672,11 +1690,11 @@ case RISCVVector::BI__builtin_rvv_vlseg2e8ff_v_m:
           CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                            Address(Ops[I], Align));
+                            Address::deprecated(Ops[I], Align));
       }
       // Store new_vl.
       return Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {NF}),
-                                 Address(NewVL, Align));
+                                 Address::deprecated(NewVL, Align));
     }
             break;
 case RISCVVector::BI__builtin_rvv_vlseg3e8_v:
@@ -1699,7 +1717,7 @@ case RISCVVector::BI__builtin_rvv_vlseg3e64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1731,7 +1749,7 @@ case RISCVVector::BI__builtin_rvv_vlseg3e64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1756,11 +1774,11 @@ case RISCVVector::BI__builtin_rvv_vlseg3e64ff_v:
           CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                            Address(Ops[I], Align));
+                            Address::deprecated(Ops[I], Align));
       }
       // Store new_vl.
       return Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {NF}),
-                                 Address(NewVL, Align));
+                                 Address::deprecated(NewVL, Align));
     }
             break;
 case RISCVVector::BI__builtin_rvv_vlseg3e8ff_v_m:
@@ -1790,11 +1808,11 @@ case RISCVVector::BI__builtin_rvv_vlseg3e64ff_v_m:
           CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                            Address(Ops[I], Align));
+                            Address::deprecated(Ops[I], Align));
       }
       // Store new_vl.
       return Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {NF}),
-                                 Address(NewVL, Align));
+                                 Address::deprecated(NewVL, Align));
     }
             break;
 case RISCVVector::BI__builtin_rvv_vlseg4e8_v:
@@ -1817,7 +1835,7 @@ case RISCVVector::BI__builtin_rvv_vlseg4e64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1849,7 +1867,7 @@ case RISCVVector::BI__builtin_rvv_vlseg4e64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1874,11 +1892,11 @@ case RISCVVector::BI__builtin_rvv_vlseg4e64ff_v:
           CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                            Address(Ops[I], Align));
+                            Address::deprecated(Ops[I], Align));
       }
       // Store new_vl.
       return Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {NF}),
-                                 Address(NewVL, Align));
+                                 Address::deprecated(NewVL, Align));
     }
             break;
 case RISCVVector::BI__builtin_rvv_vlseg4e8ff_v_m:
@@ -1908,11 +1926,11 @@ case RISCVVector::BI__builtin_rvv_vlseg4e64ff_v_m:
           CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                            Address(Ops[I], Align));
+                            Address::deprecated(Ops[I], Align));
       }
       // Store new_vl.
       return Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {NF}),
-                                 Address(NewVL, Align));
+                                 Address::deprecated(NewVL, Align));
     }
             break;
 case RISCVVector::BI__builtin_rvv_vlseg5e8_v:
@@ -1935,7 +1953,7 @@ case RISCVVector::BI__builtin_rvv_vlseg5e64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1967,7 +1985,7 @@ case RISCVVector::BI__builtin_rvv_vlseg5e64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -1992,11 +2010,11 @@ case RISCVVector::BI__builtin_rvv_vlseg5e64ff_v:
           CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                            Address(Ops[I], Align));
+                            Address::deprecated(Ops[I], Align));
       }
       // Store new_vl.
       return Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {NF}),
-                                 Address(NewVL, Align));
+                                 Address::deprecated(NewVL, Align));
     }
             break;
 case RISCVVector::BI__builtin_rvv_vlseg5e8ff_v_m:
@@ -2026,11 +2044,11 @@ case RISCVVector::BI__builtin_rvv_vlseg5e64ff_v_m:
           CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                            Address(Ops[I], Align));
+                            Address::deprecated(Ops[I], Align));
       }
       // Store new_vl.
       return Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {NF}),
-                                 Address(NewVL, Align));
+                                 Address::deprecated(NewVL, Align));
     }
             break;
 case RISCVVector::BI__builtin_rvv_vlseg6e8_v:
@@ -2053,7 +2071,7 @@ case RISCVVector::BI__builtin_rvv_vlseg6e64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2085,7 +2103,7 @@ case RISCVVector::BI__builtin_rvv_vlseg6e64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2110,11 +2128,11 @@ case RISCVVector::BI__builtin_rvv_vlseg6e64ff_v:
           CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                            Address(Ops[I], Align));
+                            Address::deprecated(Ops[I], Align));
       }
       // Store new_vl.
       return Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {NF}),
-                                 Address(NewVL, Align));
+                                 Address::deprecated(NewVL, Align));
     }
             break;
 case RISCVVector::BI__builtin_rvv_vlseg6e8ff_v_m:
@@ -2144,11 +2162,11 @@ case RISCVVector::BI__builtin_rvv_vlseg6e64ff_v_m:
           CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                            Address(Ops[I], Align));
+                            Address::deprecated(Ops[I], Align));
       }
       // Store new_vl.
       return Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {NF}),
-                                 Address(NewVL, Align));
+                                 Address::deprecated(NewVL, Align));
     }
             break;
 case RISCVVector::BI__builtin_rvv_vlseg7e8_v:
@@ -2171,7 +2189,7 @@ case RISCVVector::BI__builtin_rvv_vlseg7e64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2203,7 +2221,7 @@ case RISCVVector::BI__builtin_rvv_vlseg7e64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2228,11 +2246,11 @@ case RISCVVector::BI__builtin_rvv_vlseg7e64ff_v:
           CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                            Address(Ops[I], Align));
+                            Address::deprecated(Ops[I], Align));
       }
       // Store new_vl.
       return Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {NF}),
-                                 Address(NewVL, Align));
+                                 Address::deprecated(NewVL, Align));
     }
             break;
 case RISCVVector::BI__builtin_rvv_vlseg7e8ff_v_m:
@@ -2262,11 +2280,11 @@ case RISCVVector::BI__builtin_rvv_vlseg7e64ff_v_m:
           CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                            Address(Ops[I], Align));
+                            Address::deprecated(Ops[I], Align));
       }
       // Store new_vl.
       return Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {NF}),
-                                 Address(NewVL, Align));
+                                 Address::deprecated(NewVL, Align));
     }
             break;
 case RISCVVector::BI__builtin_rvv_vlseg8e8_v:
@@ -2289,7 +2307,7 @@ case RISCVVector::BI__builtin_rvv_vlseg8e64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2321,7 +2339,7 @@ case RISCVVector::BI__builtin_rvv_vlseg8e64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2346,11 +2364,11 @@ case RISCVVector::BI__builtin_rvv_vlseg8e64ff_v:
           CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                            Address(Ops[I], Align));
+                            Address::deprecated(Ops[I], Align));
       }
       // Store new_vl.
       return Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {NF}),
-                                 Address(NewVL, Align));
+                                 Address::deprecated(NewVL, Align));
     }
             break;
 case RISCVVector::BI__builtin_rvv_vlseg8e8ff_v_m:
@@ -2380,11 +2398,11 @@ case RISCVVector::BI__builtin_rvv_vlseg8e64ff_v_m:
           CGM.getNaturalPointeeTypeAlignment(E->getArg(0)->getType());
       for (unsigned I = 0; I < NF; ++I) {
         Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                            Address(Ops[I], Align));
+                            Address::deprecated(Ops[I], Align));
       }
       // Store new_vl.
       return Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {NF}),
-                                 Address(NewVL, Align));
+                                 Address::deprecated(NewVL, Align));
     }
             break;
 case RISCVVector::BI__builtin_rvv_vlsseg2e16_v:
@@ -2407,7 +2425,7 @@ case RISCVVector::BI__builtin_rvv_vlsseg2e64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2440,7 +2458,7 @@ case RISCVVector::BI__builtin_rvv_vlsseg2e64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2465,7 +2483,7 @@ case RISCVVector::BI__builtin_rvv_vlsseg3e64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2498,7 +2516,7 @@ case RISCVVector::BI__builtin_rvv_vlsseg3e64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2523,7 +2541,7 @@ case RISCVVector::BI__builtin_rvv_vlsseg4e64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2556,7 +2574,7 @@ case RISCVVector::BI__builtin_rvv_vlsseg4e64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2581,7 +2599,7 @@ case RISCVVector::BI__builtin_rvv_vlsseg5e64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2614,7 +2632,7 @@ case RISCVVector::BI__builtin_rvv_vlsseg5e64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2639,7 +2657,7 @@ case RISCVVector::BI__builtin_rvv_vlsseg6e64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2672,7 +2690,7 @@ case RISCVVector::BI__builtin_rvv_vlsseg6e64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2697,7 +2715,7 @@ case RISCVVector::BI__builtin_rvv_vlsseg7e64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2730,7 +2748,7 @@ case RISCVVector::BI__builtin_rvv_vlsseg7e64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2755,7 +2773,7 @@ case RISCVVector::BI__builtin_rvv_vlsseg8e64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2788,7 +2806,7 @@ case RISCVVector::BI__builtin_rvv_vlsseg8e64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2835,7 +2853,7 @@ case RISCVVector::BI__builtin_rvv_vluxseg2ei64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2868,7 +2886,7 @@ case RISCVVector::BI__builtin_rvv_vluxseg2ei64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2893,7 +2911,7 @@ case RISCVVector::BI__builtin_rvv_vluxseg3ei64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2926,7 +2944,7 @@ case RISCVVector::BI__builtin_rvv_vluxseg3ei64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2951,7 +2969,7 @@ case RISCVVector::BI__builtin_rvv_vluxseg4ei64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -2984,7 +3002,7 @@ case RISCVVector::BI__builtin_rvv_vluxseg4ei64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -3009,7 +3027,7 @@ case RISCVVector::BI__builtin_rvv_vluxseg5ei64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -3042,7 +3060,7 @@ case RISCVVector::BI__builtin_rvv_vluxseg5ei64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -3067,7 +3085,7 @@ case RISCVVector::BI__builtin_rvv_vluxseg6ei64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -3100,7 +3118,7 @@ case RISCVVector::BI__builtin_rvv_vluxseg6ei64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -3125,7 +3143,7 @@ case RISCVVector::BI__builtin_rvv_vluxseg7ei64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -3158,7 +3176,7 @@ case RISCVVector::BI__builtin_rvv_vluxseg7ei64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -3183,7 +3201,7 @@ case RISCVVector::BI__builtin_rvv_vluxseg8ei64_v:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -3216,7 +3234,7 @@ case RISCVVector::BI__builtin_rvv_vluxseg8ei64_v_m:
       llvm::Value *V;
       for (unsigned I = 0; I < NF; ++I) {
         V = Builder.CreateStore(Builder.CreateExtractValue(LoadValue, {I}),
-                                Address(Ops[I], Align));
+                                Address::deprecated(Ops[I], Align));
       }
       return V;
     }
@@ -3224,6 +3242,7 @@ case RISCVVector::BI__builtin_rvv_vluxseg8ei64_v_m:
 case RISCVVector::BI__builtin_rvv_vmacc_vv:
 case RISCVVector::BI__builtin_rvv_vmacc_vx:
   ID = Intrinsic::riscv_vmacc;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vmacc_vv_m:
@@ -3246,6 +3265,7 @@ case RISCVVector::BI__builtin_rvv_vmadc_vxm:
 case RISCVVector::BI__builtin_rvv_vmadd_vv:
 case RISCVVector::BI__builtin_rvv_vmadd_vx:
   ID = Intrinsic::riscv_vmadd;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vmadd_vv_m:
@@ -3312,6 +3332,8 @@ case RISCVVector::BI__builtin_rvv_vmerge_vxm:
 
       std::rotate(Ops.begin(), Ops.begin() + 1, Ops.begin() + 3);
       IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[3]->getType()};
+      // insert undef passthru
+      Ops.insert(Ops.begin(), llvm::UndefValue::get(ResultType));
     break;
 case RISCVVector::BI__builtin_rvv_vmfeq_vv:
 case RISCVVector::BI__builtin_rvv_vmfeq_vf:
@@ -3647,10 +3669,14 @@ case RISCVVector::BI__builtin_rvv_vmv_s_x:
   break;
 case RISCVVector::BI__builtin_rvv_vmv_v_v:
   ID = Intrinsic::riscv_vmv_v_v;
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
   IntrinsicTypes = {ResultType, Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vmv_v_x:
   ID = Intrinsic::riscv_vmv_v_x;
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
   IntrinsicTypes = {ResultType, Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vmv_x_s:
@@ -3696,6 +3722,7 @@ case RISCVVector::BI__builtin_rvv_vnclipu_wx_m:
 case RISCVVector::BI__builtin_rvv_vnmsac_vv:
 case RISCVVector::BI__builtin_rvv_vnmsac_vx:
   ID = Intrinsic::riscv_vnmsac;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vnmsac_vv_m:
@@ -3708,6 +3735,7 @@ case RISCVVector::BI__builtin_rvv_vnmsac_vx_m:
 case RISCVVector::BI__builtin_rvv_vnmsub_vv:
 case RISCVVector::BI__builtin_rvv_vnmsub_vx:
   ID = Intrinsic::riscv_vnmsub;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vnmsub_vv_m:
@@ -3996,7 +4024,9 @@ case RISCVVector::BI__builtin_rvv_vsaddu_vx_m:
 case RISCVVector::BI__builtin_rvv_vsbc_vvm:
 case RISCVVector::BI__builtin_rvv_vsbc_vxm:
   ID = Intrinsic::riscv_vsbc;
-  IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops.back()->getType()};
+  Ops.push_back(llvm::UndefValue::get(ResultType));
+  std::rotate(Ops.rbegin(), Ops.rbegin() + 1,  Ops.rend());
+  IntrinsicTypes = {ResultType, Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vse8_v:
 case RISCVVector::BI__builtin_rvv_vse16_v:
@@ -5301,6 +5331,7 @@ case RISCVVector::BI__builtin_rvv_vwaddu_wv_m:
 case RISCVVector::BI__builtin_rvv_vwmacc_vv:
 case RISCVVector::BI__builtin_rvv_vwmacc_vx:
   ID = Intrinsic::riscv_vwmacc;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vwmacc_vv_m:
@@ -5313,6 +5344,7 @@ case RISCVVector::BI__builtin_rvv_vwmacc_vx_m:
 case RISCVVector::BI__builtin_rvv_vwmaccsu_vv:
 case RISCVVector::BI__builtin_rvv_vwmaccsu_vx:
   ID = Intrinsic::riscv_vwmaccsu;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vwmaccsu_vv_m:
@@ -5325,6 +5357,7 @@ case RISCVVector::BI__builtin_rvv_vwmaccsu_vx_m:
 case RISCVVector::BI__builtin_rvv_vwmaccu_vv:
 case RISCVVector::BI__builtin_rvv_vwmaccu_vx:
   ID = Intrinsic::riscv_vwmaccu;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vwmaccu_vv_m:
@@ -5336,6 +5369,7 @@ case RISCVVector::BI__builtin_rvv_vwmaccu_vx_m:
   break;
 case RISCVVector::BI__builtin_rvv_vwmaccus_vx:
   ID = Intrinsic::riscv_vwmaccus;
+  Ops.push_back(ConstantInt::get(Ops.back()->getType(), TAIL_UNDISTURBED));
   IntrinsicTypes = {ResultType, Ops[1]->getType(), Ops[2]->getType(), Ops.back()->getType()};
   break;
 case RISCVVector::BI__builtin_rvv_vwmaccus_vx_m:
